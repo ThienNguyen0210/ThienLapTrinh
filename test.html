@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trò Chơi Tài Xỉu</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="https://radiant-flame-44830ef920.media.strapiapp.com/65b614370b_1711592901920_aee42f9b8f.jpeg" type="image/png">
+    <style type="text/css">
+/* Reset CSS cơ bản */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('https://i.pinimg.com/736x/c2/e9/02/c2e902e031e1d9d932411dd0b8ab5eef.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 15px 0;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+header #user-info {
+    margin-top: 10px;
+}
+
+header button, header span {
+    color: #fff;
+    background-color: #00bcd4;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+header button:hover {
+    background-color: #008c95;
+    transform: scale(1.05);
+}
+
+header #logout-btn {
+    background: url('logout-icon.png') no-repeat center center;
+    background-size: 20px 20px;
+    width: 30px;
+    height: 30px;
+}
+
+header #logout-btn:hover {
+    background-color: #f44336;
+    transform: scale(1.05);
+}
+
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+#game {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    position: relative;
+}
+
+#game h2 {
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.choices, .bet-choices {
+    margin-bottom: 20px;
+}
+
+.choice-button, .roll-button, .bet-button {
+    background-color: #00bcd4;
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    font-size: 1.2em;
+    border-radius: 50px;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.choice-button:hover, .roll-button:hover, .bet-button:hover {
+    background-color: #008c95;
+    transform: scale(1.05);
+}
+
+.choice-button.selected, .bet-button.selected {
+    background-color: #f44336; /* Màu đỏ cho trạng thái chọn */
+}
+
+.choice-button:focus, .roll-button:focus, .bet-button:focus {
+    outline: none;
+}
+
+.result {
+    margin-top: 20px;
+    font-size: 1.5em;
+}
+
+.deposit {
+    margin-top: 20px;
+}
+
+.deposit input {
+    padding: 10px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+}
+
+.deposit button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.deposit button:hover {
+    background-color: #388e3c;
+    transform: scale(1.05);
+}
+
+footer {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+}
+
+#login-form, #register-form, #forgot-password-form {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    display: none;
+}
+
+#login-form h2, #register-form h2, #forgot-password-form h2 {
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+#login-form input, #register-form input, #forgot-password-form input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+#login-form button, #register-form button, #forgot-password-form button {
+    background-color: #00bcd4;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+#login-form button:hover, #register-form button:hover, #forgot-password-form button:hover {
+    background-color: #008c95;
+    transform: scale(1.05);
+}
+
+#login-form button.cancel, #register-form button.cancel, #forgot-password-form button.cancel {
+    background-color: #f44336;
+}
+
+#login-form button.cancel:hover, #register-form button.cancel:hover, #forgot-password-form button.cancel:hover {
+    background-color: #c62828;
+}
+
+/* Thông báo */
+#notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #00bcd4;
+    color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    display: none;
+    z-index: 1000;
+}
+
+#notification.success {
+    background-color: #4caf50;
+}
+
+#notification.error {
+    background-color: #f44336;
+}
+
+#notification button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.2em;
+    cursor: pointer;
+    float: right;
+}
+
+#user-details {
+    position: absolute;
+    top: 15px;
+    right: 10px; /* Điều chỉnh giá trị này để kéo phần tử sang trái */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#user-details span {
+    font-size: 1.2em;
+}
+
+#user-details button {
+    background-color: #00bcd4;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+#user-details button:hover {
+    background-color: #008c95;
+    transform: scale(1.05);
+}
+
+#user-details img {
+    width: 20px;
+    vertical-align: middle;
+}
+
+    </style>
+</head>
+<body>
+<header>
+    <h1>Trò Chơi Tài Xỉu</h1>
+    <h4 style="color: red">Lưu ý: số từ 2->6 là xỉu,8->12 là Tài</h4>
+    <div id="user-info">
+        <!-- Đăng nhập/Đăng ký/Quên mật khẩu -->
+        <button id="login-btn">Đăng Nhập</button>
+        <button id="register-btn">Đăng Ký</button>
+        <button id="forgot-password-btn">Quên Mật Khẩu</button>
+    </div>
+    <div id="user-details" style="display: none;">
+        <span id="user-name"></span>
+        <button id="logout-btn">Đăng Xuất</button>
+    </div>
+</header>
+    <main>
+        <section id="game" style="display:none;">
+            <h2>Chọn Tài hoặc Xỉu</h2>
+            <p>Số dư: <span id="account-balance">$1000</span></p>
+            <div class="choices">
+                <button id="tai" class="choice-button">Tài</button>
+                <button id="xiu" class="choice-button">Xỉu</button>
+            </div>
+            <div class="bet-choices">
+                <button class="bet-button" data-bet="100">$100</button>
+                <button class="bet-button" data-bet="200">$200</button>
+                <button class="bet-button" data-bet="500">$500</button>
+                <button class="bet-button" data-bet="1000">$1000</button>
+            </div>
+            <button id="roll" class="roll-button">Lăn Xí Ngầu</button>
+            <div id="result" class="result">
+                <p id="result-text"></p>
+                <p id="dice-results"></p>
+            </div>
+            <div class="deposit">
+                <input type="number" id="deposit-amount" placeholder="Nhập số tiền nạp">
+                <button id="deposit">Nạp tiền</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Đăng nhập -->
+    <div id="login-form" style="display:none;">
+        <h2>Đăng Nhập</h2>
+        <input type="text" id="login-username" placeholder="Tên người dùng">
+        <input type="password" id="login-password" placeholder="Mật khẩu">
+        <button id="login-submit">Đăng Nhập</button>
+        <button id="login-cancel">Hủy</button>
+    </div>
+
+    <!-- Đăng ký -->
+    <div id="register-form" style="display:none;">
+        <h2>Đăng Ký</h2>
+        <form id="register-form-body">
+            <input type="text" id="register-username" placeholder="Tên người dùng" required>
+            <input type="email" id="register-email" placeholder="Email" required>
+            <input type="password" id="register-password" placeholder="Mật khẩu" required>
+            <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu" required>
+            <button type="submit" id="register-submit">Đăng Ký</button>
+            <button type="button" class="cancel" id="register-cancel">Hủy</button>
+        </form>
+    </div>
+
+    <!-- Quên mật khẩu -->
+    <div id="forgot-password-form" style="display:none;">
+        <h2>Quên Mật Khẩu</h2>
+        <input type="text" id="forgot-username" placeholder="Tên người dùng">
+        <button id="forgot-submit">Gửi</button>
+        <button id="forgot-cancel">Hủy</button>
+    </div>
+
+    <!-- Thông báo -->
+    <div id="notification">
+        <span id="notification-message"></span>
+        <button id="notification-close">&times;</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Trò Chơi Tài Xỉu. Bản quyền thuộc về ThienNguyen.</p>
+    </footer>
+
+    <script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    const taiButton = document.getElementById('tai');
+    const xiuButton = document.getElementById('xiu');
+    const rollButton = document.getElementById('roll');
+    const depositButton = document.getElementById('deposit');
+    const depositAmountInput = document.getElementById('deposit-amount');
+    const resultText = document.getElementById('result-text');
+    const diceResults = document.getElementById('dice-results');
+    const accountBalance = document.getElementById('account-balance');
+    const betButtons = document.querySelectorAll('.bet-button');
+    const userInfo = document.getElementById('user-info');
+    const userDetails = document.getElementById('user-details');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const forgotPasswordForm = document.getElementById('forgot-password-form');
+    const userNameSpan = document.getElementById('user-name');
+    const logoutButton = document.getElementById('logout-btn');
+    const notification = document.getElementById('notification');
+    const notificationMessage = document.getElementById('notification-message');
+    const notificationClose = document.getElementById('notification-close');
+
+    let userChoice = '';
+    let balance = 1000; // Initial account balance
+    let betAmount = 0; // Current bet amount
+
+    // Check login status
+    const checkLoginStatus = () => {
+        const username = localStorage.getItem('username');
+        if (username) {
+            userInfo.style.display = 'none';
+            userDetails.style.display = 'flex';
+            userNameSpan.textContent = `Xin chào, ${username}`;
+            document.getElementById('game').style.display = 'block';
+        } else {
+            userInfo.style.display = 'block';
+            userDetails.style.display = 'none';
+            document.getElementById('game').style.display = 'none';
+        }
+    };
+
+    // Automatically log out when the page loads
+    localStorage.removeItem('username');
+    checkLoginStatus();
+
+    // Show notification
+    const showNotification = (message, type) => {
+        notificationMessage.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.style.display = 'block';
+    };
+
+    // Hide notification
+    notificationClose.addEventListener('click', () => {
+        notification.style.display = 'none';
+    });
+
+    // Handle login
+    document.getElementById('login-btn').addEventListener('click', () => {
+        loginForm.style.display = 'block';
+    });
+    document.getElementById('login-submit').addEventListener('click', () => {
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+
+        if (username && password) {
+            const storedPassword = localStorage.getItem(username);
+            if (storedPassword === password) {
+                localStorage.setItem('username', username);
+                loginForm.style.display = 'none';
+                checkLoginStatus();
+                showNotification('Đăng nhập thành công!', 'success');
+            } else {
+                showNotification('Tên người dùng hoặc mật khẩu không chính xác!', 'error');
+            }
+        }
+    });
+    document.getElementById('login-cancel').addEventListener('click', () => {
+        loginForm.style.display = 'none';
+    });
+
+    // Handle registration
+    document.getElementById('register-btn').addEventListener('click', () => {
+        registerForm.style.display = 'block';
+    });
+    document.getElementById('register-submit').addEventListener('click', (event) => {
+        event.preventDefault();
+        const username = document.getElementById('register-username').value;
+        const password = document.getElementById('register-password').value;
+        const confirmPassword = document.getElementById('register-confirm-password').value;
+
+        if (username && password && password === confirmPassword) {
+            if (localStorage.getItem(username)) {
+                showNotification('Tên người dùng đã tồn tại!', 'error');
+            } else {
+                localStorage.setItem(username, password);
+                showNotification('Đăng ký thành công!', 'success');
+                registerForm.style.display = 'none';
+            }
+        } else {
+            showNotification('Vui lòng kiểm tra lại thông tin!', 'error');
+        }
+    });
+    document.getElementById('register-cancel').addEventListener('click', () => {
+        registerForm.style.display = 'none';
+    });
+
+    // Handle forgot password
+    document.getElementById('forgot-password-btn').addEventListener('click', () => {
+        forgotPasswordForm.style.display = 'block';
+    });
+    document.getElementById('forgot-submit').addEventListener('click', () => {
+        const username = document.getElementById('forgot-username').value;
+        // You can send an email or perform other actions here
+        // For now, just notify the user that the request has been received
+        showNotification(`Yêu cầu khôi phục mật khẩu cho ${username} đã được gửi!`, 'success');
+        forgotPasswordForm.style.display = 'none';
+    });
+    document.getElementById('forgot-cancel').addEventListener('click', () => {
+        forgotPasswordForm.style.display = 'none';
+    });
+
+    // Handle logout
+    logoutButton.addEventListener('click', () => {
+        localStorage.removeItem('username');
+        checkLoginStatus();
+        showNotification('Đăng xuất thành công!', 'success');
+    });
+
+    // Game functionality
+    betButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            betAmount = parseInt(button.getAttribute('data-bet'), 10);
+            betButtons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+        });
+    });
+
+    taiButton.addEventListener('click', function() {
+        userChoice = 'tai';
+        taiButton.classList.add('selected');
+        xiuButton.classList.remove('selected');
+    });
+
+    xiuButton.addEventListener('click', function() {
+        userChoice = 'xiu';
+        xiuButton.classList.add('selected');
+        taiButton.classList.remove('selected');
+    });
+
+    rollButton.addEventListener('click', function() {
+        if (!userChoice) {
+            resultText.textContent = 'Vui lòng chọn Tài hoặc Xỉu!';
+            diceResults.textContent = '';
+            return;
+        }
+
+        if (betAmount === 0) {
+            resultText.textContent = 'Vui lòng chọn số tiền đặt cược!';
+            diceResults.textContent = '';
+            return;
+        }
+
+        if (balance < betAmount) {
+            resultText.textContent = 'Bạn không đủ tiền để đặt cược!';
+            diceResults.textContent = '';
+            return;
+        }
+
+        balance -= betAmount;
+        const dice1 = Math.floor(Math.random() * 6) + 1;
+        const dice2 = Math.floor(Math.random() * 6) + 1;
+        const sum = dice1 + dice2;
+        let result = '';
+
+        diceResults.textContent = `Xúc xắc: ${dice1} và ${dice2} (Tổng: ${sum})`;
+
+        if ((sum >= 8 && userChoice === 'tai') || (sum <= 6 && userChoice === 'xiu')) {
+            result = 'Chúc mừng bạn thắng!';
+            balance += betAmount * 2;
+        } else {
+            result = 'Rất tiếc, bạn thua!';
+        }
+
+        resultText.textContent = result;
+        accountBalance.textContent = `$${balance}`;
+    });
+
+    depositButton.addEventListener('click', function() {
+        const depositAmount = parseFloat(depositAmountInput.value);
+        if (depositAmount > 0) {
+            balance += depositAmount;
+            accountBalance.textContent = `$${balance}`;
+            depositAmountInput.value = '';
+            showNotification('Nạp tiền thành công!', 'success');
+        } else {
+            showNotification('Số tiền nạp không hợp lệ!', 'error');
+        }
+    });
+});
+
+
+
+    </script>
+</body>
+</html>
