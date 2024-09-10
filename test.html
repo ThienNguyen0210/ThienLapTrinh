@@ -287,7 +287,7 @@ footer {
 <body>
 <header>
     <h1>Trò Chơi Tài Xỉu</h1>
-    <h4 style="color: red">Lưu ý: số từ 2->6 là xỉu,8->12 là Tài</h4>
+    <h4 style="color: red">Coder: <a href="https://www.fb.com/tnc0210" style="color: blue" target="_blank">Thiện Nguyễn</a></h4>
     <div id="user-info">
         <!-- Đăng nhập/Đăng ký/Quên mật khẩu -->
         <button id="login-btn">Đăng Nhập</button>
@@ -388,8 +388,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const notificationClose = document.getElementById('notification-close');
 
     let userChoice = '';
-    let balance = 1000; // Initial account balance
     let betAmount = 0; // Current bet amount
+
+    // Load the balance from localStorage or set it to 1000 if not found
+    let balance = parseFloat(localStorage.getItem('balance')) || 1000;
+    accountBalance.textContent = `$${balance}`;
 
     // Check login status
     const checkLoginStatus = () => {
@@ -545,12 +548,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if ((sum >= 8 && userChoice === 'tai') || (sum <= 6 && userChoice === 'xiu')) {
             result = 'Chúc mừng bạn thắng!';
             balance += betAmount * 2;
+            resultText.textContent = `Bạn chọn Tài và kết quả là ${sum >= 8 ? 'Tài' : 'Xỉu'}. ${result}`;
         } else {
             result = 'Rất tiếc, bạn thua!';
+            resultText.textContent = `Bạn chọn ${userChoice === 'tai' ? 'Tài' : 'Xỉu'} và kết quả là ${sum >= 8 ? 'Tài' : 'Xỉu'}. ${result}`;
         }
 
-        resultText.textContent = result;
         accountBalance.textContent = `$${balance}`;
+        localStorage.setItem('balance', balance); // Save balance to localStorage
     });
 
     depositButton.addEventListener('click', function() {
@@ -559,13 +564,13 @@ document.addEventListener('DOMContentLoaded', function() {
             balance += depositAmount;
             accountBalance.textContent = `$${balance}`;
             depositAmountInput.value = '';
+            localStorage.setItem('balance', balance); // Save balance to localStorage
             showNotification('Nạp tiền thành công!', 'success');
         } else {
             showNotification('Số tiền nạp không hợp lệ!', 'error');
         }
     });
 });
-
 
 
     </script>
