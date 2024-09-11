@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trò Chơi Đua Xe</title>
+    <style>
+        body {
+            background-image: url(https://cdn.tgdd.vn/Files/2016/03/24/806833/maxresdefault.jpg);
+            margin: 0;
+            overflow: hidden;
+            background-color: #e0e0e0;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: #a0a0a0;
+        }
+        #controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        #speed-slider {
+            width: 200px;
+        }
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            display: none;
+        }
+        #game-over h2 {
+            margin: 0;
+            color: #333;
+        }
+        #game-over button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        #game-over button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <label for="speed-slider">Tốc độ xe:</label>
+        <input type="range" id="speed-slider" min="1" max="40" value="5">
+        <span id="speed-value">5</span>
+    </div>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="game-over">
+        <h2>Game Over!</h2>
+        <p>Điểm số của bạn: <span id="final-score"></span></p>
+        <button id="restart-btn">Chơi lại</button>
+    </div>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const carWidth = 50;
+        const carHeight = 100;
+        const obstacleWidth = 50;
+        const obstacleHeight = 100;
+        const carImage = new Image();
+        carImage.src = 'deptrai.png'; // Thay thế bằng URL của hình ảnh chiếc xe
+
+        let car = {
+            x: canvas.width / 2 - carWidth / 2,
+            y: canvas.height - carHeight - 10,
+            width: carWidth,
+            height: carHeight,
+            speed: 5 // Default speed
+        };
+
+        let obstacles = [];
+        let score = 0;
+        let gameInterval;
+        let obstacleInterval;
+
+        // Speed adjustment elements
+        const speedSlider = document.getElementById('speed-slider');
+        const speedValue = document.getElementById('speed-value');
+        const gameOverScreen = document.getElementById('game-over');
+        const finalScore = document.getElementById('final-score');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // Update car speed based on slider
+        speedSlider.addEventListener('input', () => {
+            car.speed = Math.min(40, parseInt(speedSlider.value, 10));
+            speedValue.textContent = car.speed;
+        });
+
+        // Restart the game
+        restartBtn.addEventListener('click', () => {
+            gameOverScreen.style.display = 'none';
+            resetGame();
+            startGame();
+        });
+
+        function setup() {
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'ArrowLeft') {
+                    car.x -= car.speed;
+                } else if (event.key === 'ArrowRight') {
+                    car.x += car.speed;
+                }
+            });
+
+            carImage.onload = () => {
+                startGame();
+            };
+        }
+
+        function startGame() {
+            gameInterval = setInterval(gameLoop, 1000 / 60); // 60 FPS
+            obstacleInterval = setInterval(createObstacle, 1500); // Create a new obstacle every 1.5 seconds
+        }
+
+        function createObstacle() {
+            const x = Math.random() * (canvas.width - obstacleWidth);
+            obstacles.push({
+                x: x,
+                y: -obstacleHeight,
+                width: obstacleWidth,
+                height: obstacleHeight
+            });
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the car using the image
+            ctx.drawImage(carImage, car.x, car.y, car.width, car.height);
+
+            // Update and draw obstacles
+            ctx.fillStyle = 'red';
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                obs.y += car.speed * 0.5; // Adjust obstacle speed relative to car speed
+                ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+
+                if (obs.y > canvas.height) {
+                    obstacles.splice(i, 1);
+                    score++;
+                }
+
+                if (car.x < obs.x + obs.width &&
+                    car.x + car.width > obs.x &&
+                    car.y < obs.y + obs.height &&
+                    car.y + car.height > obs.y) {
+                    showGameOverScreen();
+                    return;
+                }
+            }
+
+            // Draw score
+            ctx.fillStyle = 'black';
+            ctx.font = '24px Arial';
+            ctx.fillText('Score: ' + score, 10, 30);
+        }
+
+        function showGameOverScreen() {
+            clearInterval(gameInterval); // Stop the game loop
+            clearInterval(obstacleInterval); // Stop creating new obstacles
+            gameOverScreen.style.display = 'block';
+            finalScore.textContent = score;
+        }
+
+        function resetGame() {
+            car.x = canvas.width / 2 - carWidth / 2;
+            car.y = canvas.height - carHeight - 10;
+            obstacles = [];
+            score = 0;
+        }
+
+        setup();
+    </script>
+</body>
+</html>
