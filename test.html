@@ -6,6 +6,9 @@
     <title>Trò Chơi Tài Xỉu</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="https://radiant-flame-44830ef920.media.strapiapp.com/65b614370b_1711592901920_aee42f9b8f.jpeg" type="image/png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.0.0/dist/fireworks.min.js"></script>
     <style type="text/css">
 /* Reset CSS cơ bản */
 * {
@@ -303,6 +306,7 @@ footer {
         <section id="game" style="display:none;">
             <h2>Chọn Tài hoặc Xỉu</h2>
             <p>Số dư: <span id="account-balance">$1000</span></p>
+            <p style="color: aqua;"><a href="https://thiennguyen0210.github.io/ThienLapTrinh/index.html" target="_blank">Game khác</a></p>
             <div class="choices">
                 <button id="tai" class="choice-button">Tài</button>
                 <button id="xiu" class="choice-button">Xỉu</button>
@@ -364,7 +368,13 @@ footer {
     <footer>
         <p>&copy; 2024 Trò Chơi Tài Xỉu. Bản quyền thuộc về ThienNguyen.</p>
     </footer>
+    
+    <!-- Phần tử canvas cho hiệu ứng pháo hoa -->
+    <canvas id="fireworks" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
 
+    <!-- Liên kết đến thư viện pháo hoa -->
+    <script src="https://cdn.jsdelivr.net/npm/fireworks-canvas@1.0.1/dist/fireworks.min.js"></script>
+    <script src="path-to-your-script.js"></script>
     <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
     const taiButton = document.getElementById('tai');
@@ -497,6 +507,80 @@ document.addEventListener('DOMContentLoaded', function() {
         showNotification('Đăng xuất thành công!', 'success');
     });
 
+    // Initialize fireworks
+    let fireworks = [];
+
+    function setupFireworks() {
+        const canvas = document.getElementById('fireworks');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        function createFirework(x, y) {
+            const firework = {
+                x,
+                y,
+                particles: [],
+                color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                explode() {
+                    for (let i = 0; i < 100; i++) {
+                        this.particles.push({
+                            x: this.x,
+                            y: this.y,
+                            vx: Math.random() * 4 - 2,
+                            vy: Math.random() * 4 - 2,
+                            life: Math.random() * 60,
+                            color: this.color
+                        });
+                    }
+                },
+                update() {
+                    for (let i = this.particles.length - 1; i >= 0; i--) {
+                        const p = this.particles[i];
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.life--;
+                        if (p.life <= 0) {
+                            this.particles.splice(i, 1);
+                        }
+                    }
+                },
+                draw() {
+                    for (const p of this.particles) {
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color;
+                        ctx.fill();
+                    }
+                }
+            };
+            firework.explode();
+            return firework;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const firework of fireworks) {
+                firework.update();
+                firework.draw();
+            }
+        }
+
+        function loop() {
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+        return createFirework;
+    }
+
+    const createFirework = setupFireworks();
+
+    function triggerFireworks() {
+        createFirework(Math.random() * window.innerWidth, Math.random() * window.innerHeight);
+    }
+
     // Game functionality
     betButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -549,6 +633,9 @@ document.addEventListener('DOMContentLoaded', function() {
             result = 'Chúc mừng bạn thắng!';
             balance += betAmount * 2;
             resultText.textContent = `Bạn chọn Tài và kết quả là ${sum >= 8 ? 'Tài' : 'Xỉu'}. ${result}`;
+            
+            // Trigger fireworks effect
+            triggerFireworks();
         } else {
             result = 'Rất tiếc, bạn thua!';
             resultText.textContent = `Bạn chọn ${userChoice === 'tai' ? 'Tài' : 'Xỉu'} và kết quả là ${sum >= 8 ? 'Tài' : 'Xỉu'}. ${result}`;
@@ -560,19 +647,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     depositButton.addEventListener('click', function() {
         const depositAmount = parseFloat(depositAmountInput.value);
-        if (depositAmount > 0) {
-            balance += depositAmount;
-            accountBalance.textContent = `$${balance}`;
-            depositAmountInput.value = '';
-            localStorage.setItem('balance', balance); // Save balance to localStorage
-            showNotification('Nạp tiền thành công!', 'success');
-        } else {
+        if (isNaN(depositAmount) || depositAmount <= 0) {
             showNotification('Số tiền nạp không hợp lệ!', 'error');
+            return;
         }
+        balance += depositAmount;
+        accountBalance.textContent = `$${balance}`;
+        localStorage.setItem('balance', balance); // Save balance to localStorage
+        depositAmountInput.value = '';
+    });
+
+    // Resize canvas on window resize
+    window.addEventListener('resize', () => {
+        const canvas = document.getElementById('fireworks');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     });
 });
-
-
     </script>
+
 </body>
 </html>
