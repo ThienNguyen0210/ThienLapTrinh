@@ -58,6 +58,39 @@
         #game-over button:hover {
             background-color: #218838;
         }
+        /* Nút điều khiển trên thiết bị di động */
+        #mobile-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border: 2px solid #333;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .control-btn:active {
+            background-color: #ddd;
+        }
+        #left-btn {
+            border-right: none;
+            border-radius: 50% 0 0 50%;
+        }
+        #right-btn {
+            border-left: none;
+            border-radius: 0 50% 50% 0;
+        }
     </style>
 </head>
 <body>
@@ -72,6 +105,10 @@
         <p>Điểm số của bạn: <span id="final-score"></span></p>
         <button id="restart-btn">Chơi lại</button>
     </div>
+    <div id="mobile-controls">
+        <div id="left-btn" class="control-btn">←</div>
+        <div id="right-btn" class="control-btn">→</div>
+    </div>
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -81,14 +118,16 @@
         const obstacleWidth = 50;
         const obstacleHeight = 100;
         const carImage = new Image();
-        carImage.src = 'deptrai.png'; // Thay thế bằng URL của hình ảnh chiếc xe
+        carImage.src = 'https://example.com/path-to-your-car-image.png'; // Thay thế bằng URL của hình ảnh chiếc xe
 
         let car = {
             x: canvas.width / 2 - carWidth / 2,
             y: canvas.height - carHeight - 10,
             width: carWidth,
             height: carHeight,
-            speed: 5 // Default speed
+            speed: 5, // Default speed
+            moveLeft: false,
+            moveRight: false
         };
 
         let obstacles = [];
@@ -103,6 +142,10 @@
         const finalScore = document.getElementById('final-score');
         const restartBtn = document.getElementById('restart-btn');
 
+        // Mobile control elements
+        const leftBtn = document.getElementById('left-btn');
+        const rightBtn = document.getElementById('right-btn');
+
         // Update car speed based on slider
         speedSlider.addEventListener('input', () => {
             car.speed = Math.min(40, parseInt(speedSlider.value, 10));
@@ -116,15 +159,41 @@
             startGame();
         });
 
-        function setup() {
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'ArrowLeft') {
-                    car.x -= car.speed;
-                } else if (event.key === 'ArrowRight') {
-                    car.x += car.speed;
-                }
-            });
+        // Handle keyboard events
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft') {
+                car.moveLeft = true;
+            } else if (event.key === 'ArrowRight') {
+                car.moveRight = true;
+            }
+        });
 
+        document.addEventListener('keyup', (event) => {
+            if (event.key === 'ArrowLeft') {
+                car.moveLeft = false;
+            } else if (event.key === 'ArrowRight') {
+                car.moveRight = false;
+            }
+        });
+
+        // Handle mobile control events
+        leftBtn.addEventListener('touchstart', () => {
+            car.moveLeft = true;
+        });
+
+        rightBtn.addEventListener('touchstart', () => {
+            car.moveRight = true;
+        });
+
+        leftBtn.addEventListener('touchend', () => {
+            car.moveLeft = false;
+        });
+
+        rightBtn.addEventListener('touchend', () => {
+            car.moveRight = false;
+        });
+
+        function setup() {
             carImage.onload = () => {
                 startGame();
             };
@@ -147,6 +216,17 @@
 
         function gameLoop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Move the car based on controls
+            if (car.moveLeft) {
+                car.x -= car.speed;
+            }
+            if (car.moveRight) {
+                car.x += car.speed;
+            }
+
+            // Ensure the car stays within bounds
+            car.x = Math.max(0, Math.min(canvas.width - car.width, car.x));
 
             // Draw the car using the image
             ctx.drawImage(carImage, car.x, car.y, car.width, car.height);
