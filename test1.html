@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Profile</title>
+    <link rel="shortcut icon" style="image/png" href="https://i.pinimg.com/736x/1a/04/93/1a0493ce119adfa5c11b4297d457e4fa.jpg">
+    <link rel="stylesheet" href="style.css">
+    <style type="text/css">
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 20px;
+            background-image: url(https://img2.thuthuatphanmem.vn/uploads/2019/01/20/anh-background-den-dep-cho-may-tinh_034510753.jpg);
+        }
+
+        .profile-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+        }
+
+        .profile-container:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-header h1 {
+            font-size: 2.5em;
+            color: #007BFF;
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: block;
+            margin: 20px auto;
+            transition: transform 0.3s;
+            border: 5px solid #007BFF; /* Viền cho avatar */
+        }
+
+        .avatar:hover {
+            transform: scale(1.2);
+        }
+
+        .profile-info {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .profile-info h2 {
+            color: #343a40;
+        }
+
+        .profile-footer {
+            margin-top: 20px;
+        }
+
+        h3 {
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 5px;
+            color: #007BFF;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f8f9fa;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        li:hover {
+            background: #007BFF;
+            color: white;
+        }
+        .id1 {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <h1>Bùi Trọng Hiếu</h1>
+            <p style="color: black; font-style: italic;">Mãi Mãi Một Tình Yêu:3</p>
+        </div>
+        <div class="profile-info">
+            <img src="hieu.png" alt="Avatar" class="avatar">
+            <h2>Thông tin cá nhân</h2>
+            <p><strong>Email:</strong> Không có</p>
+            <p><strong>Số điện thoại:</strong> Không có</p>
+            <p><strong>Giới thiệu:</strong> Chàng trai dễ thương mũm mĩm vui tính</p>
+            <p><strong>FACEBOOK:</strong> <a  target="_blank" class="id1" href="https://www.facebook.com/profile.php?id=100066541512538">Trọng Hiếu</a></p>
+        </div>
+        <div class="profile-footer">
+            <h3>Ưu điểm:</h3>
+            <ul>
+                <li>Học Giỏi</li>
+                <li>Tốt Bụng</li>
+                <li>Dễ Thương</li>
+                <li>Năng Động</li>
+            </ul>
+            <h3>Nhược điểm:</h3>
+            <ul>
+                <li>Không có vì quá perfect</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
