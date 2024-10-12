@@ -220,190 +220,143 @@
     document.getElementById('loginButton').addEventListener('click', function() {
         const account = document.getElementById('loginAccount').value;
         const password = document.getElementById('loginPassword').value;
-        const user = accounts.find(acc => acc.username === account && acc.password === password);
+        const user = accounts.find(acc => acc.account === account && acc.password === password);
+
         if (user) {
-            currentUser = user.username;
-            displayName = user.displayName || '';
-            showNotification(`Đăng nhập thành công với tài khoản: ${account}`);
-            document.getElementById('loginForm').style.display = 'none';
-            document.querySelector('.post-form').style.display = 'block';
-            document.getElementById('currentUser').textContent = `Tài khoản: ${account}`;
+            currentUser = user;
+            displayName = user.displayName || account;
+            document.getElementById('currentUser').innerText = `Đăng Nhập: ${displayName}`;
             document.getElementById('logoutButton').style.display = 'inline';
-            loadComments();
-            document.getElementById('displayNameInput').value = displayName; // Đặt giá trị cho tên hiển thị
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            document.querySelector('.post-form').style.display = 'block';
+            document.getElementById('notification').style.display = 'none';
+            loadPosts();
         } else {
-            showNotification('Tài khoản hoặc mật khẩu không đúng.');
+            showNotification('Tài khoản hoặc mật khẩu không đúng!');
         }
     });
 
-    // Đăng ký tài khoản
+    document.getElementById('logoutButton').addEventListener('click', function() {
+        currentUser = null;
+        displayName = '';
+        document.getElementById('currentUser').innerText = '';
+        document.getElementById('logoutButton').style.display = 'none';
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('registerForm').style.display = 'none';
+        document.querySelector('.post-form').style.display = 'none';
+        document.getElementById('postsContainer').innerHTML = ''; // Xóa tất cả bình luận
+    });
+
+    document.getElementById('showRegisterButton').addEventListener('click', function() {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'block';
+    });
+
+    document.getElementById('showLoginButton').addEventListener('click', function() {
+        document.getElementById('registerForm').style.display = 'none';
+        document.getElementById('loginForm').style.display = 'block';
+    });
+
     document.getElementById('registerButton').addEventListener('click', function() {
         const account = document.getElementById('registerAccount').value;
         const password = document.getElementById('registerPassword').value;
         const confirmPassword = document.getElementById('registerConfirmPassword').value;
 
-        if (account && password && confirmPassword) {
-            if (accounts.some(acc => acc.username === account)) {
-                showNotification('Tài khoản này đã được đăng ký.');
-            } else if (password === confirmPassword) {
-                accounts.push({ username: account, password: password, displayName: '' });
-                localStorage.setItem('accounts', JSON.stringify(accounts));
-                showNotification(`Đăng ký thành công với tài khoản: ${account}`);
-                document.getElementById('registerForm').reset();
-            } else {
-                showNotification('Mật khẩu không khớp. Vui lòng kiểm tra lại.');
-            }
-        } else {
-            showNotification('Vui lòng nhập đầy đủ thông tin.');
+        if (password !== confirmPassword) {
+            showNotification('Mật khẩu không khớp!');
+            return;
         }
-    });
 
-    // Đăng xuất
-    document.getElementById('logoutButton').addEventListener('click', function() {
-        currentUser = null;
-        displayName = '';
-        document.getElementById('currentUser').textContent = '';
-        document.getElementById('logoutButton').style.display = 'none';
+        if (accounts.find(acc => acc.account === account)) {
+            showNotification('Tài khoản đã tồn tại!');
+            return;
+        }
+
+        const newAccount = {
+            account: account,
+            password: password,
+            displayName: account
+        };
+        accounts.push(newAccount);
+        localStorage.setItem('accounts', JSON.stringify(accounts));
+        showNotification('Đăng ký thành công!');
+        document.getElementById('registerForm').style.display = 'none';
         document.getElementById('loginForm').style.display = 'block';
-        document.querySelector('.post-form').style.display = 'none';
-        showNotification('Đã đăng xuất.');
     });
 
-    // Đặt tên hiển thị
     document.getElementById('setDisplayNameButton').addEventListener('click', function() {
-        const displayNameInput = document.getElementById('displayNameInput');
-        displayName = displayNameInput.value.trim();
-
-        if (currentUser) {
-            accounts = accounts.map(acc => {
-                if (acc.username === currentUser) {
-                    acc.displayName = displayName;
-                }
-                return acc;
-            });
-            localStorage.setItem('accounts', JSON.stringify(accounts));
-            showNotification(`Tên hiển thị đã được đặt là: ${displayName}`);
-            displayNameInput.value = displayName; // Giữ lại giá trị đã nhập
-        }
+        const inputName = document.getElementById('displayNameInput').value;
+        displayName = inputName.trim() || displayName; // Nếu không có tên mới, giữ lại tên cũ
+        showNotification('Tên hiển thị đã được thay đổi!');
     });
 
-    // Đăng bình luận
     document.getElementById('postButton').addEventListener('click', function() {
-        const postInput = document.getElementById('postInput');
-        const emotionSelect = document.getElementById('emotionSelect');
-        const quantityInput = document.getElementById('quantityInput');
-        const postsContainer = document.getElementById('postsContainer');
+        const postContent = document.getElementById('postInput').value;
+        const emotion = document.getElementById('emotionSelect').value;
+        const quantity = parseInt(document.getElementById('quantityInput').value) || 1;
 
-        const postText = postInput.value.trim();
-        const effectiveDisplayName = displayName || 'Người dùng';
-        const emotion = emotionSelect.value;
-        const quantity = quantityInput.value;
-
-        if (postText !== '' && quantity > 0) {
-            const postId = Date.now();
-            const postData = { 
-                id: postId, 
-                displayName: effectiveDisplayName, 
-                text: postText, 
-                emotion, 
-                quantity, 
-                likes: 0, // Thêm trường lượt thích
-                timestamp: Date.now() 
-            };
-
-            saveComment(postData);
-            createPostElement(postData, postsContainer);
-            postInput.value = '';
-            emotionSelect.value = '';
-            quantityInput.value = '';
-        } else {
-            showNotification('Vui lòng nhập đầy đủ thông tin.');
+        if (!postContent) {
+            showNotification('Vui lòng nhập nội dung bình luận!');
+            return;
         }
+
+        const post = {
+            content: postContent,
+            emotion: emotion,
+            displayName: displayName,
+            likes: 0 // Khởi tạo số lượng like
+        };
+
+        for (let i = 0; i < quantity; i++) {
+            addPost(post);
+        }
+
+        document.getElementById('postInput').value = '';
+        document.getElementById('emotionSelect').value = '';
+        document.getElementById('quantityInput').value = '';
     });
 
-    // Lưu bình luận vào localStorage
-    function saveComment(postData) {
-        let posts = JSON.parse(localStorage.getItem('posts')) || [];
-        posts.push(postData);
-        localStorage.setItem('posts', JSON.stringify(posts));
-    }
+    function addPost(post) {
+        const postElement = document.createElement('div');
+        postElement.classList.add('post');
+        postElement.innerHTML = `
+            <strong>${post.displayName}</strong>: ${post.content} <span style="color: gray;">(${post.emotion})</span>
+            <div>
+                <button class="like-button">Like (${post.likes})</button>
+                <button class="delete-button">Xóa</button>
+            </div>
+        `;
 
-    // Load bình luận từ localStorage
-    function loadComments() {
-        const postsContainer = document.getElementById('postsContainer');
-        let posts = JSON.parse(localStorage.getItem('posts')) || [];
-        const now = Date.now();
-
-        posts.forEach(post => {
-            if (now - post.timestamp < 5 * 60 * 60 * 1000) {
-                createPostElement(post, postsContainer);
-            }
-        });
-    }
-
-    // Tạo phần tử bình luận
-    function createPostElement(postData, postsContainer) {
-        const postDiv = document.createElement('div');
-        postDiv.className = 'post';
-        postDiv.innerHTML = `
-            <p><span style="color: red;">${postData.displayName}:</span> ${postData.text} <strong>(Cảm xúc: ${postData.emotion}, Số lượng: ${postData.quantity})</strong></p>
-            <button class="like-button" data-id="${postData.id}">Thích</button>
-            <button class="delete-button" data-id="${postData.id}" style="display: ${currentUser ? 'inline' : 'none'};">Xóa</button>
-            <span class="like-count" id="likeCount_${postData.id}">${postData.likes}</span>`; // Hiển thị số lượt thích
-
-        postsContainer.prepend(postDiv);
-
-        // Thêm sự kiện cho nút "Thích"
-        postDiv.querySelector('.like-button').addEventListener('click', function() {
-            const likeCountElement = document.getElementById(`likeCount_${postData.id}`);
-            postData.likes++; // Tăng lượt thích
-            likeCountElement.textContent = postData.likes;
-            updatePostLikes(postData.id, postData.likes); // Cập nhật lượt thích trong localStorage
+        // Thêm sự kiện cho nút like
+        postElement.querySelector('.like-button').addEventListener('click', function() {
+            post.likes++;
+            postElement.querySelector('.like-button').innerText = `Like (${post.likes})`;
         });
 
-        // Thêm sự kiện cho nút "Xóa"
-        if (currentUser) {
-            postDiv.querySelector('.delete-button').addEventListener('click', function() {
-                postDiv.remove();
-                deleteComment(postData.id);
-            });
-        }
-    }
-
-    // Cập nhật lượt thích trong localStorage
-    function updatePostLikes(postId, newLikes) {
-        let posts = JSON.parse(localStorage.getItem('posts')) || [];
-        posts = posts.map(post => {
-            if (post.id === postId) {
-                post.likes = newLikes; // Cập nhật số lượt thích
-            }
-            return post;
+        // Thêm sự kiện cho nút xóa
+        postElement.querySelector('.delete-button').addEventListener('click', function() {
+            postElement.remove();
         });
-        localStorage.setItem('posts', JSON.stringify(posts));
+
+        document.getElementById('postsContainer').appendChild(postElement);
     }
 
-    // Xóa bình luận
-    function deleteComment(postId) {
-        let posts = JSON.parse(localStorage.getItem('posts')) || [];
-        posts = posts.filter(post => post.id !== postId);
-        localStorage.setItem('posts', JSON.stringify(posts));
+    function loadPosts() {
+        // Nếu cần, có thể thêm logic để tải lại bình luận từ storage hoặc API
+        // Đây là một ví dụ đơn giản
+        const existingPosts = JSON.parse(localStorage.getItem('posts')) || [];
+        existingPosts.forEach(post => addPost(post));
     }
 
-    // Hiển thị thông báo
     function showNotification(message) {
         const notification = document.getElementById('notification');
-        notification.textContent = message;
+        notification.innerText = message;
         notification.style.display = 'block';
         setTimeout(() => {
             notification.style.display = 'none';
         }, 3000);
     }
-
-    document.getElementById('loginForm').style.display = 'block';
 </script>
-
-
-
-
 </body>
 </html>
