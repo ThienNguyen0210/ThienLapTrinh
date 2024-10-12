@@ -19,6 +19,10 @@
             color: white;
             min-height: 200vh;
         }
+        .reply {
+            border-radius: 5px; /* Bo góc cho các phản hồi */
+            border: 1px solid #008CBA; /* Đường viền cho phản hồi */
+        }
 
         header {
             text-align: center;
@@ -140,13 +144,6 @@
             margin-left: 10px;
         }
 
-        .display-name-input {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
         .like-button {
             background-color: transparent;
             color: #4267B2;
@@ -193,8 +190,6 @@
         <div id="notification" class="notification"></div>
 
         <div class="post-form">
-            <input type="text" id="displayNameInput" class="display-name-input" placeholder="Nhập tên hiển thị" required>
-            <button id="setDisplayNameButton">Đổi Tên Bình Luận</button>
             <textarea id="postInput" placeholder="Nhập link cần buff"></textarea>
             <select id="emotionSelect">
                 <option value="">Chọn cảm xúc</option>
@@ -213,150 +208,191 @@
     </main>
 
 <script>
-    let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
-    let currentUser = null;
-    let displayName = '';
+let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+let currentUser = null;
+let posts = [];
+let postsToShow = 3;
+let hiddenPostsCount = 0; // Số bình luận ẩn
 
-    document.getElementById('loginButton').addEventListener('click', function() {
-        const account = document.getElementById('loginAccount').value;
-        const password = document.getElementById('loginPassword').value;
-        const user = accounts.find(acc => acc.account === account && acc.password === password);
+document.getElementById('loginButton').addEventListener('click', function() {
+    const account = document.getElementById('loginAccount').value;
+    const password = document.getElementById('loginPassword').value;
+    const user = accounts.find(acc => acc.account === account && acc.password === password);
 
-        if (user) {
-            currentUser = user;
-            displayName = user.displayName || account;
-            document.getElementById('currentUser').innerText = `Đăng Nhập: ${displayName}`;
-            document.getElementById('logoutButton').style.display = 'inline';
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'none';
-            document.querySelector('.post-form').style.display = 'block';
-            document.getElementById('notification').style.display = 'none';
-            loadPosts();
-        } else {
-            showNotification('Tài khoản hoặc mật khẩu không đúng!');
-        }
-    });
-
-    document.getElementById('logoutButton').addEventListener('click', function() {
-        currentUser = null;
-        displayName = '';
-        document.getElementById('currentUser').innerText = '';
-        document.getElementById('logoutButton').style.display = 'none';
-        document.getElementById('loginForm').style.display = 'block';
-        document.getElementById('registerForm').style.display = 'none';
-        document.querySelector('.post-form').style.display = 'none';
-        document.getElementById('postsContainer').innerHTML = ''; // Xóa tất cả bình luận
-    });
-
-    document.getElementById('showRegisterButton').addEventListener('click', function() {
+    if (user) {
+        currentUser = user;
+        const displayName = user.account; // Sử dụng tên tài khoản làm tên hiển thị
+        document.getElementById('currentUser').innerText = `Đăng nhập: ${displayName}`;
         document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('registerForm').style.display = 'block';
-    });
-
-    document.getElementById('showLoginButton').addEventListener('click', function() {
-        document.getElementById('registerForm').style.display = 'none';
-        document.getElementById('loginForm').style.display = 'block';
-    });
-
-    document.getElementById('registerButton').addEventListener('click', function() {
-        const account = document.getElementById('registerAccount').value;
-        const password = document.getElementById('registerPassword').value;
-        const confirmPassword = document.getElementById('registerConfirmPassword').value;
-
-        if (password !== confirmPassword) {
-            showNotification('Mật khẩu không khớp!');
-            return;
-        }
-
-        if (accounts.find(acc => acc.account === account)) {
-            showNotification('Tài khoản đã tồn tại!');
-            return;
-        }
-
-        const newAccount = {
-            account: account,
-            password: password,
-            displayName: account
-        };
-        accounts.push(newAccount);
-        localStorage.setItem('accounts', JSON.stringify(accounts));
-        showNotification('Đăng ký thành công!');
-        document.getElementById('registerForm').style.display = 'none';
-        document.getElementById('loginForm').style.display = 'block';
-    });
-
-    document.getElementById('setDisplayNameButton').addEventListener('click', function() {
-        const inputName = document.getElementById('displayNameInput').value;
-        displayName = inputName.trim() || displayName; // Nếu không có tên mới, giữ lại tên cũ
-        showNotification('Tên hiển thị đã được thay đổi!');
-    });
-
-    document.getElementById('postButton').addEventListener('click', function() {
-        const postContent = document.getElementById('postInput').value;
-        const emotion = document.getElementById('emotionSelect').value;
-        const quantity = parseInt(document.getElementById('quantityInput').value) || 1;
-
-        if (!postContent) {
-            showNotification('Vui lòng nhập nội dung bình luận!');
-            return;
-        }
-
-        const post = {
-            content: postContent,
-            emotion: emotion,
-            displayName: displayName,
-            likes: 0 // Khởi tạo số lượng like
-        };
-
-        for (let i = 0; i < quantity; i++) {
-            addPost(post);
-        }
-
+        document.getElementById('logoutButton').style.display = 'block';
         document.getElementById('postInput').value = '';
-        document.getElementById('emotionSelect').value = '';
-        document.getElementById('quantityInput').value = '';
+        document.querySelector('.post-form').style.display = 'block'; // Hiện phần bình luận
+        showNotification('Đăng nhập thành công');
+        renderPosts();
+    } else {
+        showNotification('Tài khoản hoặc mật khẩu không đúng');
+    }
+});
+
+document.getElementById('logoutButton').addEventListener('click', function() {
+    currentUser = null;
+    document.getElementById('currentUser').innerText = '';
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('logoutButton').style.display = 'none';
+    document.querySelector('.post-form').style.display = 'none'; // Ẩn phần bình luận
+    showNotification('Đã đăng xuất');
+    document.getElementById('postsContainer').innerHTML = ''; // Ẩn bình luận khi đăng xuất
+});
+
+document.getElementById('showRegisterButton').addEventListener('click', function() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('registerForm').style.display = 'block';
+});
+
+document.getElementById('showLoginButton').addEventListener('click', function() {
+    document.getElementById('registerForm').style.display = 'none';
+    document.getElementById('loginForm').style.display = 'block';
+});
+
+document.getElementById('registerButton').addEventListener('click', function() {
+    const account = document.getElementById('registerAccount').value;
+    const password = document.getElementById('registerPassword').value;
+    const confirmPassword = document.getElementById('registerConfirmPassword').value;
+
+    if (password !== confirmPassword) {
+        showNotification('Mật khẩu không khớp');
+        return;
+    }
+
+    if (accounts.find(acc => acc.account === account)) {
+        showNotification('Tài khoản đã tồn tại');
+        return;
+    }
+
+    const newAccount = { account, password };
+    accounts.push(newAccount);
+    localStorage.setItem('accounts', JSON.stringify(accounts));
+    showNotification('Đăng ký thành công');
+    document.getElementById('registerForm').style.display = 'none';
+    document.getElementById('loginForm').style.display = 'block';
+});
+
+document.getElementById('postButton').addEventListener('click', function() {
+    if (!currentUser) {
+        showNotification('Vui lòng đăng nhập để bình luận');
+        return;
+    }
+
+    const postContent = document.getElementById('postInput').value;
+    const emotion = document.getElementById('emotionSelect').value;
+    const quantity = parseInt(document.getElementById('quantityInput').value, 10);
+
+    if (postContent.trim() === '') {
+        showNotification('Nội dung bình luận không được để trống');
+        return;
+    }
+
+    if (isNaN(quantity) || quantity < 1) {
+        showNotification('Số lượng phải lớn hơn 0');
+        return;
+    }
+
+    const timestamp = Date.now(); // Thời gian hiện tại
+    posts.push({ user: currentUser.account, content: postContent, emotion, quantity, timestamp, likes: 0 }); // Thêm likes vào bài viết
+
+    localStorage.setItem('posts', JSON.stringify(posts));
+    document.getElementById('postInput').value = '';
+    document.getElementById('quantityInput').value = '';
+    document.getElementById('emotionSelect').value = '';
+    renderPosts();
+});
+
+function renderPosts() {
+    const postsContainer = document.getElementById('postsContainer');
+    postsContainer.innerHTML = ''; // Xóa nội dung hiện tại
+
+    const displayedPosts = posts.slice(-postsToShow); // Lấy n phần tử cuối cùng để hiển thị
+    hiddenPostsCount = 0; // Đặt lại số bình luận ẩn
+
+    displayedPosts.forEach((post, index) => {
+        const postElement = document.createElement('div');
+        postElement.className = 'post';
+
+        // Kiểm tra xem bình luận đã quá 5 tiếng hay chưa
+        const currentTime = Date.now();
+        const timeDiff = currentTime - post.timestamp; // Tính thời gian từ khi đăng
+
+        if (timeDiff >= 5 * 60 * 60 * 1000) { // Nếu đã hơn 5 tiếng
+            posts.splice(posts.length - displayedPosts.length + index, 1); // Xóa bình luận
+            localStorage.setItem('posts', JSON.stringify(posts));
+            return; // Không hiển thị bình luận này
+        }
+
+        postElement.innerHTML = `
+            <strong>${post.user}</strong> ${post.content} (Số lượng: ${post.quantity}) 
+            <span style="color: blue;">(${post.emotion})</span> 
+            <span class="likes-count">(${post.likes} Thích)</span>
+            <button class="like-button" data-index="${index}">Thích</button>
+            <button class="delete-button" data-index="${index}">Xóa</button>`;
+        
+        postsContainer.appendChild(postElement);
     });
 
-    function addPost(post) {
-        const postElement = document.createElement('div');
-        postElement.classList.add('post');
-        postElement.innerHTML = `
-            <strong>${post.displayName}</strong>: ${post.content} <span style="color: gray;">(${post.emotion})</span>
-            <div>
-                <button class="like-button">Like (${post.likes})</button>
-                <button class="delete-button">Xóa</button>
-            </div>
-        `;
-
-        // Thêm sự kiện cho nút like
-        postElement.querySelector('.like-button').addEventListener('click', function() {
-            post.likes++;
-            postElement.querySelector('.like-button').innerText = `Like (${post.likes})`;
+    // Kiểm tra xem có cần hiển thị nút "Tải thêm bình luận" không
+    if (posts.length > postsToShow) {
+        hiddenPostsCount = posts.length - postsToShow; // Cập nhật số bình luận ẩn
+        const loadMoreButton = document.createElement('button');
+        loadMoreButton.innerText = `Tải thêm bình luận (${hiddenPostsCount})`;
+        loadMoreButton.addEventListener('click', function() {
+            postsToShow += 3; // Tăng số bình luận hiển thị
+            renderPosts(); // Gọi lại hàm để hiển thị bình luận
         });
+        postsContainer.appendChild(loadMoreButton);
+    }
 
-        // Thêm sự kiện cho nút xóa
-        postElement.querySelector('.delete-button').addEventListener('click', function() {
-            postElement.remove();
+    // Cập nhật trạng thái các nút Thích và Xóa
+    const likeButtons = postsContainer.querySelectorAll('.like-button');
+    const deleteButtons = postsContainer.querySelectorAll('.delete-button');
+
+    likeButtons.forEach((button, index) => {
+        button.addEventListener('click', function() {
+            posts[posts.length - displayedPosts.length + index].likes++; // Tăng lượt thích
+            localStorage.setItem('posts', JSON.stringify(posts)); // Cập nhật localStorage
+            renderPosts(); // Gọi lại hàm để cập nhật số lượng lượt thích
         });
+    });
 
-        document.getElementById('postsContainer').appendChild(postElement);
-    }
+    deleteButtons.forEach((button, index) => {
+        button.addEventListener('click', function() {
+            posts.splice(posts.length - displayedPosts.length + index, 1); // Xóa bài viết
+            localStorage.setItem('posts', JSON.stringify(posts));
+            renderPosts();
+        });
+    });
+}
 
-    function loadPosts() {
-        // Nếu cần, có thể thêm logic để tải lại bình luận từ storage hoặc API
-        // Đây là một ví dụ đơn giản
-        const existingPosts = JSON.parse(localStorage.getItem('posts')) || [];
-        existingPosts.forEach(post => addPost(post));
-    }
+// Hiển thị thông báo
+function showNotification(message) {
+    const notification = document.getElementById('notification');
+    notification.innerText = message;
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 3000);
+}
 
-    function showNotification(message) {
-        const notification = document.getElementById('notification');
-        notification.innerText = message;
-        notification.style.display = 'block';
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 3000);
+// Tải bài viết từ localStorage
+window.onload = function() {
+    const savedPosts = JSON.parse(localStorage.getItem('posts'));
+    if (savedPosts) {
+        posts = savedPosts;
+        // Không hiển thị bình luận nếu chưa đăng nhập
+        if (currentUser) {
+            renderPosts();
+        }
     }
+};
+
 </script>
 </body>
 </html>
