@@ -1,670 +1,409 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trò Chơi Tài Xỉu</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="https://radiant-flame-44830ef920.media.strapiapp.com/65b614370b_1711592901920_aee42f9b8f.jpeg" type="image/png">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.0.0/dist/fireworks.min.js"></script>
+    <title>Dịch vụ FACEBOOK</title>
+    <link rel="shortcut icon" style="image/png" href="https://cdn-icons-png.flaticon.com/512/4228/4228171.png">
     <style type="text/css">
-/* Reset CSS cơ bản */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://png.pngtree.com/background/20211217/original/pngtree-matrix-digital-code-hacker-background-picture-image_1593618.jpg');
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            min-height: 200vh;
+        }
 
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: url('https://i.pinimg.com/736x/c2/e9/02/c2e902e031e1d9d932411dd0b8ab5eef.jpg') no-repeat center center fixed;
-    background-size: cover;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-header {
-    background-color: rgba(0, 0, 0, 0.7);
-    color: #fff;
-    padding: 15px 0;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    position: relative;
-}
+        h1 {
+            color: #ffffff;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
 
-header #user-info {
-    margin-top: 10px;
-}
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
 
-header button, header span {
-    color: #fff;
-    background-color: #00bcd4;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1em;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 5px;
-    transition: background-color 0.3s, transform 0.3s;
-}
+        input[type="text"], input[type="password"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
 
-header button:hover {
-    background-color: #008c95;
-    transform: scale(1.05);
-}
+        button {
+            margin-top: 10px;
+            background-color: #4267B2;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
 
-header #logout-btn {
-    background: url('logout-icon.png') no-repeat center center;
-    background-size: 20px 20px;
-    width: 30px;
-    height: 30px;
-}
+        button:hover {
+            background-color: #365899;
+        }
 
-header #logout-btn:hover {
-    background-color: #f44336;
-    transform: scale(1.05);
-}
+        .post-form {
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            display: none; /* Ẩn phần bình luận theo mặc định */
+        }
 
-main {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-}
+        textarea {
+            width: 100%;
+            height: 100px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            font-size: 16px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            resize: none;
+        }
 
-#game {
-    background: rgba(0, 0, 0, 0.7);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-    position: relative;
-}
+        #postsContainer {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
 
-#game h2 {
-    margin-bottom: 20px;
-    font-size: 2em;
-}
+        .post {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+            color: black;
+        }
 
-.choices, .bet-choices {
-    margin-bottom: 20px;
-}
+        .post:hover {
+            transform: translateY(-2px);
+        }
 
-.choice-button, .roll-button, .bet-button {
-    background-color: #00bcd4;
-    color: white;
-    border: none;
-    padding: 15px 25px;
-    font-size: 1.2em;
-    border-radius: 50px;
-    cursor: pointer;
-    margin: 10px;
-    transition: background-color 0.3s, transform 0.3s;
-}
+        .notification {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            text-align: center;
+            z-index: 1000;
+        }
 
-.choice-button:hover, .roll-button:hover, .bet-button:hover {
-    background-color: #008c95;
-    transform: scale(1.05);
-}
+        .current-user {
+            color: red; /* Màu chữ tài khoản */
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 18px;
+        }
 
-.choice-button.selected, .bet-button.selected {
-    background-color: #f44336; /* Màu đỏ cho trạng thái chọn */
-}
+        .logout-button {
+            background-color: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
 
-.choice-button:focus, .roll-button:focus, .bet-button:focus {
-    outline: none;
-}
+        .display-name-input {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
 
-.result {
-    margin-top: 20px;
-    font-size: 1.5em;
-}
+        .like-button {
+            background-color: transparent;
+            color: #4267B2;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
 
-.deposit {
-    margin-top: 20px;
-}
-
-.deposit input {
-    padding: 10px;
-    font-size: 1em;
-    border: none;
-    border-radius: 5px;
-}
-
-.deposit button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1em;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.deposit button:hover {
-    background-color: #388e3c;
-    transform: scale(1.05);
-}
-
-footer {
-    background-color: rgba(0, 0, 0, 0.7);
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    position: relative;
-}
-
-#login-form, #register-form, #forgot-password-form {
-    background: rgba(0, 0, 0, 0.8);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
-    display: none;
-}
-
-#login-form h2, #register-form h2, #forgot-password-form h2 {
-    margin-bottom: 15px;
-    font-size: 1.5em;
-}
-
-#login-form input, #register-form input, #forgot-password-form input {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    font-size: 1em;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 5px;
-}
-
-#login-form button, #register-form button, #forgot-password-form button {
-    background-color: #00bcd4;
-    color: white;
-    border: none;
-    padding: 10px;
-    font-size: 1em;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-#login-form button:hover, #register-form button:hover, #forgot-password-form button:hover {
-    background-color: #008c95;
-    transform: scale(1.05);
-}
-
-#login-form button.cancel, #register-form button.cancel, #forgot-password-form button.cancel {
-    background-color: #f44336;
-}
-
-#login-form button.cancel:hover, #register-form button.cancel:hover, #forgot-password-form button.cancel:hover {
-    background-color: #c62828;
-}
-
-/* Thông báo */
-#notification {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #00bcd4;
-    color: #fff;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    display: none;
-    z-index: 1000;
-}
-
-#notification.success {
-    background-color: #4caf50;
-}
-
-#notification.error {
-    background-color: #f44336;
-}
-
-#notification button {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.2em;
-    cursor: pointer;
-    float: right;
-}
-
-#user-details {
-    position: absolute;
-    top: 15px;
-    right: 10px; /* Điều chỉnh giá trị này để kéo phần tử sang trái */
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-#user-details span {
-    font-size: 1.2em;
-}
-
-#user-details button {
-    background-color: #00bcd4;
-    color: white;
-    border: none;
-    padding: 10px;
-    font-size: 1em;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-#user-details button:hover {
-    background-color: #008c95;
-    transform: scale(1.05);
-}
-
-#user-details img {
-    width: 20px;
-    vertical-align: middle;
-}
-
+        .delete-button {
+            background-color: transparent;
+            color: red;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
-<header>
-    <h1>Trò Chơi Tài Xỉu</h1>
-    <h4 style="color: red">Coder: <a href="https://www.fb.com/tnc0210" style="color: blue" target="_blank">Thiện Nguyễn</a></h4>
-    <div id="user-info">
-        <!-- Đăng nhập/Đăng ký/Quên mật khẩu -->
-        <button id="login-btn">Đăng Nhập</button>
-        <button id="register-btn">Đăng Ký</button>
-        <button id="forgot-password-btn">Quên Mật Khẩu</button>
-    </div>
-    <div id="user-details" style="display: none;">
-        <span id="user-name"></span>
-        <button id="logout-btn">Đăng Xuất</button>
-    </div>
-</header>
+    <header>
+        <h1>Buff Like Facebook</h1>
+        <div class="current-user" id="currentUser"></div>
+        <button class="logout-button" id="logoutButton" style="display: none;">Đăng Xuất</button>
+    </header>
+    <h3><a href="https://www.fb.com/tnc0210" style="color: violet;text-decoration: none" target="_blank">Coder</a></h3>
     <main>
-        <section id="game" style="display:none;">
-            <h2>Chọn Tài hoặc Xỉu</h2>
-            <p>Số dư: <span id="account-balance">$1000</span></p>
-            <p style="color: aqua;"><a href="https://thiennguyen0210.github.io/ThienLapTrinh/index.html" target="_blank">Game khác</a></p>
-            <div class="choices">
-                <button id="tai" class="choice-button">Tài</button>
-                <button id="xiu" class="choice-button">Xỉu</button>
-            </div>
-            <div class="bet-choices">
-                <button class="bet-button" data-bet="100">$100</button>
-                <button class="bet-button" data-bet="200">$200</button>
-                <button class="bet-button" data-bet="500">$500</button>
-                <button class="bet-button" data-bet="1000">$1000</button>
-            </div>
-            <button id="roll" class="roll-button">Lăn Xí Ngầu</button>
-            <div id="result" class="result">
-                <p id="result-text"></p>
-                <p id="dice-results"></p>
-            </div>
-            <div class="deposit">
-                <input type="number" id="deposit-amount" placeholder="Nhập số tiền nạp">
-                <button id="deposit">Nạp tiền</button>
-            </div>
-        </section>
+        <div class="form-container" id="loginForm">
+            <h2>Đăng Nhập</h2>
+            <input type="text" id="loginAccount" placeholder="Tài Khoản" required>
+            <input type="password" id="loginPassword" placeholder="Mật Khẩu" required>
+            <button id="loginButton">Đăng Nhập</button>
+            <p>Chưa có tài khoản? <button id="showRegisterButton">Đăng Ký</button></p>
+        </div>
+
+        <div class="form-container" id="registerForm" style="display: none;">
+            <h2>Đăng Ký</h2>
+            <input type="text" id="registerAccount" placeholder="Tài Khoản" required>
+            <input type="password" id="registerPassword" placeholder="Mật Khẩu" required>
+            <input type="password" id="registerConfirmPassword" placeholder="Nhập Lại Mật Khẩu" required>
+            <button id="registerButton">Đăng Ký</button>
+            <p>Đã có tài khoản? <button id="showLoginButton">Đăng Nhập</button></p>
+        </div>
+
+        <div id="notification" class="notification"></div>
+
+        <div class="post-form">
+            <input type="text" id="displayNameInput" class="display-name-input" placeholder="Nhập tên hiển thị" required>
+            <button id="setDisplayNameButton">Đổi Tên Bình Luận</button>
+            <textarea id="postInput" placeholder="Nhập link cần buff"></textarea>
+            <select id="emotionSelect">
+                <option value="">Chọn cảm xúc</option>
+                <option value="hạnh phúc">Like</option>
+                <option value="buồn">Tym</option>
+                <option value="thích thú">Buồn</option>
+                <option value="giận dữ">Giận Dữ</option>
+            </select>
+            <h5 style="color: red;">Lưu ý: chọn số lượng ít ít thôi ThienNguyen còn buff được</h5>
+            <h5 style="color: green;">Buff tương tác bằng tool được viết bằng mã php hoàn toàn tự động nhưng sử dụng nhiều hao acc clone facebook:)))</h5>
+            <input type="number" id="quantityInput" placeholder="Nhập số lượng" min="1" required>
+            <button id="postButton">Bình luận</button>
+        </div>
+
+        <div id="postsContainer"></div>
     </main>
 
-    <!-- Đăng nhập -->
-    <div id="login-form" style="display:none;">
-        <h2>Đăng Nhập</h2>
-        <input type="text" id="login-username" placeholder="Tên người dùng">
-        <input type="password" id="login-password" placeholder="Mật khẩu">
-        <button id="login-submit">Đăng Nhập</button>
-        <button id="login-cancel">Hủy</button>
-    </div>
+<script>
+    let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+    let currentUser = null;
+    let displayName = '';
 
-    <!-- Đăng ký -->
-    <div id="register-form" style="display:none;">
-        <h2>Đăng Ký</h2>
-        <form id="register-form-body">
-            <input type="text" id="register-username" placeholder="Tên người dùng" required>
-            <input type="email" id="register-email" placeholder="Email" required>
-            <input type="password" id="register-password" placeholder="Mật khẩu" required>
-            <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu" required>
-            <button type="submit" id="register-submit">Đăng Ký</button>
-            <button type="button" class="cancel" id="register-cancel">Hủy</button>
-        </form>
-    </div>
-
-    <!-- Quên mật khẩu -->
-    <div id="forgot-password-form" style="display:none;">
-        <h2>Quên Mật Khẩu</h2>
-        <input type="text" id="forgot-username" placeholder="Tên người dùng">
-        <button id="forgot-submit">Gửi</button>
-        <button id="forgot-cancel">Hủy</button>
-    </div>
-
-    <!-- Thông báo -->
-    <div id="notification">
-        <span id="notification-message"></span>
-        <button id="notification-close">&times;</button>
-    </div>
-
-    <footer>
-        <p>&copy; 2024 Trò Chơi Tài Xỉu. Bản quyền thuộc về ThienNguyen.</p>
-    </footer>
-    
-    <!-- Phần tử canvas cho hiệu ứng pháo hoa -->
-    <canvas id="fireworks" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
-
-    <!-- Liên kết đến thư viện pháo hoa -->
-    <script src="https://cdn.jsdelivr.net/npm/fireworks-canvas@1.0.1/dist/fireworks.min.js"></script>
-    <script src="path-to-your-script.js"></script>
-    <script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function() {
-    const taiButton = document.getElementById('tai');
-    const xiuButton = document.getElementById('xiu');
-    const rollButton = document.getElementById('roll');
-    const depositButton = document.getElementById('deposit');
-    const depositAmountInput = document.getElementById('deposit-amount');
-    const resultText = document.getElementById('result-text');
-    const diceResults = document.getElementById('dice-results');
-    const accountBalance = document.getElementById('account-balance');
-    const betButtons = document.querySelectorAll('.bet-button');
-    const userInfo = document.getElementById('user-info');
-    const userDetails = document.getElementById('user-details');
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-    const forgotPasswordForm = document.getElementById('forgot-password-form');
-    const userNameSpan = document.getElementById('user-name');
-    const logoutButton = document.getElementById('logout-btn');
-    const notification = document.getElementById('notification');
-    const notificationMessage = document.getElementById('notification-message');
-    const notificationClose = document.getElementById('notification-close');
-
-    let userChoice = '';
-    let betAmount = 0; // Current bet amount
-
-    // Load the balance from localStorage or set it to 1000 if not found
-    let balance = parseFloat(localStorage.getItem('balance')) || 1000;
-    accountBalance.textContent = `$${balance}`;
-
-    // Check login status
-    const checkLoginStatus = () => {
-        const username = localStorage.getItem('username');
-        if (username) {
-            userInfo.style.display = 'none';
-            userDetails.style.display = 'flex';
-            userNameSpan.textContent = `Xin chào, ${username}`;
-            document.getElementById('game').style.display = 'block';
+    document.getElementById('loginButton').addEventListener('click', function() {
+        const account = document.getElementById('loginAccount').value;
+        const password = document.getElementById('loginPassword').value;
+        const user = accounts.find(acc => acc.username === account && acc.password === password);
+        if (user) {
+            currentUser = user.username;
+            displayName = user.displayName || '';
+            showNotification(`Đăng nhập thành công với tài khoản: ${account}`);
+            document.getElementById('loginForm').style.display = 'none';
+            document.querySelector('.post-form').style.display = 'block';
+            document.getElementById('currentUser').textContent = `Tài khoản: ${account}`;
+            document.getElementById('logoutButton').style.display = 'inline';
+            loadComments();
+            document.getElementById('displayNameInput').value = displayName; // Đặt giá trị cho tên hiển thị
         } else {
-            userInfo.style.display = 'block';
-            userDetails.style.display = 'none';
-            document.getElementById('game').style.display = 'none';
-        }
-    };
-
-    // Automatically log out when the page loads
-    localStorage.removeItem('username');
-    checkLoginStatus();
-
-    // Show notification
-    const showNotification = (message, type) => {
-        notificationMessage.textContent = message;
-        notification.className = `notification ${type}`;
-        notification.style.display = 'block';
-    };
-
-    // Hide notification
-    notificationClose.addEventListener('click', () => {
-        notification.style.display = 'none';
-    });
-
-    // Handle login
-    document.getElementById('login-btn').addEventListener('click', () => {
-        loginForm.style.display = 'block';
-    });
-    document.getElementById('login-submit').addEventListener('click', () => {
-        const username = document.getElementById('login-username').value;
-        const password = document.getElementById('login-password').value;
-
-        if (username && password) {
-            const storedPassword = localStorage.getItem(username);
-            if (storedPassword === password) {
-                localStorage.setItem('username', username);
-                loginForm.style.display = 'none';
-                checkLoginStatus();
-                showNotification('Đăng nhập thành công!', 'success');
-            } else {
-                showNotification('Tên người dùng hoặc mật khẩu không chính xác!', 'error');
-            }
+            showNotification('Tài khoản hoặc mật khẩu không đúng.');
         }
     });
-    document.getElementById('login-cancel').addEventListener('click', () => {
-        loginForm.style.display = 'none';
-    });
 
-    // Handle registration
-    document.getElementById('register-btn').addEventListener('click', () => {
-        registerForm.style.display = 'block';
-    });
-    document.getElementById('register-submit').addEventListener('click', (event) => {
-        event.preventDefault();
-        const username = document.getElementById('register-username').value;
-        const password = document.getElementById('register-password').value;
-        const confirmPassword = document.getElementById('register-confirm-password').value;
+    // Đăng ký tài khoản
+    document.getElementById('registerButton').addEventListener('click', function() {
+        const account = document.getElementById('registerAccount').value;
+        const password = document.getElementById('registerPassword').value;
+        const confirmPassword = document.getElementById('registerConfirmPassword').value;
 
-        if (username && password && password === confirmPassword) {
-            if (localStorage.getItem(username)) {
-                showNotification('Tên người dùng đã tồn tại!', 'error');
+        if (account && password && confirmPassword) {
+            if (accounts.some(acc => acc.username === account)) {
+                showNotification('Tài khoản này đã được đăng ký.');
+            } else if (password === confirmPassword) {
+                accounts.push({ username: account, password: password, displayName: '' });
+                localStorage.setItem('accounts', JSON.stringify(accounts));
+                showNotification(`Đăng ký thành công với tài khoản: ${account}`);
+                document.getElementById('registerForm').reset();
             } else {
-                localStorage.setItem(username, password);
-                showNotification('Đăng ký thành công!', 'success');
-                registerForm.style.display = 'none';
+                showNotification('Mật khẩu không khớp. Vui lòng kiểm tra lại.');
             }
         } else {
-            showNotification('Vui lòng kiểm tra lại thông tin!', 'error');
+            showNotification('Vui lòng nhập đầy đủ thông tin.');
         }
     });
-    document.getElementById('register-cancel').addEventListener('click', () => {
-        registerForm.style.display = 'none';
+
+    // Đăng xuất
+    document.getElementById('logoutButton').addEventListener('click', function() {
+        currentUser = null;
+        displayName = '';
+        document.getElementById('currentUser').textContent = '';
+        document.getElementById('logoutButton').style.display = 'none';
+        document.getElementById('loginForm').style.display = 'block';
+        document.querySelector('.post-form').style.display = 'none';
+        showNotification('Đã đăng xuất.');
     });
 
-    // Handle forgot password
-    document.getElementById('forgot-password-btn').addEventListener('click', () => {
-        forgotPasswordForm.style.display = 'block';
-    });
-    document.getElementById('forgot-submit').addEventListener('click', () => {
-        const username = document.getElementById('forgot-username').value;
-        // You can send an email or perform other actions here
-        // For now, just notify the user that the request has been received
-        showNotification(`Yêu cầu khôi phục mật khẩu cho ${username} đã được gửi!`, 'success');
-        forgotPasswordForm.style.display = 'none';
-    });
-    document.getElementById('forgot-cancel').addEventListener('click', () => {
-        forgotPasswordForm.style.display = 'none';
-    });
+    // Đặt tên hiển thị
+    document.getElementById('setDisplayNameButton').addEventListener('click', function() {
+        const displayNameInput = document.getElementById('displayNameInput');
+        displayName = displayNameInput.value.trim();
 
-    // Handle logout
-    logoutButton.addEventListener('click', () => {
-        localStorage.removeItem('username');
-        checkLoginStatus();
-        showNotification('Đăng xuất thành công!', 'success');
-    });
-
-    // Initialize fireworks
-    let fireworks = [];
-
-    function setupFireworks() {
-        const canvas = document.getElementById('fireworks');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        function createFirework(x, y) {
-            const firework = {
-                x,
-                y,
-                particles: [],
-                color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-                explode() {
-                    for (let i = 0; i < 100; i++) {
-                        this.particles.push({
-                            x: this.x,
-                            y: this.y,
-                            vx: Math.random() * 4 - 2,
-                            vy: Math.random() * 4 - 2,
-                            life: Math.random() * 60,
-                            color: this.color
-                        });
-                    }
-                },
-                update() {
-                    for (let i = this.particles.length - 1; i >= 0; i--) {
-                        const p = this.particles[i];
-                        p.x += p.vx;
-                        p.y += p.vy;
-                        p.life--;
-                        if (p.life <= 0) {
-                            this.particles.splice(i, 1);
-                        }
-                    }
-                },
-                draw() {
-                    for (const p of this.particles) {
-                        ctx.beginPath();
-                        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-                        ctx.fillStyle = p.color;
-                        ctx.fill();
-                    }
+        if (currentUser) {
+            accounts = accounts.map(acc => {
+                if (acc.username === currentUser) {
+                    acc.displayName = displayName;
                 }
+                return acc;
+            });
+            localStorage.setItem('accounts', JSON.stringify(accounts));
+            showNotification(`Tên hiển thị đã được đặt là: ${displayName}`);
+            displayNameInput.value = displayName; // Giữ lại giá trị đã nhập
+        }
+    });
+
+    // Đăng bình luận
+    document.getElementById('postButton').addEventListener('click', function() {
+        const postInput = document.getElementById('postInput');
+        const emotionSelect = document.getElementById('emotionSelect');
+        const quantityInput = document.getElementById('quantityInput');
+        const postsContainer = document.getElementById('postsContainer');
+
+        const postText = postInput.value.trim();
+        const effectiveDisplayName = displayName || 'Người dùng';
+        const emotion = emotionSelect.value;
+        const quantity = quantityInput.value;
+
+        if (postText !== '' && quantity > 0) {
+            const postId = Date.now();
+            const postData = { 
+                id: postId, 
+                displayName: effectiveDisplayName, 
+                text: postText, 
+                emotion, 
+                quantity, 
+                likes: 0, // Thêm trường lượt thích
+                timestamp: Date.now() 
             };
-            firework.explode();
-            return firework;
-        }
 
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (const firework of fireworks) {
-                firework.update();
-                firework.draw();
-            }
-        }
-
-        function loop() {
-            draw();
-            requestAnimationFrame(loop);
-        }
-
-        loop();
-        return createFirework;
-    }
-
-    const createFirework = setupFireworks();
-
-    function triggerFireworks() {
-        createFirework(Math.random() * window.innerWidth, Math.random() * window.innerHeight);
-    }
-
-    // Game functionality
-    betButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            betAmount = parseInt(button.getAttribute('data-bet'), 10);
-            betButtons.forEach(btn => btn.classList.remove('selected'));
-            button.classList.add('selected');
-        });
-    });
-
-    taiButton.addEventListener('click', function() {
-        userChoice = 'tai';
-        taiButton.classList.add('selected');
-        xiuButton.classList.remove('selected');
-    });
-
-    xiuButton.addEventListener('click', function() {
-        userChoice = 'xiu';
-        xiuButton.classList.add('selected');
-        taiButton.classList.remove('selected');
-    });
-
-    rollButton.addEventListener('click', function() {
-        if (!userChoice) {
-            resultText.textContent = 'Vui lòng chọn Tài hoặc Xỉu!';
-            diceResults.textContent = '';
-            return;
-        }
-
-        if (betAmount === 0) {
-            resultText.textContent = 'Vui lòng chọn số tiền đặt cược!';
-            diceResults.textContent = '';
-            return;
-        }
-
-        if (balance < betAmount) {
-            resultText.textContent = 'Bạn không đủ tiền để đặt cược!';
-            diceResults.textContent = '';
-            return;
-        }
-
-        balance -= betAmount;
-        const dice1 = Math.floor(Math.random() * 6) + 1;
-        const dice2 = Math.floor(Math.random() * 6) + 1;
-        const sum = dice1 + dice2;
-        let result = '';
-
-        diceResults.textContent = `Xúc xắc: ${dice1} và ${dice2} (Tổng: ${sum})`;
-
-        if ((sum >= 8 && userChoice === 'tai') || (sum <= 6 && userChoice === 'xiu')) {
-            result = 'Chúc mừng bạn thắng!';
-            balance += betAmount * 2;
-            resultText.textContent = `Bạn chọn Tài và kết quả là ${sum >= 8 ? 'Tài' : 'Xỉu'}. ${result}`;
-            
-            // Trigger fireworks effect
-            triggerFireworks();
+            saveComment(postData);
+            createPostElement(postData, postsContainer);
+            postInput.value = '';
+            emotionSelect.value = '';
+            quantityInput.value = '';
         } else {
-            result = 'Rất tiếc, bạn thua!';
-            resultText.textContent = `Bạn chọn ${userChoice === 'tai' ? 'Tài' : 'Xỉu'} và kết quả là ${sum >= 8 ? 'Tài' : 'Xỉu'}. ${result}`;
+            showNotification('Vui lòng nhập đầy đủ thông tin.');
         }
-
-        accountBalance.textContent = `$${balance}`;
-        localStorage.setItem('balance', balance); // Save balance to localStorage
     });
 
-    depositButton.addEventListener('click', function() {
-        const depositAmount = parseFloat(depositAmountInput.value);
-        if (isNaN(depositAmount) || depositAmount <= 0) {
-            showNotification('Số tiền nạp không hợp lệ!', 'error');
-            return;
+    // Lưu bình luận vào localStorage
+    function saveComment(postData) {
+        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+        posts.push(postData);
+        localStorage.setItem('posts', JSON.stringify(posts));
+    }
+
+    // Load bình luận từ localStorage
+    function loadComments() {
+        const postsContainer = document.getElementById('postsContainer');
+        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+        const now = Date.now();
+
+        posts.forEach(post => {
+            if (now - post.timestamp < 5 * 60 * 60 * 1000) {
+                createPostElement(post, postsContainer);
+            }
+        });
+    }
+
+    // Tạo phần tử bình luận
+    function createPostElement(postData, postsContainer) {
+        const postDiv = document.createElement('div');
+        postDiv.className = 'post';
+        postDiv.innerHTML = `
+            <p><span style="color: red;">${postData.displayName}:</span> ${postData.text} <strong>(Cảm xúc: ${postData.emotion}, Số lượng: ${postData.quantity})</strong></p>
+            <button class="like-button" data-id="${postData.id}">Thích</button>
+            <button class="delete-button" data-id="${postData.id}" style="display: ${currentUser ? 'inline' : 'none'};">Xóa</button>
+            <span class="like-count" id="likeCount_${postData.id}">${postData.likes}</span>`; // Hiển thị số lượt thích
+
+        postsContainer.prepend(postDiv);
+
+        // Thêm sự kiện cho nút "Thích"
+        postDiv.querySelector('.like-button').addEventListener('click', function() {
+            const likeCountElement = document.getElementById(`likeCount_${postData.id}`);
+            postData.likes++; // Tăng lượt thích
+            likeCountElement.textContent = postData.likes;
+            updatePostLikes(postData.id, postData.likes); // Cập nhật lượt thích trong localStorage
+        });
+
+        // Thêm sự kiện cho nút "Xóa"
+        if (currentUser) {
+            postDiv.querySelector('.delete-button').addEventListener('click', function() {
+                postDiv.remove();
+                deleteComment(postData.id);
+            });
         }
-        balance += depositAmount;
-        accountBalance.textContent = `$${balance}`;
-        localStorage.setItem('balance', balance); // Save balance to localStorage
-        depositAmountInput.value = '';
-    });
+    }
 
-    // Resize canvas on window resize
-    window.addEventListener('resize', () => {
-        const canvas = document.getElementById('fireworks');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
-});
-    </script>
+    // Cập nhật lượt thích trong localStorage
+    function updatePostLikes(postId, newLikes) {
+        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+        posts = posts.map(post => {
+            if (post.id === postId) {
+                post.likes = newLikes; // Cập nhật số lượt thích
+            }
+            return post;
+        });
+        localStorage.setItem('posts', JSON.stringify(posts));
+    }
+
+    // Xóa bình luận
+    function deleteComment(postId) {
+        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+        posts = posts.filter(post => post.id !== postId);
+        localStorage.setItem('posts', JSON.stringify(posts));
+    }
+
+    // Hiển thị thông báo
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
+
+    document.getElementById('loginForm').style.display = 'block';
+</script>
+
+
+
 
 </body>
 </html>
