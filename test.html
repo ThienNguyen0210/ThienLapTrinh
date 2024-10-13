@@ -213,7 +213,7 @@ let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
 let currentUser = null;
 let posts = [];
 let postsToShow = 3;
-let hiddenPostsCount = 0; // Số bình luận ẩn
+let hiddenPostsCount = 0; // Số bài viết ẩn
 
 document.getElementById('loginButton').addEventListener('click', function() {
     const account = document.getElementById('loginAccount').value;
@@ -313,7 +313,7 @@ function renderPosts() {
     postsContainer.innerHTML = ''; // Xóa nội dung hiện tại
 
     const displayedPosts = posts.slice(-postsToShow); // Lấy n phần tử cuối cùng để hiển thị
-    hiddenPostsCount = 0; // Đặt lại số bình luận ẩn
+    hiddenPostsCount = 0; // Đặt lại số bài viết ẩn
 
     displayedPosts.forEach((post, index) => {
         const postElement = document.createElement('div');
@@ -324,15 +324,15 @@ function renderPosts() {
         const timeDiff = currentTime - post.timestamp; // Tính thời gian từ khi đăng
 
         if (timeDiff >= 5 * 60 * 60 * 1000) { // Nếu đã hơn 5 tiếng
-            posts.splice(posts.length - displayedPosts.length + index, 1); // Xóa bình luận
+            posts.splice(posts.length - displayedPosts.length + index, 1); // Xóa bài viết
             localStorage.setItem('posts', JSON.stringify(posts));
-            return; // Không hiển thị bình luận này
+            return; // Không hiển thị bài viết này
         }
 
         postElement.innerHTML = `
-            <strong>${post.user}</strong> ${post.content} (Số lượng: ${post.quantity}) 
+            <strong>${post.user}</strong>: ${post.content} (Số lượng: ${post.quantity}) 
             <span style="color: blue;">(${post.emotion})</span> 
-            <span class="likes-count">(${post.likes} Thích)</span>
+            <span class="likes-count">(${post.likes} lượt thích)</span>
             <button class="like-button" data-index="${index}">Thích</button>
             <button class="delete-button" data-index="${index}">Xóa</button>`;
         
@@ -341,12 +341,12 @@ function renderPosts() {
 
     // Kiểm tra xem có cần hiển thị nút "Tải thêm bình luận" không
     if (posts.length > postsToShow) {
-        hiddenPostsCount = posts.length - postsToShow; // Cập nhật số bình luận ẩn
+        hiddenPostsCount = posts.length - postsToShow; // Cập nhật số bài viết ẩn
         const loadMoreButton = document.createElement('button');
         loadMoreButton.innerText = `Tải thêm bình luận (${hiddenPostsCount})`;
         loadMoreButton.addEventListener('click', function() {
-            postsToShow += 3; // Tăng số bình luận hiển thị
-            renderPosts(); // Gọi lại hàm để hiển thị bình luận
+            postsToShow += 3; // Tăng số bài viết hiển thị
+            renderPosts(); // Gọi lại hàm để hiển thị bài viết
         });
         postsContainer.appendChild(loadMoreButton);
     }
@@ -387,7 +387,7 @@ window.onload = function() {
     const savedPosts = JSON.parse(localStorage.getItem('posts'));
     if (savedPosts) {
         posts = savedPosts;
-        // Không hiển thị bình luận nếu chưa đăng nhập
+        // Không hiển thị bài viết nếu chưa đăng nhập
         if (currentUser) {
             renderPosts();
         }
