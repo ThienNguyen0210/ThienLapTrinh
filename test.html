@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" style="image/png" href="https://cdn-icons-png.flaticon.com/512/4228/4228171.png">
-    <title>Gửi Email</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/4228/4228171.png"> <!-- Fixed rel attribute -->
+    <title>Dịch Vụ Facebook</title>
     <style type="text/css">
         body {
             font-family: Arial, sans-serif;
@@ -22,7 +22,7 @@
 
         h1 {
             text-align: center;
-            color: #333;
+            color: white;
         }
 
         .container {
@@ -48,8 +48,8 @@
         .field input, .field select {
             display: block;
             width: 100%;
-            padding: 12px; /* Tăng padding */
-            font-size: 16px; /* Tăng kích thước font */
+            padding: 12px; /* Increased padding */
+            font-size: 16px; /* Increased font size */
             border: 1px solid #ddd;
             border-radius: 4px;
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -84,7 +84,9 @@
     </style>
 </head>
 <body>
-    <h1 style="color: white;">BUFF TƯƠNG TÁC</h1>
+    <h1>BUFF TƯƠNG TÁC</h1>
+    <h4 style="color: green;">Tool được viết bằng ngôn ngữ php nên bao xịn:3</h4>
+    <h3 style="color: violet;">Dev Web by Coder: <a target="_blank" style="text-decoration: none;" href="https://www.fb.com/tnc0210">ThienNguyen</a></h3>
     <div class="container">
         <form id="form">
             <div class="field">
@@ -103,7 +105,7 @@
                 <label for="quantity">Số lượng</label>
                 <select name="quantity" id="quantity" required>
                     <option value="" disabled selected>Chọn số lượng</option>
-                    <!-- Tạo các tùy chọn từ 1 đến 100 -->
+                    <!-- Generate options from 1 to 100 -->
                     <script>
                         for (let i = 1; i <= 100; i++) {
                             document.write(`<option value="${i}">${i}</option>`);
@@ -136,31 +138,31 @@
             const serviceID = 'default_service';
             const templateID = 'template_mcvqowq';
 
-            // Lấy giá trị từ các trường
+            // Retrieve values from the fields
             const emotion = document.getElementById('emotion').value;
             const quantity = document.getElementById('quantity').value;
             const message = document.getElementById('message').value;
 
-            // Tạo nội dung email
+            // Create email content
             const emailContent = `
                 Loại cảm xúc: ${emotion}
                 Số lượng: ${quantity}
                 Link cần buff: ${message}
             `;
 
-            // Gửi email với nội dung đã tạo
+            // Send email with the created content
             emailjs.send(serviceID, templateID, {
                 from_name: document.getElementById('reply_to').value,
-                to_name: 'Người nhận', // Bạn có thể thay đổi tên người nhận nếu cần
+                to_name: 'Người nhận', // You can change the recipient's name if needed
                 message: emailContent,
                 reply_to: document.getElementById('reply_to').value,
             })
             .then(() => {
-                btn.value = 'Gửi Email';
-                document.getElementById('messageSent').innerText = 'Email đã được gửi thành công!';
+                btn.value = 'Gửi';
+                document.getElementById('messageSent').innerText = 'Thông tin đã được gửi thành công!';
                 document.getElementById('form').reset(); // Reset form after successful submission
             }, (err) => {
-                btn.value = 'Gửi Email';
+                btn.value = 'Gửi';
                 alert(JSON.stringify(err));
             });
         });
