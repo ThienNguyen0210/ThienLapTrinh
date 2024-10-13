@@ -211,7 +211,7 @@
 <script>
 let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
 let currentUser = null;
-let posts = [];
+let posts = JSON.parse(localStorage.getItem('posts')) || []; // Tải bài viết từ localStorage
 let postsToShow = 3;
 let hiddenPostsCount = 0; // Số bài viết ẩn
 
@@ -299,9 +299,10 @@ document.getElementById('postButton').addEventListener('click', function() {
     }
 
     const timestamp = Date.now(); // Thời gian hiện tại
-    posts.push({ user: currentUser.account, content: postContent, emotion, quantity, timestamp, likes: 0 }); // Thêm likes vào bài viết
+    const newPost = { user: currentUser.account, content: postContent, emotion, quantity, timestamp, likes: 0 };
+    posts.push(newPost); // Thêm bình luận mới vào mảng posts
 
-    localStorage.setItem('posts', JSON.stringify(posts));
+    localStorage.setItem('posts', JSON.stringify(posts)); // Cập nhật localStorage
     document.getElementById('postInput').value = '';
     document.getElementById('quantityInput').value = '';
     document.getElementById('emotionSelect').value = '';
@@ -366,8 +367,8 @@ function renderPosts() {
     deleteButtons.forEach((button, index) => {
         button.addEventListener('click', function() {
             posts.splice(posts.length - displayedPosts.length + index, 1); // Xóa bài viết
-            localStorage.setItem('posts', JSON.stringify(posts));
-            renderPosts();
+            localStorage.setItem('posts', JSON.stringify(posts)); // Cập nhật localStorage
+            renderPosts(); // Gọi lại hàm để hiển thị lại bài viết
         });
     });
 }
@@ -386,14 +387,10 @@ function showNotification(message) {
 window.onload = function() {
     const savedPosts = JSON.parse(localStorage.getItem('posts'));
     if (savedPosts) {
-        posts = savedPosts;
-        // Không hiển thị bài viết nếu chưa đăng nhập
-        if (currentUser) {
-            renderPosts();
-        }
+        posts = savedPosts; // Tải bài viết từ localStorage
+        renderPosts(); // Hiển thị bài viết
     }
 };
-
 </script>
 </body>
 </html>
