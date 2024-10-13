@@ -3,13 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" style="image/png" href="https://cdn-icons-png.flaticon.com/512/4228/4228171.png">
     <title>Gửi Email</title>
     <style type="text/css">
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-image: url('https://png.pngtree.com/background/20211217/original/pngtree-matrix-digital-code-hacker-background-picture-image_1593618.jpg');
+            background-size: cover;
+            background-position: center;
             margin: 0;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            min-height: 200vh;
         }
 
         h1 {
@@ -37,17 +45,17 @@
             margin-bottom: 5px;
         }
 
-        .field input {
+        .field input, .field select {
             display: block;
             width: 100%;
-            padding: 8px;
-            font-size: 14px;
+            padding: 12px; /* Tăng padding */
+            font-size: 16px; /* Tăng kích thước font */
             border: 1px solid #ddd;
             border-radius: 4px;
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
-        .field input:focus {
+        .field input:focus, .field select:focus {
             border-color: #4460AA;
             box-shadow: 0 0 5px rgba(68, 96, 170, 0.5);
         }
@@ -76,26 +84,42 @@
     </style>
 </head>
 <body>
-    <h1>Gửi Email</h1>
+    <h1 style="color: white;">BUFF TƯƠNG TÁC</h1>
     <div class="container">
         <form id="form">
             <div class="field">
-                <label for="from_name">Tên người gửi</label>
-                <input type="text" name="from_name" id="from_name" required>
+                <label for="emotion">Loại cảm xúc</label>
+                <select name="emotion" id="emotion" required>
+                    <option value="" disabled selected>Chọn cảm xúc</option>
+                    <option value="Like">Thích</option>
+                    <option value="Love">Yêu thích</option>
+                    <option value="Haha">Haha</option>
+                    <option value="Wow">Wow</option>
+                    <option value="Sad">Buồn</option>
+                    <option value="Angry">Giận dữ</option>
+                </select>
             </div>
             <div class="field">
-                <label for="to_name">Tên người nhận</label>
-                <input type="text" name="to_name" id="to_name" required>
+                <label for="quantity">Số lượng</label>
+                <select name="quantity" id="quantity" required>
+                    <option value="" disabled selected>Chọn số lượng</option>
+                    <!-- Tạo các tùy chọn từ 1 đến 100 -->
+                    <script>
+                        for (let i = 1; i <= 100; i++) {
+                            document.write(`<option value="${i}">${i}</option>`);
+                        }
+                    </script>
+                </select>
             </div>
             <div class="field">
-                <label for="message">Nội dung</label>
+                <label for="message">Link cần buff</label>
                 <input type="text" name="message" id="message" required>
             </div>
             <div class="field">
                 <label for="reply_to">Địa chỉ email trả lời</label>
                 <input type="email" name="reply_to" id="reply_to" required>
             </div>
-            <input type="submit" id="button" value="Gửi Email">
+            <input type="submit" id="button" value="Gửi">
             <div class="message" id="messageSent"></div>
         </form>
     </div>
@@ -112,15 +136,33 @@
             const serviceID = 'default_service';
             const templateID = 'template_mcvqowq';
 
-            emailjs.sendForm(serviceID, templateID, this)
-                .then(() => {
-                    btn.value = 'Gửi Email';
-                    document.getElementById('messageSent').innerText = 'Email đã được gửi thành công!';
-                    document.getElementById('form').reset(); // Reset form after successful submission
-                }, (err) => {
-                    btn.value = 'Gửi Email';
-                    alert(JSON.stringify(err));
-                });
+            // Lấy giá trị từ các trường
+            const emotion = document.getElementById('emotion').value;
+            const quantity = document.getElementById('quantity').value;
+            const message = document.getElementById('message').value;
+
+            // Tạo nội dung email
+            const emailContent = `
+                Loại cảm xúc: ${emotion}
+                Số lượng: ${quantity}
+                Link cần buff: ${message}
+            `;
+
+            // Gửi email với nội dung đã tạo
+            emailjs.send(serviceID, templateID, {
+                from_name: document.getElementById('reply_to').value,
+                to_name: 'Người nhận', // Bạn có thể thay đổi tên người nhận nếu cần
+                message: emailContent,
+                reply_to: document.getElementById('reply_to').value,
+            })
+            .then(() => {
+                btn.value = 'Gửi Email';
+                document.getElementById('messageSent').innerText = 'Email đã được gửi thành công!';
+                document.getElementById('form').reset(); // Reset form after successful submission
+            }, (err) => {
+                btn.value = 'Gửi Email';
+                alert(JSON.stringify(err));
+            });
         });
 
         emailjs.init('BUHtg1BuVtAPT9O2M');
