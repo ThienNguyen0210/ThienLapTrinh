@@ -5,41 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/4228/4228171.png">
     <title>Dịch Vụ Facebook</title>
-    <style type="text/css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to right, #1e3c72, #2a5298);
-            margin: 0;
-            padding: 20px;
+            background: linear-gradient(120deg, #2a5298, #1e3c72);
+            color: #fff;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            color: #fff;
             min-height: 100vh;
+            padding: 0 20px;
+            overflow-x: hidden;
         }
 
         h1 {
+            font-size: 3rem;
             text-align: center;
-            font-size: 2.5em;
             text-transform: uppercase;
-            background: -webkit-linear-gradient(#ffffff, #d8d8d8);
+            background: linear-gradient(45deg, #fff, #d8d8d8);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
+            color: transparent;
+            margin-bottom: 30px;
+            animation: textEffect 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes textEffect {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.1);
+            }
         }
 
         .container {
-            max-width: 500px;
+            max-width: 550px;
+            width: 100%;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s ease-in-out;
         }
 
         .container:hover {
-            transform: scale(1.02);
+            transform: scale(1.05);
         }
 
         .field {
@@ -53,7 +71,8 @@
             margin-bottom: 5px;
         }
 
-        .field input, .field select {
+        .field input,
+        .field select {
             display: block;
             width: 100%;
             padding: 12px;
@@ -61,24 +80,25 @@
             background: rgba(255, 255, 255, 0.2);
             color: #fff;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            transition: all 0.3s ease;
+            border-radius: 8px;
+            transition: 0.3s ease;
         }
 
-        .field input:focus, .field select:focus {
+        .field input:focus,
+        .field select:focus {
             border-color: #4a90e2;
-            box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
             background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
         }
 
         input[type="submit"] {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             font-size: 18px;
             background: linear-gradient(45deg, #6a11cb, #2575fc);
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -88,18 +108,17 @@
         }
 
         .message {
-            margin-top: 20px;
             font-size: 14px;
             color: #6aff6a;
             text-align: center;
         }
 
         .toggle {
-            margin-top: 20px;
             text-align: center;
             cursor: pointer;
             color: #fbc531;
             text-decoration: underline;
+            margin-top: 10px;
             transition: color 0.3s ease;
         }
 
@@ -129,6 +148,17 @@
 
         .logout:hover {
             color: #ff7979;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 20px;
+                box-shadow: none;
+            }
         }
     </style>
 </head>
@@ -179,7 +209,7 @@
         </div>
 
         <div id="emailForm" class="hidden">
-            <h2>Web tạo bởi: <a href="www.https://fb.com/tnc0210">ThienNguyen</a></h2>
+            <h2>Web tạo bởi: <a href="https://fb.com/tnc0210" target="_blank" style="color: #fff;">ThienNguyen</a></h2>
             <h2 style="color: green">Tool buff tự động bằng mã php</h2>
             <form id="form">
                 <div class="field">
@@ -221,7 +251,6 @@
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
-    // Load registered users from local storage
     let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
     let loggedInUser = null;
 
