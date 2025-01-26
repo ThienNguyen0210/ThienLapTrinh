@@ -325,6 +325,74 @@ downBtn.addEventListener('click', () => {
 });
 
 
+// Thêm sự kiện chạm cho thiết bị di động
+let startTouchX = 0;
+let startTouchY = 0;
+
+coverElem.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    startTouchX = touch.clientX;
+    startTouchY = touch.clientY;
+    isDragging = true;
+});
+
+coverElem.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - startTouchX;
+    const deltaY = touch.clientY - startTouchY;
+    coverElem.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+    if (Math.abs(deltaX) > 75 || Math.abs(deltaY) > 75) {
+        coverElem.style.display = 'none';
+        if (!isResultCalculated) {
+            showResult();
+        }
+    }
+});
+
+document.addEventListener('touchend', () => {
+    if (isDragging) {
+        coverElem.style.transform = 'translate(0, 0)';
+    }
+    isDragging = false;
+});
+
+// Thêm hiệu ứng bay tiền khi thắng
+function showResult() {
+    isResultCalculated = true;
+    const isWin = (upBtn.classList.contains('active') && currentNumber > 50) ||
+                  (downBtn.classList.contains('active') && currentNumber <= 50);
+    const outcome = isWin ? "win" : "lose";
+    const change = isWin ? cuoc : -cuoc;
+    sodu += change;
+    soduElem.innerHTML = `Số dư: ${sodu}$`;
+
+    // Thêm hiệu ứng bay tiền
+    if (isWin) {
+        const flyMoney = document.createElement('div');
+        flyMoney.classList.add('fly-money');
+        flyMoney.innerHTML = `+${cuoc * 2}$`;
+        document.body.appendChild(flyMoney);
+
+        setTimeout(() => {
+            flyMoney.style.transform = 'translateY(-100px)';
+            flyMoney.style.opacity = '0';
+        }, 100);
+
+        setTimeout(() => {
+            document.body.removeChild(flyMoney);
+        }, 1000);
+    }
+
+    historyElem.innerHTML += `<div class="history-item ${outcome}">${isWin ? 'Thắng' : 'Thua'} - Cược: ${cuoc}$ - Kết quả: ${currentNumber}</div>`;
+    thongbaoElem.innerHTML = isWin
+        ? `<span style="color: green;">Bạn đã thắng ${cuoc * 2}$!</span>`
+        : `<span style="color: red;">Bạn đã thua ${cuoc}$!</span>`;
+    setTimeout(() => {
+        thongbaoElem.innerHTML = '';
+    }, 2000);
+}
 
 
 
