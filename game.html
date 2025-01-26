@@ -303,8 +303,8 @@ function showResult() {
     soduElem.innerHTML = `Số dư: ${sodu}$`;
     historyElem.innerHTML += `<div class="history-item ${outcome}">${isWin ? 'Thắng' : 'Thua'} - Cược: ${cuoc}$ - Kết quả: ${currentNumber}</div>`;
     thongbaoElem.innerHTML = isWin
-        ? `<span style="color: green;">Bạn đã thắng ${cuoc * 2}$!</span>`
-        : `<span style="color: red;">Bạn đã thua ${cuoc}$!</span>`;
+        ? `<span style="color: green;">Thắng +${cuoc * 2}$!</span>`
+        : `<span style="color: red;">Bạn đã thua -${cuoc}$!</span>`;
     setTimeout(() => {
         thongbaoElem.innerHTML = '';
     }, 2000);
