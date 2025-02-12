@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Đăng Nhập</title>
+    <link rel="icon" type="image/png" href="https://cdn.tgdd.vn/hoi-dap/1107690/Thumbnail/nap-quan-huy-lien-quan.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen">
+    <div class="bg-gray-800 text-white rounded-lg shadow-lg p-8 max-w-3xl w-full flex" id="container">
+        <div class="w-1/2 p-5">
+            <h1 class="text-3xl font-bold">quanhuylau.online</h1>
+            <p class="mt-4 text-sm text-gray-400">
+                Là một hệ thống quân huy lậu nhập từ các nguồn không phải của Garena,
+                đảm bảo cho người chơi có trải nghiệm tốt và giá rẻ. Cam kết không bị ban.
+            </p>
+            <p class="text-red-400">⚠ Lưu ý: Cân nhắc khi mua số lượng lớn bởi dễ bị ban!</p>
+            <p class="text-blue-400">👥 Số lượng khách hàng đã ủng hộ: <strong>231</strong></p>        </div>
+        <div class="w-1/2 bg-gray-700 p-6 rounded-lg" id="form-container">
+            <h2 class="text-xl font-semibold" id="form-title">Đăng nhập hệ thống</h2>
+            <p class="text-sm text-gray-400">Nếu bạn chưa có tài khoản, <a href="#" id="toggle-form" class="text-red-400">Đăng Ký Ngay!</a></p>
+            <form class="mt-4" id="auth-form">
+                <label class="block text-sm">Tài khoản</label>
+                <input type="text" id="username" class="w-full p-2 rounded bg-gray-600 text-white border border-gray-500" placeholder="username" required>
+                
+                <label class="block text-sm mt-3">Mật khẩu</label>
+                <input type="password" id="password" class="w-full p-2 rounded bg-gray-600 text-white border border-gray-500" placeholder="******" required>
+                
+                <div id="confirm-password-container" class="hidden">
+                    <label class="block text-sm mt-3">Nhập lại mật khẩu</label>
+                    <input type="password" id="confirm-password" class="w-full p-2 rounded bg-gray-600 text-white border border-gray-500" placeholder="******">
+                </div>
+                
+                <button type="submit" class="mt-4 w-full bg-blue-500 p-2 rounded text-white font-semibold hover:bg-blue-600" id="submit-btn">Đăng nhập</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="notification" class="fixed bottom-5 right-5 bg-green-500 text-white p-3 rounded-lg shadow-lg hidden">
+        <p id="notification-text"></p>
+    </div>
+
+    <script>
+        const toggleForm = document.getElementById("toggle-form");
+        const formTitle = document.getElementById("form-title");
+        const submitBtn = document.getElementById("submit-btn");
+        const confirmPasswordContainer = document.getElementById("confirm-password-container");
+        const authForm = document.getElementById("auth-form");
+        const notification = document.getElementById("notification");
+        const notificationText = document.getElementById("notification-text");
+
+        let isLogin = true;
+
+        toggleForm.addEventListener("click", (e) => {
+            e.preventDefault();
+            isLogin = !isLogin;
+            formTitle.textContent = isLogin ? "Đăng nhập hệ thống" : "Đăng ký tài khoản";
+            submitBtn.textContent = isLogin ? "Đăng nhập" : "Đăng ký";
+            toggleForm.textContent = isLogin ? "Đăng Ký Ngay!" : "Đăng nhập";
+            confirmPasswordContainer.classList.toggle("hidden", isLogin);
+        });
+
+        authForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm-password")?.value;
+
+            if (!isLogin && password !== confirmPassword) {
+                showNotification("Mật khẩu nhập lại không khớp!", "bg-red-500");
+                return;
+            }
+
+            const response = await fetch(isLogin ? "login.php" : "register.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+
+            showNotification(result.message, result.success ? "bg-green-500" : "bg-red-500");
+        });
+
+        function showNotification(message, color) {
+            notificationText.textContent = message;
+            notification.classList.remove("hidden", "bg-green-500", "bg-red-500");
+            notification.classList.add(color);
+            setTimeout(() => notification.classList.add("hidden"), 3000);
+        }
+    </script>
+</body>
+</html>
