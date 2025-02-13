@@ -174,16 +174,26 @@ document.addEventListener("DOMContentLoaded", function () {
     refreshCaptcha.addEventListener("click", generateCaptcha);
     generateCaptcha();
 
-    document.querySelectorAll("[data-toggle]").forEach(button => {
-        button.addEventListener("click", function () {
-            const input = document.getElementById(button.dataset.toggle);
-            input.type = input.type === "password" ? "text" : "password";
-            button.textContent = input.type === "password" ? "👁" : "🙈";
-        });
+    function togglePasswordVisibility(inputField, toggleButton) {
+        if (inputField.type === "password") {
+            inputField.type = "text";
+            toggleButton.textContent = "🙈";
+        } else {
+            inputField.type = "password";
+            toggleButton.textContent = "👁";
+        }
+    }
+
+    // Thêm sự kiện click cho nút ẩn/hiện mật khẩu chính
+    document.getElementById("toggle-password").addEventListener("click", function () {
+        togglePasswordVisibility(passwordInput, this);
+    });
+
+    // Thêm sự kiện click cho nút ẩn/hiện mật khẩu xác nhận
+    document.getElementById("toggle-confirm-password").addEventListener("click", function () {
+        togglePasswordVisibility(confirmPasswordInput, this);
     });
 });
-
-
     </script>
 
 </body>
