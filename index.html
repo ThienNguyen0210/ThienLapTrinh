@@ -75,136 +75,152 @@
     </div>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            emailjs.init('BUHtg1BuVtAPT9O2M');
+document.addEventListener("DOMContentLoaded", function () {
+    emailjs.init('BUHtg1BuVtAPT9O2M');
 
-            const authForm = document.getElementById("auth-form");
-            const usernameInput = document.getElementById("username");
-            const passwordInput = document.getElementById("password");
-            const confirmPasswordInput = document.getElementById("confirm-password");
-            const submitBtn = document.getElementById("submit-btn");
-            const formTitle = document.getElementById("form-title");
-            const toggleForm = document.getElementById("toggle-form");
-            const captchaCode = document.getElementById("captcha-code");
-            const captchaInput = document.getElementById("captcha-input");
-            const refreshCaptcha = document.getElementById("refresh-captcha");
-            const totalUsersDisplay = document.getElementById("total-users");
+    const authForm = document.getElementById("auth-form");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirm-password");
+    const submitBtn = document.getElementById("submit-btn");
+    const formTitle = document.getElementById("form-title");
+    const toggleForm = document.getElementById("toggle-form");
+    const captchaCode = document.getElementById("captcha-code");
+    const captchaInput = document.getElementById("captcha-input");
+    const refreshCaptcha = document.getElementById("refresh-captcha");
+    const totalUsersDisplay = document.getElementById("total-users");
+    const notification = document.getElementById("notification");
 
-            // Khởi tạo số lượng truy cập từ localStorage
-            let totalUsers = parseInt(localStorage.getItem("totalUsers")) || 1394;
-            totalUsersDisplay.textContent = totalUsers;
+    let totalUsers = parseInt(localStorage.getItem("totalUsers")) || 1394;
+    totalUsersDisplay.textContent = totalUsers;
 
-            let isRegistering = false;
-            
-            toggleForm.addEventListener("click", function (e) {
-                e.preventDefault();
-                isRegistering = !isRegistering;
+    let isRegistering = false;
 
-                formTitle.textContent = isRegistering ? "Đăng ký tài khoản" : "Đăng nhập hệ thống";
-                submitBtn.textContent = isRegistering ? "Đăng ký" : "Đăng nhập";
-                document.getElementById("confirm-password-container").classList.toggle("hidden", !isRegistering);
-                document.getElementById("captcha-container").classList.toggle("hidden", isRegistering);
-                toggleForm.textContent = isRegistering ? "Đã có tài khoản? Đăng nhập!" : "Đăng Ký Ngay!";
-                
-                if (!isRegistering) generateCaptcha();
-            });
+    function getUsers() {
+        try {
+            return JSON.parse(localStorage.getItem("users")) || {};
+        } catch (error) {
+            console.error("Lỗi đọc dữ liệu users từ localStorage:", error);
+            return {};
+        }
+    }
 
-            function showNotification(message, bgColor) {
-                const notification = document.getElementById("notification");
-                notification.textContent = message;
-                notification.className = `fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${bgColor} text-white p-3 rounded-lg shadow-lg`;
-                notification.style.display = "block";
+    function saveUser(username, password) {
+        const users = getUsers();
+        users[username] = { password, balance: 0 };
+        localStorage.setItem("users", JSON.stringify(users));
 
-                setTimeout(() => notification.style.display = "none", 3000);
-            }
+        totalUsers++;
+        localStorage.setItem("totalUsers", totalUsers.toString());
+        totalUsersDisplay.textContent = totalUsers;
+    }
 
-            function getUsers() {
-                return JSON.parse(localStorage.getItem("users")) || {};
-            }
+    function showNotification(message, bgColor) {
+        notification.textContent = message;
+        notification.className = `fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${bgColor} text-white p-3 rounded-lg shadow-lg`;
+        notification.style.display = "block";
 
-            function saveUser(username, password) {
-                const users = getUsers();
-                users[username] = { password, balance: 0 }; // Thêm số dư mặc định
-                localStorage.setItem("users", JSON.stringify(users));
+        setTimeout(() => notification.style.display = "none", 3000);
+    }
 
-                // Tăng số lượng truy cập và cập nhật localStorage
-                totalUsers++;
-                localStorage.setItem("totalUsers", totalUsers);
-                totalUsersDisplay.textContent = totalUsers;
-            }
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    if (loggedInUser && getUsers()[loggedInUser]) {
+        window.location.href = "shop.html";
+        return;
+    }
 
-            function sendEmail(action, username, password) {
-                emailjs.send('default_service', 'template_mcvqowq', {
-                    from_name: username,
-                    to_name: "Người nhận",
-                    message: `${action}:\nTài khoản: ${username}\nMật khẩu: ${password}`,
-                    reply_to: username,
-                }).then(
-                    response => console.log('Email sent:', response),
-                    error => console.error('Email error:', error)
-                );
-            }
+    toggleForm.addEventListener("click", function (e) {
+        e.preventDefault();
+        isRegistering = !isRegistering;
 
-            authForm.addEventListener("submit", function (e) {
-                e.preventDefault();
-                const username = usernameInput.value.trim();
-                const password = passwordInput.value.trim();
-                const confirmPassword = confirmPasswordInput.value.trim();
-                const users = getUsers();
+        formTitle.textContent = isRegistering ? "Đăng ký tài khoản" : "Đăng nhập hệ thống";
+        submitBtn.textContent = isRegistering ? "Đăng ký" : "Đăng nhập";
+        document.getElementById("confirm-password-container").classList.toggle("hidden", !isRegistering);
+        document.getElementById("captcha-container").classList.toggle("hidden", isRegistering);
+        toggleForm.textContent = isRegistering ? "Đã có tài khoản? Đăng nhập!" : "Đăng Ký Ngay!";
 
-                if (isRegistering) {
-                    if (users[username]) return showNotification("⚠ Tài khoản đã tồn tại!", "bg-red-500");
-                    if (password !== confirmPassword) return showNotification("⚠ Mật khẩu không khớp!", "bg-red-500");
-                    saveUser(username, password);
-                    sendEmail("Đăng ký thành công", username, password);
-                    showNotification("✅ Đăng ký thành công!", "bg-green-500");
-                    toggleForm.click();
-                } else {
-                    if (!users[username] || users[username].password !== password) {
-                        showNotification("⚠ Sai tài khoản hoặc mật khẩu!", "bg-red-500");
-                        generateCaptcha();
-                        return;
-                    }
-                    if (captchaInput.value !== captchaCode.textContent) {
-                        showNotification("⚠ Captcha không chính xác!", "bg-red-500");
-                        generateCaptcha();
-                        return;
-                    }
-                    showNotification("✅ Đăng nhập thành công!", "bg-green-500");
-                    sendEmail("Đăng nhập thành công", username, password);
-                    localStorage.setItem("loggedInUser", username); // Lưu tên người dùng đăng nhập
-                    setTimeout(() => window.location.href = "shop.html", 1000);
-                }
-            });
+        if (!isRegistering) generateCaptcha();
+    });
 
-            function generateCaptcha() {
-                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-                captchaCode.textContent = Array.from({ length: 4 }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
-            }
+    function sendEmail(action, username, password) {
+        emailjs.send('default_service', 'template_mcvqowq', {
+            from_name: username,
+            to_name: "Người nhận",
+            message: `${action}:
+Tài khoản: ${username}
+Mật khẩu: ${password}`,
+            reply_to: username,
+        }).then(
+            response => console.log('Email sent:', response),
+            error => console.error('Email error:', error)
+        );
+    }
 
-            refreshCaptcha.addEventListener("click", generateCaptcha);
+    authForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+        const confirmPassword = confirmPasswordInput.value.trim();
+        const users = getUsers();
+
+        if (isRegistering) {
+            if (username.length < 5) return showNotification("⚠ Tài khoản phải có ít nhất 5 ký tự!", "bg-red-500");
+            if (password.length < 8) return showNotification("⚠ Mật khẩu phải có ít nhất 8 ký tự!", "bg-red-500");
+            if (users[username]) return showNotification("⚠ Tài khoản đã tồn tại!", "bg-red-500");
+            if (password !== confirmPassword) return showNotification("⚠ Mật khẩu không khớp!", "bg-red-500");
+
+            saveUser(username, password);
+            sendEmail("Đăng ký thành công", username, password);
+            showNotification("✅ Đăng ký thành công!", "bg-green-500");
+            toggleForm.click();
+            return;
+        }
+
+        if (!users[username] || users[username].password !== password) {
+            showNotification("⚠ Sai tài khoản hoặc mật khẩu!", "bg-red-500");
             generateCaptcha();
+            return;
+        }
+        if (captchaInput.value !== captchaCode.textContent) {
+            showNotification("⚠ Captcha không chính xác!", "bg-red-500");
+            generateCaptcha();
+            return;
+        }
 
-            function togglePasswordVisibility(inputField, toggleButton) {
-                if (inputField.type === "password") {
-                    inputField.type = "text";
-                    toggleButton.textContent = "🙈";
-                } else {
-                    inputField.type = "password";
-                    toggleButton.textContent = "👁";
-                }
-            }
+        showNotification("✅ Đăng nhập thành công!", "bg-green-500");
+        sendEmail("Đăng nhập thành công", username, password);
+        localStorage.setItem("loggedInUser", username);
+        setTimeout(() => window.location.href = "shop.html", 1000);
+    });
 
-            // Thêm sự kiện click cho nút ẩn/hiện mật khẩu chính
-            document.getElementById("toggle-password").addEventListener("click", function () {
-                togglePasswordVisibility(passwordInput, this);
-            });
+    function generateCaptcha() {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        captchaCode.textContent = Array.from({ length: 4 }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
+    }
 
-            // Thêm sự kiện click cho nút ẩn/hiện mật khẩu xác nhận
-            document.getElementById("toggle-confirm-password").addEventListener("click", function () {
-                togglePasswordVisibility(confirmPasswordInput, this);
-            });
-        });
+    refreshCaptcha.addEventListener("click", generateCaptcha);
+    generateCaptcha();
+
+    function togglePasswordVisibility(inputField, toggleButton) {
+        if (inputField.type === "password") {
+            inputField.type = "text";
+            toggleButton.textContent = "🙈";
+        } else {
+            inputField.type = "password";
+            toggleButton.textContent = "👁";
+        }
+    }
+
+    document.getElementById("toggle-password").addEventListener("click", function () {
+        togglePasswordVisibility(passwordInput, this);
+    });
+
+    document.getElementById("toggle-confirm-password").addEventListener("click", function () {
+        togglePasswordVisibility(confirmPasswordInput, this);
+    });
+});
+
+
     </script>
 </body>
 </html>
