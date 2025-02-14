@@ -106,8 +106,24 @@
     font-size: 20px;
     color: #333;
 }
+
 /* Tối ưu hóa cho mobile */
 @media (max-width: 768px) {
+        .menu {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+        .menu a {
+        padding: 8px 12px;
+        background: #f0f0f0;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+    .logo {
+        display: none;
+    }
     .container {
         padding-left: 1rem;
         padding-right: 1rem;
@@ -201,13 +217,13 @@
     <!-- Header -->
     <header class="fixed-header">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-500 glow-text">QUANHUYLAU.ONLINE</div>
-            <nav class="space-x-6">
+            <div class="text-2xl font-bold text-blue-500 glow-text logo">QUANHUYLAU.ONLINE</div>
+            <nav class="space-x-6 menu"@>
                 <a href="#top" class="text-gray-700 hover:text-blue-500">Trang Chủ</a>
                 <a href="#huong-dan" class="text-gray-700 hover:text-blue-500">Hướng Dẫn</a>
                 <a href="#nap-tien" class="text-gray-700 hover:text-blue-500">Nạp Tiền</a>
                 <span id="username-display" class="text-gray-700"></span>
-                <button id="logout-btn" class="text-gray-700 hover:text-blue-500">Đăng Xuất</button>
+                <button id="logout-btn" class="text-gray-700 hover:text-blue-500" style=" background: red; border-radius: 8px; padding: 5px">LogOut</button>
             </nav>
         </div>
     </header>
@@ -375,6 +391,7 @@
             <span class="close-form" id="closeForm">×</span>
             <h3 class="text-xl font-semibold mb-4">Nạp Tiền</h3>
             <input type="number" id="amountInput" class="w-full p-2 rounded border border-gray-300 mb-4" placeholder="Nhập số tiền">
+            <p id="errornaptien" style="color: red"></p>
             <button id="generateQR" class="button w-full">Tạo Mã</button>
             <div id="qrCodeContainer" class="mt-4 hidden">
                 <img id="qrCodeImage" src="" alt="QR Code" class="w-full">
@@ -402,8 +419,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Cập nhật hiển thị số dư
     const updateBalanceDisplay = () => {
-        document.getElementById("username-display").textContent = 
-            `${loggedInUser} (Số dư: ${users[loggedInUser].balance} VNĐ)`;
+        document.getElementById("username-display").innerHTML = 
+            `Tài khoản: ${loggedInUser} <span style="background: gray; padding: 6px; border-radius: 8px">Ví: ${users[loggedInUser].balance} VNĐ </span>`;
     };
 
     updateBalanceDisplay(); // Hiển thị số dư ngay khi load trang
@@ -432,14 +449,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Kiểm tra số tiền hợp lệ và phải từ 5000 VNĐ trở lên
         if (!amount || isNaN(amount) || amount < 5000) {
-            alert("Vui lòng nhập số tiền hợp lệ (tối thiểu 5000 VNĐ)!");
+            const errornaptien = document.getElementById('errornaptien')
+            errornaptien.innerHTML = `<p style="color: red">Vui lòng nhập số tiền từ 5000 trở lên</p>`
             return;
         }
 
         if (countdownInterval) {
             clearInterval(countdownInterval);
         }
-
+        errornaptien.innerHTML = `<p style="color: red"></p>`
         const randomContent = Math.random().toString(36).substring(2, 6).toUpperCase();
         const qrCodeURL = `https://img.vietqr.io/image/970407-5089206015240-compact.png?amount=${amount}&addInfo=${randomContent}&accountName=NGUYEN+CHI+THIEN`;
         document.getElementById("qrCodeImage").src = qrCodeURL;
