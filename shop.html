@@ -5,7 +5,6 @@
     <title>Dịch vụ tiền tệ Liên Quân</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_LCIHTVbgreID4-b4BruKg0LF5AraSzXlLA&s">
     <style>
         body {
     font-family: 'Roboto', sans-serif;
@@ -139,6 +138,7 @@
         width: 95%;
     }
 }
+
 #qrCodeContainer {
     display: none; /* Ẩn ban đầu */
     text-align: center; /* Căn giữa nội dung */
@@ -361,6 +361,47 @@ body {
         align-items: center;
 
 }
+
+.top-nap-tien-form {
+    width: 50%; /* Chiều rộng 50% của body */
+    max-width: 600px; /* Giới hạn chiều rộng tối đa (tuỳ chọn) */
+    margin: 0 auto; /* Căn giữa form */
+}
+        .online-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-top: -250px;
+            position: absolute;
+            margin-left: 200px
+        }
+        .user-list li {
+            background: #007bff;
+            color: black;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .user-list li::before {
+            content: "🟢";
+            margin-right: 8px;
+        }
+        #online-list li {
+    font-size: 16px;
+    padding: 5px;
+    background: #f3f3f3;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.online-time {
+    color: gray;
+    font-size: 14px;
+}
     </style>
 
 
@@ -411,9 +452,65 @@ body {
     <div class="content">
         <h1 class="text-4xl font-bold mb-4">Nạp Quân Huy Liên Quân Giá Rẻ</h1>
         <p class="text-lg">UY TÍN - GIÁ RẺ - CHẤT LƯỢNG</p>
-        <p style="color: red;">Trang chủ rửa tiền bằng quân huy hàng đầu Việt Nam</p>
+        <p style="color: red;">Trang chủ nạp quân huy uy tín hàng đầu Việt Nam</p>
     </div>
 </section>
+<!-- TOP nap the -->
+    <div class="bg-white shadow-md rounded-lg p-6 w-80 top-nap-tien-form">
+        <h2 class="text-lg font-bold flex items-center space-x-2">
+            <span>⭐</span>
+            <span>TOP NẠP TIỀN THÁNG 2</span>
+        </h2>
+
+        <ul class="mt-4 space-y-3">
+            <li class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-yellow-500 text-xl">⭐</span>
+                    <span>zaq123</span>
+                </div>
+                <span class="font-bold text-gray-700">1.000.000đ</span>
+            </li>
+            <li class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-yellow-500 text-xl">⭐</span>
+                    <span>Xintop1</span>
+                </div>
+                <span class="font-bold text-gray-700">710.000đ</span>
+            </li>
+            <li class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-yellow-500 text-xl">⭐</span>
+                    <span>Nenbdbsj</span>
+                </div>
+                <span class="font-bold text-gray-700">450.000đ</span>
+            </li>
+            <li class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-blue-500 font-bold border border-blue-500 rounded-full px-2">4</span>
+                    <span>tom22102012</span>
+                </div>
+                <span class="font-bold text-gray-700">300.000đ</span>
+            </li>
+            <li class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-blue-500 font-bold border border-blue-500 rounded-full px-2">5</span>
+                    <span>Tuan</span>
+                </div>
+                <span class="font-bold text-gray-700">60.000đ</span>
+            </li>
+        </ul>
+<button id="napTienNgayBtn" class="mt-5 w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition">
+    Nạp tiền ngay
+</button>
+    </div>
+    <!-- Online -->
+<div class="online-box">
+    <h2 class="text-lg font-bold flex items-center space-x-2">
+        <span>👥</span>
+        <span>Số người đang trực tuyến trên web (<span id="online-count">0</span>)</span>
+    </h2>
+    <ul id="online-list" class="user-list mt-4 space-y-2"></ul>
+</div>
 
 
     <!-- Sản Phẩm -->
@@ -775,6 +872,172 @@ notificationOverlay.addEventListener("click", function (e) {
         notificationOverlay.style.display = "none";
     }
 });
+document.addEventListener("DOMContentLoaded", function () {
+    // ... (các phần code khác)
+
+    // Xử lý mở form nạp tiền khi nhấp vào nút "Nạp tiền ngay"
+    const napTienNgayBtn = document.getElementById("napTienNgayBtn");
+    if (napTienNgayBtn) {
+        napTienNgayBtn.addEventListener("click", function () {
+            formOverlay.style.display = "flex"; // Hiển thị form nạp tiền
+        });
+    }
+
+    // ... (các phần code khác)
+});
+const usernames = [
+    "condianlon8", "nghia123", "mavuongs", "thiennguyen0210", "xincaitay",
+    "yencute123", "nam12345", "yasuott67", "huydeptrai1", "nguyencuto1",
+    "huyentran123", "nghiendeptrai23", "minhhoang2004", "hoanghamobile",
+    "hiennen999", "quydz2323", "trieuvanpro123", "levantri672",
+    "QuyVuongtrolai2", "yen0210magui", "longdaica222", "longdeptraizxc",
+    "thanhcong999", "toilatri123", "toanhoang666", "phantomknight99",
+    "darkpro2002", "gamerx122", "vip_noob234", "godlikeplayer1",
+    "namprovip01", "doremon123", "shogunmaster", "kiemtien247",
+    "streamerphatloc", "xXDragonXx", "nightstalker99", "tientrieu88",
+    "hungvip123", "anhempro99", "mrbinhkool", "truongdz123", "minhhai004",
+    "only1vnp", "anhyeuem221", "heroiclegend", "dinhcuong2000",
+    "tapchoigame", "thedarklord9", "quangngai777", "mastergod999",
+    "darkknight666", "sontungvip123", "hieukute2002", "cuongcon123",
+    "laokhoi123", "diemquynh99", "kidpro666", "hoangdeptrai2001",
+    "vipboy999", "chudinhvip", "caygame24h", "bethuynh999", "nhattran002",
+    "csgovippro", "tamhoang123", "suprerpro99", "legendhero123",
+    "tientruong66", "manhcuongvip", "nhutpro321", "xuananhgame99",
+    "vantoanvip", "kiemhieuvip123", "longthan999", "darkfireknight",
+    "phoenixgod99", "bigbosstien", "cuongthienvip", "dragonball999",
+    "caphecutexx", "anhyeuvip123", "gamethanhcong", "onepunchgod",
+    "trieudovip", "quangprohunter", "nguyenphatvip", "hieuchatvip99",
+    "danchoivip001", "tanchienvip123", "pokerpro999", "vanhai2003",
+    "caothu99", "superchill321", "tanbinhvjp99", "hoangprophong",
+    "gundamwarrior", "suicunegod99", "xprothienthan", "lethanhvip123",
+    "deptrai2002", "vohieupro001", "minhlux999", "baolux123",
+    "anhkhoa777", "thienthanvip99", "datvipx123", "dinhtrung666",
+    "hoangmycute", "bopvippro99", "baoquocvip", "lamtuan888",
+    "quangtrung2002", "haianh123", "longcuongvip", "anhtuanxd",
+    "tuongvip001", "caphetranvan", "hieutrungvip999", "hoangdungpro",
+    "yennhien0210", "trankhanh123", "haiduongvip123", "camtu111",
+    "nguyenthienvip", "phamhuong99", "huyndz99", "noobmaster69",
+    "vipchillmode", "trinhthanhvip", "ngocanhcute", "tuyetlinh123",
+    "quangminhpro", "thanhphongdz", "quanghieu888", "lamquocvip",
+    "gamechuyennghiep", "quoccuong123", "trankhanhvip", "hieuboy999",
+    "phamhungvip", "gamethu123", "cuongno1", "quanpro123",
+    "hieuquangvip", "hoangphatdz", "baolocvip", "mrxthienvip",
+    "darklegend999", "thienhaipro", "vophong999", "phamtrungvip",
+    "lequangdz123", "nguyenbinh888", "darkmodepro", "mrxgaming99",
+    "bachdangvip", "danhbo123", "longtu1", "nguyenthucute",
+    "caphecutex99", "huyentran888", "phuthinhpro", "hoangbao123",
+    "vanhieuvip", "huyducpro", "lebinhdz123", "ngoclinh999",
+    "anhdao0210", "yennhivip123", "minhduc999", "hieuanhvjp",
+    "longthanhto", "hoangvipboss", "baokhanh2002", "duchanh999",
+    "longbadeptraivjp", "hoangxpro", "phamhong123", "trangcutex",
+    "anhhuyvip99", "thanhhieu999", "longgamepro", "caphequangvip",
+    "vipboyminh", "truongson999", "darkphongpro", "nguyenthienxd",
+    "phamkhangpro", "dinhngocvip", "tranviet123", "vuongnghia999",
+    "hieuquangvippro", "thanhminhvjp99", "trieudanhvip", "longphuong888",
+    "phamnhatquang", "truonggamevip", "anhminhdz999", "yennhivjp99",
+    "lehoangvip123", "truonggiangpro", "binhnguyen999", "darkking123"
+];      
+
+let onlineUsers = {}; // Lưu danh sách user online
+
+// Load dữ liệu từ localStorage khi mở web
+function loadUsersFromStorage() {
+    let storedUsers = localStorage.getItem("onlineUsers");
+    if (storedUsers) {
+        onlineUsers = JSON.parse(storedUsers);
+    }
+    saveUsersToStorage();
+    renderUserList();
+}
+
+// Lưu dữ liệu vào localStorage
+function saveUsersToStorage() {
+    localStorage.setItem("onlineUsers", JSON.stringify(onlineUsers));
+}
+
+// Randomly generate a user ID
+function generateUserId() {
+    return 'user' + Math.floor(Math.random() * 10000); // Generate random user ID
+}
+
+// Cập nhật danh sách user online
+function updateOnlineUsers() {
+    const numUsers = Object.keys(onlineUsers).length;
+
+    // Logic for updating online users based on the number of users
+    if (numUsers <= 1) {
+        let randomChance = Math.random();
+        if (randomChance < 0.5) {
+            // 50% chance to add 1 or 2 users
+            let numToAdd = Math.random() < 0.5 ? 1 : 2;
+            for (let i = 0; i < numToAdd; i++) {
+                let newUserId = generateUserId();
+                onlineUsers[newUserId] = 0; // Add new user with 0 minutes
+            }
+        } else if (randomChance < 0.8) {
+            // 30% chance to remove 1 user
+            let users = Object.keys(onlineUsers);
+            let userToRemove = users[Math.floor(Math.random() * users.length)];
+            delete onlineUsers[userToRemove];
+        }
+    } else if (numUsers >= 2 && numUsers <= 4) {
+        let randomChance = Math.random();
+        if (randomChance < 0.3) {
+            // 30% chance to add 1 or 2 users
+            let numToAdd = Math.random() < 0.5 ? 1 : 2;
+            for (let i = 0; i < numToAdd; i++) {
+                let newUserId = generateUserId();
+                onlineUsers[newUserId] = 0; // Add new user with 0 minutes
+            }
+        } else if (randomChance < 0.35) {
+            // 5% chance to remove 1 user
+            let users = Object.keys(onlineUsers);
+            let userToRemove = users[Math.floor(Math.random() * users.length)];
+            delete onlineUsers[userToRemove];
+        }
+    } else if (numUsers >= 5) {
+        let randomChance = Math.random();
+        if (randomChance < 0.75) {
+            // 75% chance to remove 1 user
+            let users = Object.keys(onlineUsers);
+            let userToRemove = users[Math.floor(Math.random() * users.length)];
+            delete onlineUsers[userToRemove];
+        }
+    }
+
+    saveUsersToStorage();
+    renderUserList();
+
+    // Cập nhật danh sách online mỗi 5 giây
+    setTimeout(updateOnlineUsers, 5000);
+}
+
+// Hiển thị danh sách user online
+function renderUserList() {
+    const userList = document.getElementById("online-list");
+    const onlineCount = document.getElementById("online-count");
+    userList.innerHTML = "";
+    onlineCount.textContent = Object.keys(onlineUsers).length;
+
+    Object.keys(onlineUsers).forEach(user => {
+        let li = document.createElement("li");
+        let minutesAgo = onlineUsers[user];
+        li.innerHTML = `${user} - <span class="online-time">${minutesAgo} phút trước</span>`;
+        userList.appendChild(li);
+    });
+}
+
+// Cập nhật thời gian online mỗi phút
+setInterval(() => {
+    Object.keys(onlineUsers).forEach(user => {
+        onlineUsers[user]++; // Tăng thời gian online của user
+    });
+    saveUsersToStorage();
+    renderUserList();
+}, 60000);
+
+// Load dữ liệu khi trang mở lên
+loadUsersFromStorage();
 
  </script>
 </body>
