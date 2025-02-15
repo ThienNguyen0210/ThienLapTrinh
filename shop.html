@@ -1023,9 +1023,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const amount = document.getElementById("amountInput").value;
 
         // Kiểm tra số tiền hợp lệ và phải từ 5000 VNĐ trở lên
-        if (!amount || isNaN(amount) || amount < 5000) {
+        if (!amount || isNaN(amount) || amount < 20000) {
             const errornaptien = document.getElementById('errornaptien')
-            errornaptien.innerHTML = `<p style="color: red">Vui lòng nhập số tiền từ 5000 trở lên</p>`;
+            errornaptien.innerHTML = `<p style="color: red">Vui lòng nhập số tiền từ 20000 trở lên</p>`;
             return;
         }
 
