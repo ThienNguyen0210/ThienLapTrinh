@@ -184,8 +184,53 @@
     margin: 0 auto; /* Căn giữa nút */
     display: block; /* Đảm bảo nút chiếm toàn bộ chiều rộng */
 }
-.build {
-    margin-left: 40%;
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.hidden {
+    display: none;
+}
+
+.w-64 {
+    width: 16rem;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+.hover\:bg-gray-100:hover {
+    background-color: #f3f4f6;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+}
+
+.text-xs {
+    font-size: 0.75rem;
+}
+
+.text-gray-500 {
+    color: #6b7280;
 }
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
@@ -210,7 +255,114 @@
         text-shadow: 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #0ff;
     }
 }
+/* CSS cho form thông báo */
+#notificationOverlays {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#notificationContents {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+#top {
+    width: 100%;
+    height: 300px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+.background-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.background-slide {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: fadeBackground 9s infinite;
+}
+
+/* Animation mờ dần */
+@keyframes fadeBackground {
+    0% { opacity: 0; }
+    10% { opacity: 1; }  /* Ảnh xuất hiện */
+    40% { opacity: 1; }  /* Giữ nguyên trong một thời gian */
+    60% { opacity: 0; }  /* Bắt đầu mờ dần */
+    100% { opacity: 0; }
+}
+
+/* Định thời gian xuất hiện của từng ảnh */
+.background-slide:nth-child(1) {
+    background-image: url(https://play-lh.googleusercontent.com/hDhm0TrQA9W2HN7i1rOHfpT5-5VAwCe-eCgWD23ZJF7tRFDq-ZJSNKIi1kQNpE9yGds=w526-h296-rw);
+    animation-delay: 0s;
+}
+
+.background-slide:nth-child(2) {
+    background-image: url(https://cdn2.fptshop.com.vn/unsafe/Uploads/images/tin-tuc/171656/Originals/2023-12-08_021504.jpg);
+    animation-delay: 3s;
+}
+
+.background-slide:nth-child(3) {
+    background-image: url(https://hoanghamobile.com/tin-tuc/wp-content/uploads/2023/09/hinh-nen-lien-quan.jpg);
+    animation-delay: 6s;
+}
+
+/* Nội dung chữ luôn hiển thị trên cùng */
+.content {
+    position: relative;
+    z-index: 1;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Đổ bóng để dễ đọc hơn */
+}
+
+
+
+
+/* Đảm bảo nội dung chữ hiển thị đè lên hình nền */
+.banner {
+    position: relative;
+    z-index: 2; /* Đặt nội dung chữ lên trên cùng */
+    color: white; /* Màu chữ */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Đổ bóng chữ để dễ đọc */
+}
+body {
+    background-image: url(https://png.pngtree.com/thumb_back/fh260/background/20210521/pngtree-pink-simple-watercolor-dream-background-image_717243.jpg);
+    background-size: cover; /* Đảm bảo hình nền phủ kín toàn bộ màn hình */
+    background-position: center; /* Căn giữa hình nền */
+    height: 100vh; /* Đảm bảo body chiếm toàn bộ chiều cao màn hình */
+        align-items: center;
+
+}
     </style>
+
+
 
 </head>
 <body class="scroll-smooth">
@@ -220,27 +372,48 @@
             <div class="text-2xl font-bold text-blue-500 glow-text logo">QUANHUYLAU.ONLINE</div>
             <nav class="space-x-6 menu"@>
                 <a href="#top" class="text-gray-700 hover:text-blue-500">Trang Chủ</a>
-                <a href="#huong-dan" class="text-gray-700 hover:text-blue-500">Hướng Dẫn</a>
+                <a href="#huong-dan" class="text-gray-700 hover:text-blue-500" id="thongbao">Thông báo</a>
                 <a href="#nap-tien" class="text-gray-700 hover:text-blue-500">Nạp Tiền</a>
                 <span id="username-display" class="text-gray-700"></span>
                 <button id="logout-btn" class="text-gray-700 hover:text-blue-500" style=" background: red; border-radius: 8px; padding: 5px">LogOut</button>
             </nav>
         </div>
     </header>
+<!-- Form thông báo -->
+<div class="form-overlays" id="notificationOverlays">
+    <div class="form-container">
+        <span class="close-form" id="closeNotificationForms">×</span>
+        <h3 class="text-xl font-semibold mb-4">Thông Báo</h3>
+        <div id="notificationContents">
+            <p>Kính chúc các game thủ có trải nghiệm thật tuyệt</p>
+            <p style="color: red">By: Admin</p>
+            <p style="color: blue; font-size: 12px">7:32 ngày 15 tháng 2 năm 2025</p>
+        </div>
+                <div id="notificationContents">
+            <p>Cách lấy UID game:</p>
+            <p>Bước 1: đăng nhập game liên quân</p>
+            <p>Bước 2: bấm vào biểu tượng avt nick</p>
+            <p>Bước 3: bấm vào biểu tượng bánh răng nằm trên nickname</p>
+            <p>Bước 4: bấm vào chữ UID và sao chép</p>
+            <p style="color: blue; font-size: 12px">14:30 ngày 15 tháng 2 năm 2025</p>
+        </div>
+    </div>
+</div>
 
     <!-- Banner -->
-    <section id="top" class="banner py-12 mt-16">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl font-bold mb-4">Nạp Quân Huy Liên Quân Giá Rẻ</h1>
-            <p class="text-lg">UY TÍN - GIÁ RẺ - CHẤT LƯỢNG</p>
-            <p style="color: red;">Trang chủ rửa tiền bằng quân huy hàng đầu Việt Nam</p>
-        </div>
-    </section>
-    <div class="build">
-        <img src="https://png.pngtree.com/png-clipart/20210128/ourmid/pngtree-maintenance-worker-png-image_2817283.jpg">
-        <p style="margin-left: 10%">CODER: Thiện Nguyễn notice</p>
-        <a style="margin-left: 2%; font-size: 32px; color: red ;">Máy chủ đang xây dựng</a>
+<section id="top">
+    <div class="background-container">
+        <div class="background-slide"></div>
+        <div class="background-slide"></div>
+        <div class="background-slide"></div>
     </div>
+    <div class="content">
+        <h1 class="text-4xl font-bold mb-4">Nạp Quân Huy Liên Quân Giá Rẻ</h1>
+        <p class="text-lg">UY TÍN - GIÁ RẺ - CHẤT LƯỢNG</p>
+        <p style="color: red;">Trang chủ nạp quân huy uy tín hàng đầu Việt Nam</p>
+    </div>
+</section>
+
 
     <!-- Sản Phẩm -->
 <section class="container mx-auto px-4 py-12">
@@ -266,26 +439,27 @@
             <button class="button w-full" onclick="openInvoice('525 Quân Huy', 100000)">Mua Ngay</button>
         </div>
         <div class="card p-6 text-center">
-            <h3 class="text-xl font-semibold mb-4">1050 + 100 Quân Huy</h3>
+            <h3 class="text-xl font-semibold mb-4">1250 Quân Huy</h3>
             <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="image">
-            <p class="text-gray-600 mb-4" data-price="100000">Giá: 200,000 VNĐ</p>
+            <p class="text-gray-600 mb-4" data-price="200000">Giá: 200,000 VNĐ</p>
             <button class="button w-full" onclick="openInvoice('1050 + 100 Quân Huy', 200000)">Mua Ngay</button>
         </div>
         <div class="card p-6 text-center">
-            <h3 class="text-xl font-semibold mb-4">2100 + 200 Quân Huy</h3>
+            <h3 class="text-xl font-semibold mb-4">2300 Quân Huy</h3>
             <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="image">
-            <p class="text-gray-600 mb-4" data-price="100000">Giá: 500,000 VNĐ</p>
+            <p class="text-gray-600 mb-4" data-price="500000">Giá: 500,000 VNĐ</p>
             <button class="button w-full" onclick="openInvoice('2100 + 200 Quân Huy', 500000)">Mua Ngay</button>
         </div>
         <div class="card p-6 text-center">
-            <h3 class="text-xl font-semibold mb-4">4200 + 400 Quân Huy</h3>
+            <h3 class="text-xl font-semibold mb-4">4500 Quân Huy</h3>
             <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="image">
-            <p class="text-gray-600 mb-4" data-price="100000">Giá: 1,000,000 VNĐ</p>
+            <p class="text-gray-600 mb-4" data-price="1000000">Giá: 1,000,000 VNĐ</p>
             <button class="button w-full" onclick="openInvoice('4200 + 400 Quân Huy', 1000000)">Mua Ngay</button>
         </div>                
     </div>
 </section>
 
+<!-- Popup hóa đơn -->
 <!-- Popup hóa đơn -->
 <div id="invoice-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md border border-gray-300 relative">
@@ -302,10 +476,14 @@
             </div>
             <p class="text-gray-600 mt-2"><strong>Giá tiền:</strong> <span id="unit-price" class="text-gray-800"></span></p>
             <p class="text-gray-600 font-semibold mt-2"><strong>Tổng cộng:</strong> <span id="total-price" class="text-red-500"></span></p>
+            <p class="text-gray-600 font-semibold mt-2"><strong>Số quân huy nhận được:</strong> <span id="total-quanhuy" class="text-blue-500"></span></p>
+            <div class="mt-4">
+                <label for="uid" class="block text-gray-700">Nhập UID game:</label>
+                <input type="text" id="uid" name="uid" class="form-input mt-1 block w-full" placeholder="Nhập UID game">
+            </div>
             <div>
-            <button id="close-invoices" class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition" style="background: green;">Thanh Toán</button>
-            <p id="thanhtoan"></p>
-
+                <button id="close-invoices" class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition" style="background: green;">Thanh Toán</button>
+                <p id="thanhtoan"></p>
             </div>
         </div>
         <button id="close-invoice" class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition">Đóng</button>
@@ -313,121 +491,80 @@
 </div>
 
     <!-- Hướng Dẫn -->
-    <section id="huong-dan" class="bg-gray-100 py-12">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-8">Hướng Dẫn Nạp Quân Huy</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="card p-6">
-                    <h3 class="text-xl font-semibold mb-4">Bước 1: Chọn Gói</h3>
-                    <p class="text-gray-600">Chọn gói quân huy phù hợp với nhu cầu của bạn.</p>
-                </div>
-                <div class="card p-6">
-                    <h3 class="text-xl font-semibold mb-4">Bước 2: Thanh Toán</h3>
-                    <p class="text-gray-600">Tạo mã bằng phương thức banking ngân hàng</p>
-                </div>
-                <div class="card p-6">
-                    <h3 class="text-xl font-semibold mb-4">Bước 3: Nhận Quân Huy</h3>
-                    <p class="text-gray-600">Chọn gói quân huy và nhập UID vào và chờ quân huy vô</p>
-                </div>
-                <div class="card p-6">
-                    <h3 class="text-xl font-semibold mb-4">Bước 4: Kiểm Tra</h3>
-                    <p class="text-gray-600">Kiểm tra tài khoản để xác nhận quân huy đã được nạp.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Nạp Tiền -->
-    <section id="nap-tien" class="container mx-auto px-4 py-12">
-        <h2 class="text-3xl font-bold text-center mb-8">Nạp Tiền</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div class="card p-6 bank-card">
-    <h3 class="text-xl font-semibold mb-4">Nạp qua Ngân Hàng</h3>
-    <p class="text-gray-600 mb-4">Tình trạng: <a style="color: green">Hoạt Động</a></p>
-    <ul class="list-disc list-inside">
-        <button id="openForm" class="button">Tạo Mã</button>
-    </ul>
-    <!-- Phần hiển thị mã QR và thông tin chuyển khoản -->
-    <div id="qrCodeContainer" class="mt-4" style="display: none;">
-        <img id="qrCodeImage" src="" alt="QR Code" class="w-full">
-        <div class="text-center mt-4">
-            <h3 id="displayAmount" class="text-lg font-bold">Số tiền: </h3>
-            <h3 id="transferContent" class="text-lg font-bold">Nội dung chuyển khoản: </h3>
-            <h3>Tên chủ tài khoản: NGUYEN CHI THIEN</h3>
-                    <p id="countdownTimer" class="text-red-500 font-bold" style="display: none;">Mã sẽ hết hạn trong <span id="countdown">05:00</span></p>
-        </div>
-    </div>
-</div>
-            </div>
-                        <div class="card p-6">
-<h3 class="text-xl font-semibold mb-4">Nạp qua Thẻ Cào</h3>
-<p class="text-gray-600 mb-4"></p>
-<ul class="list-disc list-inside">
-</ul>
-<div id="cardForm" style="">
-    <form id="rechargeForm">
-        <div class="mb-4">
-            <label for="network" class="block text-gray-700">Chọn nhà mạng:</label>
-            <select id="network" name="network" class="form-select mt-1 block w-full">
-                <option value="viettel">Viettel</option>
-                <option value="mobifone">Mobifone</option>
-                <option value="vinaphone">Vinaphone</option>
-                <option value="vietnamobile">Vietnamobile</option>
-                <option value="gmobile">Gmobile</option>
-            </select>
+<!-- Form nạp tiền -->
+<div class="form-overlay" id="formOverlay">
+    <div class="form-container">
+        <span class="close-form" id="closeForm">×</span>
+        <h3 class="text-xl font-semibold mb-4">Chọn phương thức nạp tiền</h3>
+        
+        <!-- Nút lựa chọn phương thức -->
+        <div class="flex gap-4 mb-6">
+            <button id="bankMethod" class="button w-1/2">Ngân Hàng</button>
+            <button id="cardMethod" class="button w-1/2">Thẻ Cào<span style="color: red;">(bảo trì)</span></button>
         </div>
 
-        <div class="mb-4">
-            <label for="amount" class="block text-gray-700">Chọn mệnh giá:</label>
-            <select id="amount" name="amount" class="form-select mt-1 block w-full">
-                <option value="10000">10,000 VNĐ</option>
-                <option value="20000">20,000 VNĐ</option>
-                <option value="50000">50,000 VNĐ</option>
-                <option value="100000">100,000 VNĐ</option>
-                <option value="200000">200,000 VNĐ</option>
-                <option value="500000">500,000 VNĐ</option>
-            </select>
-        </div>
-
-        <div class="mb-4">
-            <label for="serial" class="block text-gray-700">Số seri thẻ:</label>
-            <input type="text" id="serial" name="serial" class="form-input mt-1 block w-full" placeholder="Nhập số seri thẻ">
-        </div>
-
-        <div class="mb-4">
-            <label for="code" class="block text-gray-700">Mã thẻ:</label>
-            <input type="text" id="code" name="code" class="form-input mt-1 block w-full" placeholder="Nhập mã thẻ">
-        </div>
-
-        <button type="submit" class="buttons">BẢO TRÌ</button>
-    </form>
-</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Form nạp tiền -->
-    <div class="form-overlay" id="formOverlay">
-        <div class="form-container">
-            <span class="close-form" id="closeForm">×</span>
-            <h3 class="text-xl font-semibold mb-4">Nạp Tiền</h3>
+        <!-- Form nạp bằng ngân hàng -->
+        <div id="bankForm" class="hidden">
+            <h3 class="text-xl font-semibold mb-4">Nạp qua Ngân Hàng</h3>
             <input type="number" id="amountInput" class="w-full p-2 rounded border border-gray-300 mb-4" placeholder="Nhập số tiền">
             <p id="errornaptien" style="color: red"></p>
             <button id="generateQR" class="button w-full">Tạo Mã</button>
-            <div id="qrCodeContainer" class="mt-4 hidden">
-                <img id="qrCodeImage" src="" alt="QR Code" class="w-full">
-            </div>
+<div id="qrCodeContainer" class="mt-4 hidden">
+    <div class="flex items-center gap-4"> <!-- Thêm Flexbox và khoảng cách giữa các phần tử -->
+        <img id="qrCodeImage" src="" alt="QR Code" class="w-48"> <!-- Điều chỉnh kích thước QR Code -->
+        <div class="text-left"> <!-- Căn trái nội dung -->
+            <h3 id="displayAmount" class="text-lg font-bold">Số tiền: </h3>
+            <h3 id="transferContent" class="text-lg font-bold">Nội dung chuyển khoản: </h3>
+            <h3>Tên chủ tài khoản: NGUYEN CHI THIEN</h3>
+            <p id="countdownTimer" class="text-red-500 font-bold" style="display: none;">Mã sẽ hết hạn trong <span id="countdown">05:00</span></p>
+        </div>
+</div>
+</div>
+        <!-- Form nạp bằng thẻ cào -->
+        <div id="cardForm" class="hidden">
+            <h3 class="text-xl font-semibold mb-4">Nạp qua Thẻ Cào</h3>
+            <form id="rechargeForm">
+                <div class="mb-4">
+                    <label for="network" class="block text-gray-700">Chọn nhà mạng:</label>
+                    <select id="network" name="network" class="form-select mt-1 block w-full">
+                        <option value="viettel">Viettel</option>
+                        <option value="mobifone">Mobifone</option>
+                        <option value="vinaphone">Vinaphone</option>
+                        <option value="vietnamobile">Vietnamobile</option>
+                        <option value="gmobile">Gmobile</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="amount" class="block text-gray-700">Chọn mệnh giá:</label>
+                    <select id="amount" name="amount" class="form-select mt-1 block w-full">
+                        <option value="10000">10,000 VNĐ</option>
+                        <option value="20000">20,000 VNĐ</option>
+                        <option value="50000">50,000 VNĐ</option>
+                        <option value="100000">100,000 VNĐ</option>
+                        <option value="200000">200,000 VNĐ</option>
+                        <option value="500000">500,000 VNĐ</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="serial" class="block text-gray-700">Số seri thẻ:</label>
+                    <input type="text" id="serial" name="serial" class="form-input mt-1 block w-full" placeholder="Nhập số seri thẻ">
+                </div>
+
+                <div class="mb-4">
+                    <label for="code" class="block text-gray-700">Mã thẻ:</label>
+                    <input type="text" id="code" name="code" class="form-input mt-1 block w-full" placeholder="Nhập mã thẻ">
+                </div>
+
+                <button type="submit" class="buttons">Nạp Thẻ</button>
+            </form>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <p class="mb-4">© 2025 QUANHUYLAU.ONLINE. All rights reserved.</p>
-            <p class="text-gray-400">Liên hệ: nguyenthuyphuong12368@gmail.com</p>
-        </div>
-    </footer>
-
+</div>
+<!-- Form thông báo -->
     <script>
 document.addEventListener("DOMContentLoaded", function () {
     // Kiểm tra đăng nhập
@@ -441,7 +578,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Cập nhật hiển thị số dư
     const updateBalanceDisplay = () => {
         document.getElementById("username-display").innerHTML = 
-            `Tài khoản: ${loggedInUser} <span style="background: gray; padding: 6px; border-radius: 8px">Ví: ${users[loggedInUser].balance} VNĐ </span>`;
+            `Tài Khoản: ${loggedInUser} <span style="background: gray; padding: 6px; border-radius: 8px">Ví: ${users[loggedInUser].balance} VNĐ </span>`;
     };
 
     updateBalanceDisplay(); // Hiển thị số dư ngay khi load trang
@@ -454,13 +591,44 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Xử lý mở/đóng form nạp tiền
-    document.getElementById("openForm").addEventListener("click", function () {
-        document.getElementById("formOverlay").style.display = "flex";
+    const formOverlay = document.getElementById("formOverlay");
+    const closeFormBtn = document.getElementById("closeForm");
+
+    // Mở form khi nhấp vào "Nạp Tiền" trên thanh điều hướng
+    document.querySelector('a[href="#nap-tien"]').addEventListener("click", function (e) {
+        e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
+        formOverlay.style.display = "flex";
     });
 
-    document.getElementById("closeForm").addEventListener("click", function () {
-        document.getElementById("formOverlay").style.display = "none";
+    // Đóng form khi nhấp vào nút đóng
+    closeFormBtn.addEventListener("click", function () {
+        formOverlay.style.display = "none";
     });
+
+    // Đóng form khi nhấp bên ngoài form
+    formOverlay.addEventListener("click", function (e) {
+        if (e.target === formOverlay) {
+            formOverlay.style.display = "none";
+        }
+    });
+
+    // Xử lý chọn phương thức nạp tiền
+    const bankMethod = document.getElementById("bankMethod");
+    const cardMethod = document.getElementById("cardMethod");
+    const bankForm = document.getElementById("bankForm");
+    const cardForm = document.getElementById("cardForm");
+
+    bankMethod.addEventListener("click", function () {
+        bankForm.classList.remove("hidden");
+        cardForm.classList.add("hidden");
+    });
+
+cardMethod.addEventListener("click", function () {
+    console.log("Nút Thẻ Cào được nhấp"); // Debug
+    console.log(cardForm); // Kiểm tra xem cardForm có tồn tại không
+    cardForm.classList.remove("hidden");
+    bankForm.classList.add("hidden");
+});
 
     let countdownInterval = null; // Biến lưu trữ interval của bộ đếm ngược
 
@@ -508,7 +676,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 1000);
     });
 
-});
+    // Xử lý form nạp thẻ cào
+    document.getElementById("rechargeForm").addEventListener("submit", function (e) {
+        e.preventDefault(); // Ngăn chặn form gửi đi
+        alert("Chức năng nạp thẻ cào đang bảo trì!");
+    });
+
+    // Xử lý hóa đơn thanh toán
+// Xử lý hóa đơn thanh toán
 function openInvoice(name, price) {
     document.getElementById("invoice-name").textContent = name;
     document.getElementById("unit-price").textContent = price.toLocaleString() + " VNĐ";
@@ -518,10 +693,20 @@ function openInvoice(name, price) {
     let quantity = 1;
     document.getElementById("quantity").textContent = quantity;
     
+    // Tính toán số quân huy nhận được
+    const calculateQuanHuy = () => {
+        const quanHuyPerUnit = parseInt(name.split(" ")[0]); // Lấy số quân huy từ tên gói
+        const totalQuanHuy = quanHuyPerUnit * quantity;
+        document.getElementById("total-quanhuy").textContent = totalQuanHuy;
+    };
+
+    calculateQuanHuy(); // Tính toán lần đầu
+
     document.getElementById("increase-qty").onclick = function () {
         quantity++;
         document.getElementById("quantity").textContent = quantity;
         document.getElementById("total-price").textContent = (price * quantity).toLocaleString() + " VNĐ";
+        calculateQuanHuy(); // Tính toán lại số quân huy
     };
     
     document.getElementById("decrease-qty").onclick = function () {
@@ -529,23 +714,67 @@ function openInvoice(name, price) {
             quantity--;
             document.getElementById("quantity").textContent = quantity;
             document.getElementById("total-price").textContent = (price * quantity).toLocaleString() + " VNĐ";
+            calculateQuanHuy(); // Tính toán lại số quân huy
         }
     };
 
     document.getElementById("close-invoice").onclick = function () {
         document.getElementById("invoice-overlay").classList.add("hidden");
     };
-    closes = document.getElementById('close-invoices')
-    thanhtoan = document.getElementById('thanhtoan')
+
+    const closes = document.getElementById('close-invoices');
+    const thanhtoan = document.getElementById('thanhtoan');
     let Timeout;
     closes.addEventListener('click', function() {
-        thanhtoan.innerHTML = `<span style="color: red">Số dư của bạn không đủ để thực hiện cuộc giao dịch này</span>`
+        const uid = document.getElementById('uid').value;
+        if (!uid) {
+            thanhtoan.innerHTML = `<span style="color: red">Vui lòng nhập UID game</span>`;
+            clearTimeout(Timeout);
+            Timeout = setTimeout(function() {
+                thanhtoan.innerHTML = ``;
+            }, 3000);
+            return;
+        }
+
+        thanhtoan.innerHTML = `<span style="color: red">Số dư của bạn không đủ để thực hiện cuộc giao dịch này</span>`;
         clearTimeout(Timeout);
         Timeout = setTimeout(function() {
-            thanhtoan.innerHTML = ``
-        }, 3000)
-    })
+            thanhtoan.innerHTML = ``;
+        }, 3000);
+    });
 }
+
+    // Gán sự kiện cho các nút "Mua Ngay"
+    document.querySelectorAll('.card button').forEach(button => {
+        button.addEventListener('click', function () {
+            const name = this.parentElement.querySelector('h3').textContent;
+            const price = parseInt(this.parentElement.querySelector('p').getAttribute('data-price'));
+            openInvoice(name, price);
+        });
+    });
+});
+// Xử lý mở/đóng form thông báo
+const notificationOverlay = document.getElementById("notificationOverlays");
+const closeNotificationFormBtn = document.getElementById("closeNotificationForms");
+
+// Mở form thông báo khi nhấp vào "Thông báo" trên thanh điều hướng
+document.getElementById("thongbao").addEventListener("click", function (e) {
+    e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
+    notificationOverlay.style.display = "flex";
+});
+
+// Đóng form thông báo khi nhấp vào nút đóng
+closeNotificationFormBtn.addEventListener("click", function () {
+    notificationOverlay.style.display = "none";
+});
+
+// Đóng form thông báo khi nhấp bên ngoài form
+notificationOverlay.addEventListener("click", function (e) {
+    if (e.target === notificationOverlay) {
+        notificationOverlay.style.display = "none";
+    }
+});
+
  </script>
 </body>
 </html>
