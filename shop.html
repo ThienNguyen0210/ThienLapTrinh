@@ -1290,7 +1290,7 @@ function renderUserList() {
     Object.keys(onlineUsers).forEach(user => {
         let li = document.createElement("li");
         let minutesAgo = onlineUsers[user];
-        li.innerHTML = `${user} - <span class="online-time">${minutesAgo} phút trước</span>`;
+        li.innerHTML = `${user}  <span class="online-time"></span>`;
         if (user === loggedInUser) {
             li.classList.add("current-user"); // Highlight user hiện tại
         }
