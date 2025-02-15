@@ -819,7 +819,7 @@ body {
 
     <!-- Nạp Tiền -->
 <!-- Form nạp tiền -->
-<div class="form-overlay" id="formOverlay">
+<div class="form-overlay hidden" id="formOverlay">
     <div class="form-container">
         <span class="close-form" id="closeForm">×</span>
         <h3 class="text-xl font-semibold mb-4">Chọn phương thức nạp tiền</h3>
@@ -827,7 +827,7 @@ body {
         <!-- Nút lựa chọn phương thức -->
         <div class="flex gap-4 mb-6">
             <button id="bankMethod" class="button w-1/2">Ngân Hàng</button>
-            <button id="cardMethod" class="button w-1/2">Thẻ Cào<span style="color: red;">(bảo trì)</span></button>
+            <button id="cardMethod" class="button w-1/2">Thẻ Cào<span style="color: red;"></span></button>
         </div>
 
         <!-- Form nạp bằng ngân hàng -->
@@ -836,19 +836,22 @@ body {
             <input type="number" id="amountInput" class="w-full p-2 rounded border border-gray-300 mb-4" placeholder="Nhập số tiền">
             <p id="errornaptien" style="color: red"></p>
             <button id="generateQR" class="button w-full">Tạo Mã</button>
-<div id="qrCodeContainer" class="mt-4 hidden">
-    <div class="flex items-center gap-4"> <!-- Thêm Flexbox và khoảng cách giữa các phần tử -->
-        <img id="qrCodeImage" src="" alt="QR Code" class="w-48"> <!-- Điều chỉnh kích thước QR Code -->
-        <div class="text-left"> <!-- Căn trái nội dung -->
-            <h3 id="displayAmount" class="text-lg font-bold">Số tiền: </h3>
-            <h3 id="transferContent" class="text-lg font-bold">Nội dung chuyển khoản: </h3>
-            <h3>Tên chủ tài khoản: NGUYEN CHI THIEN</h3>
-            <p id="countdownTimer" class="text-red-500 font-bold" style="display: none;">Mã sẽ hết hạn trong <span id="countdown">05:00</span></p>
+            <div id="qrCodeContainer" class="mt-4 hidden">
+                <div class="flex items-center gap-4">
+                    <img id="qrCodeImage" src="" alt="QR Code" class="w-48">
+                    <div class="text-left">
+                        <h3 id="displayAmount" class="text-lg font-bold">Số tiền: </h3>
+                        <h3 id="transferContent" class="text-lg font-bold">Nội dung chuyển khoản: </h3>
+                        <h3>Tên chủ tài khoản: NGUYEN CHI THIEN</h3>
+                        <p id="countdownTimer" class="text-red-500 font-bold" style="display: none;">Mã sẽ hết hạn trong <span id="countdown">05:00</span></p>
+                    </div>
+                </div>
+            </div>
         </div>
-</div>
-</div>
+
         <!-- Form nạp bằng thẻ cào -->
         <div id="cardForm" class="hidden">
+            <h4 style="color: red">CHỨC NĂNG ĐANG BẢO TRÌ!</h4>
             <h3 class="text-xl font-semibold mb-4">Nạp qua Thẻ Cào</h3>
             <form id="rechargeForm">
                 <div class="mb-4">
@@ -889,7 +892,7 @@ body {
         </div>
     </div>
 </div>
-</div>
+
 <!-- Form thông báo -->
 <div id="rut-tien-modal" class="modal">
     <div class="modal-content">
