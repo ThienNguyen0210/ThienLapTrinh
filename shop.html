@@ -5,6 +5,7 @@
     <title>Dịch vụ tiền tệ Liên Quân</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://i.pinimg.com/originals/e9/34/04/e93404572ccd4b89effe9531dc972b8b.jpg" type="image/x-icon">
     <style>
         body {
     font-family: 'Roboto', sans-serif;
@@ -402,6 +403,51 @@ body {
     color: gray;
     font-size: 14px;
 }
+.online-box {
+    max-width: 350px; /* Giới hạn chiều rộng */
+    background: #fff; /* Nền trắng */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    font-family: Arial, sans-serif;
+}
+
+.online-box h2 {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+#online-list {
+    max-height: 250px; /* Chiều cao tối đa, có thanh cuộn */
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+.user-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 14px;
+    color: #444;
+}
+
+.user-list li:last-child {
+    border-bottom: none;
+}
+
+.current-user {
+    font-weight: bold;
+    color: #007bff; /* Màu xanh cho user hiện tại */
+}
+
     </style>
 
 
@@ -673,6 +719,13 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "index.html"; // Chuyển về trang đăng nhập nếu chưa đăng nhập
     }
 
+    // Thêm tài khoản hiện tại vào danh sách online
+    if (loggedInUser) {
+        onlineUsers[loggedInUser] = 0; // Thêm tài khoản hiện tại vào danh sách online
+        saveUsersToStorage();
+        renderUserList();
+    }
+
     // Cập nhật hiển thị số dư
     const updateBalanceDisplay = () => {
         document.getElementById("username-display").innerHTML = 
@@ -721,12 +774,12 @@ document.addEventListener("DOMContentLoaded", function () {
         cardForm.classList.add("hidden");
     });
 
-cardMethod.addEventListener("click", function () {
-    console.log("Nút Thẻ Cào được nhấp"); // Debug
-    console.log(cardForm); // Kiểm tra xem cardForm có tồn tại không
-    cardForm.classList.remove("hidden");
-    bankForm.classList.add("hidden");
-});
+    cardMethod.addEventListener("click", function () {
+        console.log("Nút Thẻ Cào được nhấp"); // Debug
+        console.log(cardForm); // Kiểm tra xem cardForm có tồn tại không
+        cardForm.classList.remove("hidden");
+        bankForm.classList.add("hidden");
+    });
 
     let countdownInterval = null; // Biến lưu trữ interval của bộ đếm ngược
 
@@ -737,14 +790,14 @@ cardMethod.addEventListener("click", function () {
         // Kiểm tra số tiền hợp lệ và phải từ 5000 VNĐ trở lên
         if (!amount || isNaN(amount) || amount < 5000) {
             const errornaptien = document.getElementById('errornaptien')
-            errornaptien.innerHTML = `<p style="color: red">Vui lòng nhập số tiền từ 5000 trở lên</p>`
+            errornaptien.innerHTML = `<p style="color: red">Vui lòng nhập số tiền từ 5000 trở lên</p>`;
             return;
         }
 
         if (countdownInterval) {
             clearInterval(countdownInterval);
         }
-        errornaptien.innerHTML = `<p style="color: red"></p>`
+        errornaptien.innerHTML = `<p style="color: red"></p>`;
         const randomContent = Math.random().toString(36).substring(2, 6).toUpperCase();
         const qrCodeURL = `https://img.vietqr.io/image/970407-5089206015240-compact.png?amount=${amount}&addInfo=${randomContent}&accountName=NGUYEN+CHI+THIEN`;
         document.getElementById("qrCodeImage").src = qrCodeURL;
@@ -781,66 +834,65 @@ cardMethod.addEventListener("click", function () {
     });
 
     // Xử lý hóa đơn thanh toán
-// Xử lý hóa đơn thanh toán
-function openInvoice(name, price) {
-    document.getElementById("invoice-name").textContent = name;
-    document.getElementById("unit-price").textContent = price.toLocaleString() + " VNĐ";
-    document.getElementById("total-price").textContent = price.toLocaleString() + " VNĐ";
-    document.getElementById("invoice-overlay").classList.remove("hidden");
-    
-    let quantity = 1;
-    document.getElementById("quantity").textContent = quantity;
-    
-    // Tính toán số quân huy nhận được
-    const calculateQuanHuy = () => {
-        const quanHuyPerUnit = parseInt(name.split(" ")[0]); // Lấy số quân huy từ tên gói
-        const totalQuanHuy = quanHuyPerUnit * quantity;
-        document.getElementById("total-quanhuy").textContent = totalQuanHuy;
-    };
-
-    calculateQuanHuy(); // Tính toán lần đầu
-
-    document.getElementById("increase-qty").onclick = function () {
-        quantity++;
+    function openInvoice(name, price) {
+        document.getElementById("invoice-name").textContent = name;
+        document.getElementById("unit-price").textContent = price.toLocaleString() + " VNĐ";
+        document.getElementById("total-price").textContent = price.toLocaleString() + " VNĐ";
+        document.getElementById("invoice-overlay").classList.remove("hidden");
+        
+        let quantity = 1;
         document.getElementById("quantity").textContent = quantity;
-        document.getElementById("total-price").textContent = (price * quantity).toLocaleString() + " VNĐ";
-        calculateQuanHuy(); // Tính toán lại số quân huy
-    };
-    
-    document.getElementById("decrease-qty").onclick = function () {
-        if (quantity > 1) {
-            quantity--;
+        
+        // Tính toán số quân huy nhận được
+        const calculateQuanHuy = () => {
+            const quanHuyPerUnit = parseInt(name.split(" ")[0]); // Lấy số quân huy từ tên gói
+            const totalQuanHuy = quanHuyPerUnit * quantity;
+            document.getElementById("total-quanhuy").textContent = totalQuanHuy;
+        };
+
+        calculateQuanHuy(); // Tính toán lần đầu
+
+        document.getElementById("increase-qty").onclick = function () {
+            quantity++;
             document.getElementById("quantity").textContent = quantity;
             document.getElementById("total-price").textContent = (price * quantity).toLocaleString() + " VNĐ";
             calculateQuanHuy(); // Tính toán lại số quân huy
-        }
-    };
+        };
+        
+        document.getElementById("decrease-qty").onclick = function () {
+            if (quantity > 1) {
+                quantity--;
+                document.getElementById("quantity").textContent = quantity;
+                document.getElementById("total-price").textContent = (price * quantity).toLocaleString() + " VNĐ";
+                calculateQuanHuy(); // Tính toán lại số quân huy
+            }
+        };
 
-    document.getElementById("close-invoice").onclick = function () {
-        document.getElementById("invoice-overlay").classList.add("hidden");
-    };
+        document.getElementById("close-invoice").onclick = function () {
+            document.getElementById("invoice-overlay").classList.add("hidden");
+        };
 
-    const closes = document.getElementById('close-invoices');
-    const thanhtoan = document.getElementById('thanhtoan');
-    let Timeout;
-    closes.addEventListener('click', function() {
-        const uid = document.getElementById('uid').value;
-        if (!uid) {
-            thanhtoan.innerHTML = `<span style="color: red">Vui lòng nhập UID game</span>`;
+        const closes = document.getElementById('close-invoices');
+        const thanhtoan = document.getElementById('thanhtoan');
+        let Timeout;
+        closes.addEventListener('click', function() {
+            const uid = document.getElementById('uid').value;
+            if (!uid) {
+                thanhtoan.innerHTML = `<span style="color: red">Vui lòng nhập UID game</span>`;
+                clearTimeout(Timeout);
+                Timeout = setTimeout(function() {
+                    thanhtoan.innerHTML = ``;
+                }, 3000);
+                return;
+            }
+
+            thanhtoan.innerHTML = `<span style="color: red">Số dư của bạn không đủ để thực hiện cuộc giao dịch này</span>`;
             clearTimeout(Timeout);
             Timeout = setTimeout(function() {
                 thanhtoan.innerHTML = ``;
             }, 3000);
-            return;
-        }
-
-        thanhtoan.innerHTML = `<span style="color: red">Số dư của bạn không đủ để thực hiện cuộc giao dịch này</span>`;
-        clearTimeout(Timeout);
-        Timeout = setTimeout(function() {
-            thanhtoan.innerHTML = ``;
-        }, 3000);
-    });
-}
+        });
+    }
 
     // Gán sự kiện cho các nút "Mua Ngay"
     document.querySelectorAll('.card button').forEach(button => {
@@ -850,30 +902,28 @@ function openInvoice(name, price) {
             openInvoice(name, price);
         });
     });
-});
-// Xử lý mở/đóng form thông báo
-const notificationOverlay = document.getElementById("notificationOverlays");
-const closeNotificationFormBtn = document.getElementById("closeNotificationForms");
 
-// Mở form thông báo khi nhấp vào "Thông báo" trên thanh điều hướng
-document.getElementById("thongbao").addEventListener("click", function (e) {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
-    notificationOverlay.style.display = "flex";
-});
+    // Xử lý mở/đóng form thông báo
+    const notificationOverlay = document.getElementById("notificationOverlays");
+    const closeNotificationFormBtn = document.getElementById("closeNotificationForms");
 
-// Đóng form thông báo khi nhấp vào nút đóng
-closeNotificationFormBtn.addEventListener("click", function () {
-    notificationOverlay.style.display = "none";
-});
+    // Mở form thông báo khi nhấp vào "Thông báo" trên thanh điều hướng
+    document.getElementById("thongbao").addEventListener("click", function (e) {
+        e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
+        notificationOverlay.style.display = "flex";
+    });
 
-// Đóng form thông báo khi nhấp bên ngoài form
-notificationOverlay.addEventListener("click", function (e) {
-    if (e.target === notificationOverlay) {
+    // Đóng form thông báo khi nhấp vào nút đóng
+    closeNotificationFormBtn.addEventListener("click", function () {
         notificationOverlay.style.display = "none";
-    }
-});
-document.addEventListener("DOMContentLoaded", function () {
-    // ... (các phần code khác)
+    });
+
+    // Đóng form thông báo khi nhấp bên ngoài form
+    notificationOverlay.addEventListener("click", function (e) {
+        if (e.target === notificationOverlay) {
+            notificationOverlay.style.display = "none";
+        }
+    });
 
     // Xử lý mở form nạp tiền khi nhấp vào nút "Nạp tiền ngay"
     const napTienNgayBtn = document.getElementById("napTienNgayBtn");
@@ -882,9 +932,9 @@ document.addEventListener("DOMContentLoaded", function () {
             formOverlay.style.display = "flex"; // Hiển thị form nạp tiền
         });
     }
-
-    // ... (các phần code khác)
 });
+
+// Danh sách username
 const usernames = [
     "condianlon8", "nghia123", "mavuongs", "thiennguyen0210", "xincaitay",
     "yencute123", "nam12345", "yasuott67", "huydeptrai1", "nguyencuto1",
@@ -936,70 +986,52 @@ const usernames = [
     "hieuquangvippro", "thanhminhvjp99", "trieudanhvip", "longphuong888",
     "phamnhatquang", "truonggamevip", "anhminhdz999", "yennhivjp99",
     "lehoangvip123", "truonggiangpro", "binhnguyen999", "darkking123"
-];      
+];
 
-let onlineUsers = {}; // Lưu danh sách user online
+let onlineUsers = {}; // Lưu danh sách người dùng online
 
-// Load dữ liệu từ localStorage khi mở web
+// Load danh sách online từ localStorage khi trang tải
 function loadUsersFromStorage() {
     let storedUsers = localStorage.getItem("onlineUsers");
     if (storedUsers) {
         onlineUsers = JSON.parse(storedUsers);
     }
-    saveUsersToStorage();
     renderUserList();
 }
 
-// Lưu dữ liệu vào localStorage
+// Lưu danh sách online vào localStorage
 function saveUsersToStorage() {
     localStorage.setItem("onlineUsers", JSON.stringify(onlineUsers));
 }
 
-// Randomly generate a user ID
+// Tạo một user ngẫu nhiên từ danh sách usernames
 function generateUserId() {
-    return 'user' + Math.floor(Math.random() * 10000); // Generate random user ID
+    return usernames[Math.floor(Math.random() * usernames.length)];
 }
 
-// Cập nhật danh sách user online
+// Cập nhật danh sách người dùng online mà không reset dữ liệu cũ
 function updateOnlineUsers() {
-    const numUsers = Object.keys(onlineUsers).length;
+    const loggedInUser = localStorage.getItem("loggedInUser");
 
-    // Logic for updating online users based on the number of users
-    if (numUsers <= 1) {
-        let randomChance = Math.random();
-        if (randomChance < 0.5) {
-            // 50% chance to add 1 or 2 users
-            let numToAdd = Math.random() < 0.5 ? 1 : 2;
-            for (let i = 0; i < numToAdd; i++) {
-                let newUserId = generateUserId();
-                onlineUsers[newUserId] = 0; // Add new user with 0 minutes
-            }
-        } else if (randomChance < 0.8) {
-            // 30% chance to remove 1 user
-            let users = Object.keys(onlineUsers);
-            let userToRemove = users[Math.floor(Math.random() * users.length)];
-            delete onlineUsers[userToRemove];
+    if (!loggedInUser) {
+        return; // Nếu chưa đăng nhập, không làm gì cả
+    }
+
+    if (!onlineUsers[loggedInUser]) {
+        onlineUsers[loggedInUser] = 0; // Nếu chưa có trong danh sách, thêm vào với thời gian 0 phút
+    }
+
+    let randomChance = Math.random();
+    if (randomChance < 0.5) {
+        // 50% cơ hội thêm 1 user mới vào danh sách
+        let newUser = generateUserId();
+        if (!onlineUsers[newUser]) {
+            onlineUsers[newUser] = 0;
         }
-    } else if (numUsers >= 2 && numUsers <= 4) {
-        let randomChance = Math.random();
-        if (randomChance < 0.3) {
-            // 30% chance to add 1 or 2 users
-            let numToAdd = Math.random() < 0.5 ? 1 : 2;
-            for (let i = 0; i < numToAdd; i++) {
-                let newUserId = generateUserId();
-                onlineUsers[newUserId] = 0; // Add new user with 0 minutes
-            }
-        } else if (randomChance < 0.35) {
-            // 5% chance to remove 1 user
-            let users = Object.keys(onlineUsers);
-            let userToRemove = users[Math.floor(Math.random() * users.length)];
-            delete onlineUsers[userToRemove];
-        }
-    } else if (numUsers >= 5) {
-        let randomChance = Math.random();
-        if (randomChance < 0.75) {
-            // 75% chance to remove 1 user
-            let users = Object.keys(onlineUsers);
+    } else {
+        // 50% cơ hội xóa 1 user khỏi danh sách (trừ user đang đăng nhập)
+        let users = Object.keys(onlineUsers).filter(user => user !== loggedInUser);
+        if (users.length > 0) {
             let userToRemove = users[Math.floor(Math.random() * users.length)];
             delete onlineUsers[userToRemove];
         }
@@ -1008,37 +1040,48 @@ function updateOnlineUsers() {
     saveUsersToStorage();
     renderUserList();
 
-    // Cập nhật danh sách online mỗi 5 giây
-    setTimeout(updateOnlineUsers, 5000);
+    setTimeout(updateOnlineUsers, 30000); // Cập nhật mỗi 5 giây
 }
 
-// Hiển thị danh sách user online
+// Hiển thị danh sách người dùng online
 function renderUserList() {
     const userList = document.getElementById("online-list");
     const onlineCount = document.getElementById("online-count");
     userList.innerHTML = "";
     onlineCount.textContent = Object.keys(onlineUsers).length;
 
+    const loggedInUser = localStorage.getItem("loggedInUser");
+
     Object.keys(onlineUsers).forEach(user => {
         let li = document.createElement("li");
         let minutesAgo = onlineUsers[user];
         li.innerHTML = `${user} - <span class="online-time">${minutesAgo} phút trước</span>`;
+        if (user === loggedInUser) {
+            li.classList.add("current-user"); // Highlight user hiện tại
+        }
         userList.appendChild(li);
     });
 }
 
-// Cập nhật thời gian online mỗi phút
+// Cập nhật thời gian online mỗi phút mà không reset về 0
 setInterval(() => {
     Object.keys(onlineUsers).forEach(user => {
-        onlineUsers[user]++; // Tăng thời gian online của user
+        onlineUsers[user]++; // Tăng số phút online cho từng user
     });
     saveUsersToStorage();
     renderUserList();
 }, 60000);
 
-// Load dữ liệu khi trang mở lên
+// Khi trang load, giữ nguyên danh sách online và phút online
 loadUsersFromStorage();
 
- </script>
+// Bắt đầu cập nhật danh sách online
+updateOnlineUsers();
+
+// Khi người dùng rời khỏi trang, lưu danh sách online để không bị mất dữ liệu
+window.addEventListener("beforeunload", function () {
+    saveUsersToStorage();
+});
+</script>
 </body>
 </html>
