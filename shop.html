@@ -447,6 +447,33 @@ body {
     font-weight: bold;
     color: #007bff; /* Màu xanh cho user hiện tại */
 }
+/* Đảm bảo giao diện mobile thân thiện */
+.container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.button {
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button:hover {
+    background-color: #1e40af; /* Màu xanh đậm hơn khi hover */
+}
+
+/* Đảm bảo hình ảnh không vượt quá kích thước */
+.image {
+    max-width: 100%;
+    height: auto;
+}
 
     </style>
 
@@ -498,59 +525,61 @@ body {
     <div class="content">
         <h1 class="text-4xl font-bold mb-4">Nạp Quân Huy Liên Quân Giá Rẻ</h1>
         <p class="text-lg">UY TÍN - GIÁ RẺ - CHẤT LƯỢNG</p>
-        <p style="color: red;">Trang chủ nạp quân huy uy tín hàng đầu Việt Nam</p>
+        <p style="color: red;">Trang chủ rửa tiền bẩn bằng quân huy hàng đầu Việt Nam</p>
     </div>
 </section>
 <!-- TOP nap the -->
-    <div class="bg-white shadow-md rounded-lg p-6 w-80 top-nap-tien-form">
-        <h2 class="text-lg font-bold flex items-center space-x-2">
-            <span>⭐</span>
-            <span>TOP NẠP TIỀN THÁNG 2</span>
-        </h2>
+<!-- Form TOP NẠP TIỀN THÁNG 2 -->
+<!-- Form TOP NẠP TIỀN THÁNG 2 -->
+<div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md mx-auto mb-4">
+    <h2 class="text-lg font-bold flex items-center space-x-2">
+        <span>⭐</span>
+        <span>TOP NẠP TIỀN THÁNG 2</span>
+    </h2>
+    <ul class="mt-4 space-y-3">
+        <li class="flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-yellow-500 text-xl">⭐</span>
+                <span>zaq123</span>
+            </div>
+            <span class="font-bold text-gray-700">1.000.000đ</span>
+        </li>
+        <li class="flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-yellow-500 text-xl">⭐</span>
+                <span>Xintop1</span>
+            </div>
+            <span class="font-bold text-gray-700">710.000đ</span>
+        </li>
+        <li class="flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-yellow-500 text-xl">⭐</span>
+                <span>Nenbdbsj</span>
+            </div>
+            <span class="font-bold text-gray-700">450.000đ</span>
+        </li>
+        <li class="flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-blue-500 font-bold border border-blue-500 rounded-full px-2">4</span>
+                <span>tom22102012</span>
+            </div>
+            <span class="font-bold text-gray-700">300.000đ</span>
+        </li>
+        <li class="flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-blue-500 font-bold border border-blue-500 rounded-full px-2">5</span>
+                <span>Tuan</span>
+            </div>
+            <span class="font-bold text-gray-700">60.000đ</span>
+        </li>
+    </ul>
+    <button id="napTienNgayBtn" class="mt-5 w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition">
+        Nạp tiền ngay
+    </button>
+</div>
 
-        <ul class="mt-4 space-y-3">
-            <li class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <span class="text-yellow-500 text-xl">⭐</span>
-                    <span>zaq123</span>
-                </div>
-                <span class="font-bold text-gray-700">1.000.000đ</span>
-            </li>
-            <li class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <span class="text-yellow-500 text-xl">⭐</span>
-                    <span>Xintop1</span>
-                </div>
-                <span class="font-bold text-gray-700">710.000đ</span>
-            </li>
-            <li class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <span class="text-yellow-500 text-xl">⭐</span>
-                    <span>Nenbdbsj</span>
-                </div>
-                <span class="font-bold text-gray-700">450.000đ</span>
-            </li>
-            <li class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <span class="text-blue-500 font-bold border border-blue-500 rounded-full px-2">4</span>
-                    <span>tom22102012</span>
-                </div>
-                <span class="font-bold text-gray-700">300.000đ</span>
-            </li>
-            <li class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <span class="text-blue-500 font-bold border border-blue-500 rounded-full px-2">5</span>
-                    <span>Tuan</span>
-                </div>
-                <span class="font-bold text-gray-700">60.000đ</span>
-            </li>
-        </ul>
-<button id="napTienNgayBtn" class="mt-5 w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition">
-    Nạp tiền ngay
-</button>
-    </div>
-    <!-- Online -->
-<div class="online-box">
+<!-- Form Số người đang trực tuyến -->
+<div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md mx-auto mb-4">
     <h2 class="text-lg font-bold flex items-center space-x-2">
         <span>👥</span>
         <span>Số người đang trực tuyến trên web (<span id="online-count">0</span>)</span>
@@ -558,48 +587,53 @@ body {
     <ul id="online-list" class="user-list mt-4 space-y-2"></ul>
 </div>
 
-
-    <!-- Sản Phẩm -->
-<section class="container mx-auto px-4 py-12">
-    <h2 class="text-3xl font-bold text-center mb-8">Các Gói Quân Huy</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Các Gói Quân Huy -->
+<section class="container mx-auto px-4 py-6">
+    <h2 class="text-2xl font-bold text-center mb-6">Các Gói Quân Huy</h2>
+    <div class="grid grid-cols-1 gap-4">
         <!-- Danh sách các gói -->
-        <div class="card p-6 text-center">
-            <h3 class="text-xl font-semibold mb-4">105 Quân Huy</h3>
-            <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="image">
-            <p class="text-gray-600 mb-4" data-price="20000">Giá: 20,000 VNĐ</p>
-            <button class="button w-full" onclick="openInvoice('105 Quân Huy', 20000)">Mua Ngay</button>
+        <div class="card p-4 text-center bg-white shadow-md rounded-lg">
+            <h3 class="text-xl font-semibold mb-2">105 Quân Huy</h3>
+            <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="w-24 h-24 mx-auto mb-2">
+            <p>Lượt mua: <span style="color: red">138</span></p>
+            <p class="text-gray-600 mb-2" data-price="20000">Giá: 20,000 VNĐ</p>
+            <button class="button w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition" onclick="openInvoice('105 Quân Huy', 20000)">Mua Ngay</button>
         </div>
-        <div class="card p-6 text-center">
-            <h3 class="text-xl font-semibold mb-4">262 Quân Huy</h3>
-            <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="image">
-            <p class="text-gray-600 mb-4" data-price="50000">Giá: 50,000 VNĐ</p>
-            <button class="button w-full" onclick="openInvoice('262 Quân Huy', 50000)">Mua Ngay</button>
+        <div class="card p-4 text-center bg-white shadow-md rounded-lg">
+            <h3 class="text-xl font-semibold mb-2">262 Quân Huy</h3>
+            <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="w-24 h-24 mx-auto mb-2">
+            <p>Lượt mua: <span style="color: red">51</span></p>
+            <p class="text-gray-600 mb-2" data-price="50000">Giá: 50,000 VNĐ</p>
+            <button class="button w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition" onclick="openInvoice('262 Quân Huy', 50000)">Mua Ngay</button>
         </div>
-        <div class="card p-6 text-center">
-            <h3 class="text-xl font-semibold mb-4">525 Quân Huy</h3>
-            <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="image">
-            <p class="text-gray-600 mb-4" data-price="100000">Giá: 100,000 VNĐ</p>
-            <button class="button w-full" onclick="openInvoice('525 Quân Huy', 100000)">Mua Ngay</button>
+        <div class="card p-4 text-center bg-white shadow-md rounded-lg">
+            <h3 class="text-xl font-semibold mb-2">525 Quân Huy</h3>
+            <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="w-24 h-24 mx-auto mb-2">
+            <p>Lượt mua: <span style="color: red">16</span></p>
+            <p class="text-gray-600 mb-2" data-price="100000">Giá: 100,000 VNĐ</p>
+            <button class="button w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition" onclick="openInvoice('525 Quân Huy', 100000)">Mua Ngay</button>
         </div>
-        <div class="card p-6 text-center">
-            <h3 class="text-xl font-semibold mb-4">1250 Quân Huy</h3>
-            <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="image">
-            <p class="text-gray-600 mb-4" data-price="200000">Giá: 200,000 VNĐ</p>
-            <button class="button w-full" onclick="openInvoice('1050 + 100 Quân Huy', 200000)">Mua Ngay</button>
+        <div class="card p-4 text-center bg-white shadow-md rounded-lg">
+            <h3 class="text-xl font-semibold mb-2">1250 Quân Huy</h3>
+            <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="w-24 h-24 mx-auto mb-2">
+            <p>Lượt mua: <span style="color: red">13</span></p>
+            <p class="text-gray-600 mb-2" data-price="200000">Giá: 200,000 VNĐ</p>
+            <button class="button w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition" onclick="openInvoice('1050 + 100 Quân Huy', 200000)">Mua Ngay</button>
         </div>
-        <div class="card p-6 text-center">
-            <h3 class="text-xl font-semibold mb-4">2300 Quân Huy</h3>
-            <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="image">
-            <p class="text-gray-600 mb-4" data-price="500000">Giá: 500,000 VNĐ</p>
-            <button class="button w-full" onclick="openInvoice('2100 + 200 Quân Huy', 500000)">Mua Ngay</button>
+        <div class="card p-4 text-center bg-white shadow-md rounded-lg">
+            <h3 class="text-xl font-semibold mb-2">2300 Quân Huy</h3>
+            <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="w-24 h-24 mx-auto mb-2">
+            <p>Lượt mua: <span style="color: red">6</span></p>
+            <p class="text-gray-600 mb-2" data-price="500000">Giá: 500,000 VNĐ</p>
+            <button class="button w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition" onclick="openInvoice('2100 + 200 Quân Huy', 500000)">Mua Ngay</button>
         </div>
-        <div class="card p-6 text-center">
-            <h3 class="text-xl font-semibold mb-4">4500 Quân Huy</h3>
-            <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="image">
-            <p class="text-gray-600 mb-4" data-price="1000000">Giá: 1,000,000 VNĐ</p>
-            <button class="button w-full" onclick="openInvoice('4200 + 400 Quân Huy', 1000000)">Mua Ngay</button>
-        </div>                
+        <div class="card p-4 text-center bg-white shadow-md rounded-lg">
+            <h3 class="text-xl font-semibold mb-2">4500 Quân Huy</h3>
+            <img src="https://napquanhuy.com/upload/setting/unnamed%20(1).png" class="w-24 h-24 mx-auto mb-2">
+            <p>Lượt mua: <span style="color: red">2</span></p>
+            <p class="text-gray-600 mb-2" data-price="1000000">Giá: 1,000,000 VNĐ</p>
+            <button class="button w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition" onclick="openInvoice('4200 + 400 Quân Huy', 1000000)">Mua Ngay</button>
+        </div>
     </div>
 </section>
 
