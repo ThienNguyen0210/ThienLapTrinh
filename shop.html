@@ -474,7 +474,144 @@ body {
     max-width: 100%;
     height: auto;
 }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 60px;
+        }
 
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #333;
+        }
+
+        /* Form styling */
+        #rut-tien-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        #rut-tien-form label {
+            color: gray;
+            margin-bottom: 5px;
+        }
+
+        #rut-tien-form input[type="number"],
+        #rut-tien-form input[type="text"],
+        #rut-tien-form select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        #rut-tien-form input[type="number"]:focus,
+        #rut-tien-form input[type="text"]:focus,
+        #rut-tien-form select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        #rut-tien-form input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        #rut-tien-form button {
+            padding: 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #rut-tien-form button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Link styling */
+        #rut-tien-link {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        #rut-tien-link:hover {
+            color: #0056b3;
+        }
+        <style>
+    /* Ẩn menu trên mobile */
+    #mobile-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        padding: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Hiển thị menu khi có class 'open' */
+    #mobile-menu.open {
+        display: flex;
+    }
+
+    /* Ẩn nút hamburger trên desktop */
+    #mobile-menu-btn {
+        display: none;
+    }
+
+    /* Hiển thị nút hamburger trên mobile */
+    @media (max-width: 1023px) {
+        #mobile-menu-btn {
+            display: block;
+        }
+
+        /* Ẩn menu mặc định trên mobile */
+        #mobile-menu {
+            display: none;
+        }
+
+        /* Hiển thị menu khi có class 'open' */
+        #mobile-menu.open {
+            display: flex;
+        }
+    }
+</style>
     </style>
 
 
@@ -482,18 +619,28 @@ body {
 </head>
 <body class="scroll-smooth">
     <!-- Header -->
-    <header class="fixed-header">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-500 glow-text logo">QUANHUYLAU.ONLINE</div>
-            <nav class="space-x-6 menu"@>
-                <a href="#top" class="text-gray-700 hover:text-blue-500">Trang Chủ</a>
-                <a href="#huong-dan" class="text-gray-700 hover:text-blue-500" id="thongbao">Thông báo</a>
-                <a href="#nap-tien" class="text-gray-700 hover:text-blue-500">Nạp Tiền</a>
-                <span id="username-display" class="text-gray-700"></span>
-                <button id="logout-btn" class="text-gray-700 hover:text-blue-500" style=" background: red; border-radius: 8px; padding: 5px">LogOut</button>
-            </nav>
-        </div>
-    </header>
+<header class="fixed-header">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="text-2xl font-bold text-blue-500 glow-text logo">QUANHUYLAU.ONLINE</div>
+        
+        <!-- Nút hamburger cho mobile -->
+        <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-500 lg:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+        </button>
+
+        <!-- Menu -->
+        <nav id="mobile-menu" class="space-x-6 menu hidden lg:flex">
+            <a href="#top" class="text-gray-700 hover:text-blue-500">Trang Chủ</a>
+            <a href="#huong-dan" class="text-gray-700 hover:text-blue-500" id="thongbao">Thông báo</a>
+            <a href="#nap-tien" class="text-gray-700 hover:text-blue-500">Nạp Tiền</a>
+            <a href="#rut-tien" id="rut-tien-link" class="text-gray-700 hover:text-blue-500">Rút Tiền</a>
+            <span id="username-display" class="text-gray-700"></span>
+            <button id="logout-btn" class="text-gray-700 hover:text-blue-500" style="background: red; border-radius: 8px; padding: 5px">LogOut</button>
+        </nav>
+    </div>
+</header>
 <!-- Form thông báo -->
 <div class="form-overlays" id="notificationOverlays">
     <div class="form-container">
@@ -742,7 +889,41 @@ body {
         </div>
     </div>
 </div>
+</div>
 <!-- Form thông báo -->
+<div id="rut-tien-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 style="text-align: center; color: #333;">Rút Tiền</h2>
+        <form id="rut-tien-form">
+            <label for="amount">Số tiền rút:</label>
+            <input type="number" id="amount" name="amount" required placeholder="Nhập số tiền">
+
+            <label for="bank">Ngân hàng:</label>
+            <select id="bank" name="bank" required>
+                <option value="">Chọn ngân hàng</option>
+                <option value="VCB">Vietcombank</option>
+                <option value="ACB">ACB</option>
+                <option value="BIDV">BIDV</option>
+                <option value="VIB">VIB</option>
+            </select>
+
+            <label for="account-number">Số tài khoản:</label>
+            <input type="text" id="account-number" name="account-number" required placeholder="Nhập số tài khoản">
+
+            <label for="account-name">Tên chủ tài khoản:</label>
+            <input type="text" id="account-name" name="account-name" required placeholder="Nhập tên chủ tài khoản">
+
+            <label for="confirm">
+                <input type="checkbox" id="confirm" name="confirm" required>
+                Tôi xác nhận thông tin trên là chính xác
+            </label>
+            <p id="troll"></p>
+
+            <button type="submit">Xác nhận rút tiền</button>
+        </form>
+    </div>
+</div>
     <script>
 document.addEventListener("DOMContentLoaded", function () {
     // Kiểm tra đăng nhập
@@ -1116,6 +1297,54 @@ updateOnlineUsers();
 window.addEventListener("beforeunload", function () {
     saveUsersToStorage();
 });
+    const troll = document.getElementById('troll');
+    // Get the modal
+    var modal = document.getElementById("rut-tien-modal");
+
+    // Get the link that opens the modal
+    var link = document.getElementById("rut-tien-link");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the link, open the modal 
+    link.onclick = function(event) {
+        event.preventDefault();
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // Handle form submission
+    document.getElementById("rut-tien-form").onsubmit = function(event) {
+        event.preventDefault();
+        troll.innerHTML = `<span style="color: red">Số dư của bạn không đủ để rút</span>`
+    }
+    // Lấy các phần tử DOM
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    // Thêm sự kiện click cho nút hamburger
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('open'); // Toggle class 'open'
+    });
+
+    // Đóng menu khi click bên ngoài
+    document.addEventListener('click', (event) => {
+        if (!mobileMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+            mobileMenu.classList.remove('open');
+        }
+    });
 </script>
 </body>
 </html>
