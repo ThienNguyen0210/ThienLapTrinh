@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Sang Trọng</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            font-family: Arial, sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: white;
+            opacity: 0.8;
+            font-size: 10px;
+            user-select: none;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        .video-container {
+            position: relative;
+            width: 80%;
+            max-width: 900px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+        video {
+            width: 100%;
+            display: block;
+        }
+        .controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        .control-btn, .member-table button {
+            background: #ff9800;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+        }
+        .control-btn:hover, .member-table button:hover {
+            background: #ff5722;
+        }
+        .member-table {
+            width: 50%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .member-table th, .member-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .member-table th {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .details {
+            display: none;
+            margin-top: 5px;
+            color: yellow;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function createSnowflakes() {
+            const snowflake = document.createElement("div");
+            snowflake.classList.add("snowflake");
+            snowflake.innerHTML = "❄";
+            snowflake.style.left = Math.random() * 100 + "vw";
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + "s";
+            document.body.appendChild(snowflake);
+            setTimeout(() => snowflake.remove(), 5000);
+        }
+        setInterval(createSnowflakes, 200);
+    </script>
+
+    <div class="video-container">
+        <video id="video" src="ThienNguyen.mp4" controls></video>
+        <div class="controls">
+            <button class="controls-btn" onclick="togglePlay()"></button>
+            <button class="contsrol-btn" onclick="rewind()"></button>
+            <button class="control-bstn" onclick="forward()"></button>
+        </div>
+    </div>
+    
+    <table class="member-table">
+        <tr>
+            <th>Thành viên</th>
+        </tr>
+        <tr>
+            <td>
+                NGUYỄN CHÍ THIỆN <button onclick="toggleDetails(this, '089206015240')">Xem thêm</button>
+                <div class="details"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                LÊ GIA THỊNH <button onclick="toggleDetails(this, '087206016575')">Xem thêm</button>
+                <div class="details"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                PHÙNG NGUYỄN HỮU THỊNH <button onclick="toggleDetails(this, '083206007830')">Xem thêm</button>
+                <div class="details"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                TẢ MẠNH HOÀNG THANH <button onclick="toggleDetails(this, '083206001471')">Xem thêm</button>
+                <div class="details"></div>
+            </td>
+        </tr>
+    </table>
+    
+    <script>
+        const video = document.getElementById("video");
+        function togglePlay() {
+            if (video.paused) video.play();
+            else video.pause();
+        }
+        function rewind() {
+            video.currentTime -= 5;
+        }
+        function forward() {
+            video.currentTime += 5;
+        }
+        function toggleDetails(button, mssv) {
+            const details = button.nextElementSibling;
+            if (details.style.display === "none" || details.style.display === "") {
+                details.style.display = "block";
+                details.textContent = "MSSV: " + mssv;
+            } else {
+                details.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
