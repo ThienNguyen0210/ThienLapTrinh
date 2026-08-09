@@ -1,55 +1,267 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔧 Thông Báo Cập Nhật 🔧</title>
+    <title>Thien Nguyen - Backend Developer</title>
     <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --bg-body: #f3f4f6;
+            --bg-card: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .cv-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        header {
             text-align: center;
-            background-color: #121212;
-            color: white;
-            padding: 50px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
         }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-        }
-        .facebook-icon {
-            display: inline-block;
-            margin-top: 20px;
-            font-size: 30px;
-            color: #1877F2;
-            text-decoration: none;
-            transition: transform 0.3s;
-        }
-        .facebook-icon:hover {
-            transform: scale(1.2);
-        }
-        .worker-icon {
-            width: 150px;
-            height: auto;
-            margin-bottom: 20px;
-        }
+
         h1 {
-            top: 30%;
-            left: 40%;
+            font-size: 2.25rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .contact-info a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.25rem;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            text-align: justify;
+        }
+
+        .skills-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+
+        @media (min-width: 600px) {
+            .skills-list {
+                grid-template-columns: 180px 1fr;
+            }
+        }
+
+        .skill-category {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .skill-items {
+            color: var(--text-muted);
+        }
+
+        .project-item, .edu-item {
+            margin-bottom: 1.25rem;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 0.25rem;
+        }
+
+        .project-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-main);
+        }
+
+        .project-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        ul.project-bullets {
+            list-style-type: disc;
+            padding-left: 1.25rem;
+            margin-top: 0.35rem;
+        }
+
+        ul.project-bullets li {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .edu-school {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .edu-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            color: var(--text-muted);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 style="font-size: 250px;position: fixed;">👷</h1>
-        <h1>🚀 Game Đang Cập Nhật 🚀</h1>
-        <p>🔥 Chào các game thủ thân mến! 🔥</p>
-        <p>Hiện tại, chúng tôi đang thực hiện bảo trì và cập nhật để mang đến cho bạn trải nghiệm tốt hơn. Quá trình này có thể mất một khoảng thời gian ⏳, nhưng chúng tôi cam kết sẽ sớm trở lại với nhiều tính năng hấp dẫn 💥 và tối ưu hóa hệ thống ⚙️.</p>
-        <p>Hãy theo dõi fanpage của chúng tôi để nhận thông tin mới nhất về quá trình cập nhật! 📢</p>
-        <a class="facebook-icon" href="https://fb.com/tnc0210" target="_blank">🔵 Facebook 🔵</a>
+
+    <div class="cv-container">
+        <header>
+            <h1>Thien Nguyen</h1>
+            <div class="subtitle">Backend Developer</div>
+            <div class="contact-info">
+                <span>📞 0896445411</span>
+                <span>✉️ <a href="mailto:thiennguyenchi235aa@gmail.com">thiennguyenchi235aa@gmail.com</a></span>
+                <span>🌐 <a href="https://github.com/ThienNguyen0210" target="_blank">GitHub Profile</a></span>
+            </div>
+        </header>
+
+        <section>
+            <h2>Career Objective</h2>
+            <p>Backend developer with a strong foundation in system architecture design, event-driven processing, and RESTful API development. Self-driven in researching and building backend systems with high technical complexity, including intelligent caching, vector similarity search, and failover mechanisms. Seeking to apply system design thinking and performance optimization skills to real-world products while continuing to grow professionally.</p>
+        </section>
+
+        <section>
+            <h2>Skills</h2>
+            <div class="skills-list">
+                <div class="skill-category">Programming Languages:</div>
+                <div class="skill-items">Java (proficient in Java 21), Python, JavaScript/TypeScript, C#</div>
+                
+                <div class="skill-category">Backend & Web:</div>
+                <div class="skill-items">React, Tailwind CSS, Vite, FastAPI, Flask, Express (Node.js), RESTful API design</div>
+                
+                <div class="skill-category">System Architecture:</div>
+                <div class="skill-items">RAG-lite architecture, vector similarity search, cost-optimized caching, failover & high-availability design</div>
+                
+                <div class="skill-category">Databases & Tools:</div>
+                <div class="skill-items">MySQL, SQLite, Git/GitHub, data architecture design, real-time data synchronization</div>
+                
+                <div class="skill-category">AI Integration:</div>
+                <div class="skill-items">Gemini AI API (Chat & Embedding), automated dataset generation and import pipelines</div>
+                
+                <div class="skill-category">Languages:</div>
+                <div class="skill-items">English (strong technical reading comprehension; currently completing TOEIC certification)</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Personal Projects</h2>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">Financial & Employment Assistant System (FEPA)</span>
+                    <span class="project-date">01/2026 – 04/2026</span>
+                </div>
+                <ul class="project-bullets">
+                    <li>Built a modern, intuitive UI with React, Tailwind CSS, and Vite; designed smart financial components (BudgetCard) and implemented Dark/Light mode with persisted user preference.</li>
+                    <li>Integrated the Gemini AI API to build an intelligent chatbot assistant, supporting users with career guidance and job-search advice.</li>
+                    <li>Designed and developed the backend with FastAPI and Flask (Python): built RESTful APIs for business logic, connected the database, and operated automated notifications via EmailJS.</li>
+                </ul>
+            </div>
+
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">Self-Built RAG Chatbot System</span>
+                    <span class="project-date">2026</span>
+                </div>
+                <ul class="project-bullets">
+                    <li>Independently designed a RAG-lite backend combining vector similarity search (self-implemented cosine similarity) with the Gemini API to serve semantically similar questions from cache, cutting API call volume and cost.</li>
+                    <li>Designed a controlled-randomization data refresh strategy with rule-based routing to handle time-sensitive queries, ensuring accuracy and preventing staleness.</li>
+                    <li>Developed a Key Manager for multi-key failover, classifying temporary vs. permanent errors and applying round-robin rotation for high availability.</li>
+                    <li>Built a data layer with SQLite (sql.js/WASM) tracking hit counts and query logs; created an automated CLI pipeline for dataset generation/import (batch processing, retry with exponential backoff) and a RESTful API using Express (Node.js) for chat, dashboard, and cache management.</li>
+                </ul>
+            </div>
+
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">Automation & Computer Vision Project</span>
+                    <span class="project-date">03/2026 – 04/2026</span>
+                </div>
+                <ul class="project-bullets">
+                    <li>Researched and developed automation tools for browser and social media interactions.</li>
+                    <li>Applied PyAutoGUI to simulate user behavior and OpenCV for image recognition, improving automation script accuracy.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Education</h2>
+            <div class="edu-item">
+                <div class="project-header">
+                    <span class="edu-school">Ho Chi Minh City University of Technology - VNU</span>
+                    <span class="project-date">[2024-2028]</span>
+                </div>
+                <div class="edu-details">
+                    <span>GPA: 3.47</span>
+                </div>
+            </div>
+        </section>
     </div>
+
 </body>
 </html>
